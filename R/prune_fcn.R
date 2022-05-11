@@ -16,18 +16,18 @@
 #' a <- 42
 #' f <- local(function() a)
 #' 
-#' f_envs <- parent_envs(environment(f), until = environment())
+#' f_envs <- parent_envs(environment(f), until = environment(), extra = 1L)
 #' names(f_envs)
 #' f()
 #' 
 #' g <- prune_fcn(f, replace = environment(), populate = list(a = 13))
-#' g_envs <- parent_envs(environment(g), until = environment())
+#' g_envs <- parent_envs(environment(g), until = list(environment(), parent.env(environment())))
 #' names(g_envs)
 #' g()
 #' 
 #' ## However, we also changed f() here!
 #' f()
-#' f_envs <- parent_envs(environment(f), until = environment())
+#' f_envs <- parent_envs(environment(f), until = list(environment(), parent.env(environment())))
 #' stopifnot(identical(f_envs, g_envs))
 #'
 #' @export

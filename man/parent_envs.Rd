@@ -4,7 +4,7 @@
 \alias{parent_envs}
 \title{Find all parent environments of an environment}
 \usage{
-parent_envs(envir, until = emptyenv())
+parent_envs(envir, until = emptyenv(), extra = 0L)
 }
 \arguments{
 \item{envir}{An \code{\link[base:environment]{environment}}.}
@@ -14,6 +14,9 @@ the last parent environment.  If `until` is not one of the parent
 environments, then \code{\link[base:emptyenv]{emptyenv()}} is the
 last one.  It is also possible to specify a list of alternative
 environments.}
+
+\item{extra}{Maximum number of additional parent environments to include
+after a matching "until" one was identified.}
 }
 \value{
 A named list of \code{\link[base:environment]{environment}}s, where
@@ -36,6 +39,10 @@ f <- local({
     function() pi * a
   })
 })
-parent_envs(environment(f), until = globalenv())
+f_envs <- parent_envs(environment(f), until = environment())
+names(f_envs)
+
+f_envs <- parent_envs(environment(f), until = environment(), extra = 1L)
+names(f_envs)
 
 }

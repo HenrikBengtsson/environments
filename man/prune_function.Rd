@@ -14,10 +14,10 @@ should be replaced with a pruned environment.}
 \item{populate}{An optional, named list of objects to be assigned to
 the top parent environment.}
 
-\item{until}{An \code{\link[base:environment]{environment}} to consider
+\item{until}{A \code{\link[base:environment]{environment}} to consider
 the last parent environment.  If `until` is not one of the parent
 environments, then \code{\link[base:emptyenv]{emptyenv()}} is the
-last one.}
+last one.  It is also possible to specify a list of environments.}
 }
 \value{
 A pruned version of `object`.
@@ -29,16 +29,18 @@ Replace top parent environment of a function with a pruned environment
 a <- 42
 f <- local(function() a)
 
-envs <- parent_envs(environment(f), until = environment())
-names(envs)
+f_envs <- parent_envs(environment(f), until = environment())
+names(f_envs)
 f()
 
 g <- prune_function(f, until = environment(), populate = list(a = 13))
-envs <- parent_envs(environment(g), until = environment())
-names(envs)
+g_envs <- parent_envs(environment(g), until = environment())
+names(g_envs)
 g()
 
 ## However, we also changed f() here!
 f()
+f_envs <- parent_envs(environment(f), until = environment())
+stopifnot(identical(f_envs, g_envs))
 
 }

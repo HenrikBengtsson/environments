@@ -9,10 +9,10 @@ parent_envs(envir, until = emptyenv())
 \arguments{
 \item{envir}{An \code{\link[base:environment]{environment}}.}
 
-\item{until}{An \code{\link[base:environment]{environment}} to consider
+\item{until}{A \code{\link[base:environment]{environment}} to consider
 the last parent environment.  If `until` is not one of the parent
 environments, then \code{\link[base:emptyenv]{emptyenv()}} is the
-last one.}
+last one.  It is also possible to specify a list of environments.}
 }
 \value{
 A named list of \code{\link[base:environment]{environment}}s, where
@@ -35,6 +35,6 @@ f <- local({
     function() pi * a
   })
 })
-parent_envs(environment(f))
+parent_envs(environment(f), until = globalenv())
 
 }

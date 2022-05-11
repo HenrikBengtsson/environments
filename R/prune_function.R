@@ -14,18 +14,20 @@
 #' @examples
 #' a <- 42
 #' f <- local(function() a)
-#'
-#' envs <- parent_envs(environment(f), until = environment())
-#' names(envs)
+#' 
+#' f_envs <- parent_envs(environment(f), until = environment())
+#' names(f_envs)
 #' f()
-#'
+#' 
 #' g <- prune_function(f, until = environment(), populate = list(a = 13))
-#' envs <- parent_envs(environment(g), until = environment())
-#' names(envs)
+#' g_envs <- parent_envs(environment(g), until = environment())
+#' names(g_envs)
 #' g()
-#'
+#' 
 #' ## However, we also changed f() here!
 #' f()
+#' f_envs <- parent_envs(environment(f), until = environment())
+#' stopifnot(identical(f_envs, g_envs))
 #'
 #' @export
 prune_function <- function(object, populate = NULL, until = globalenv()) {

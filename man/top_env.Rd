@@ -11,10 +11,10 @@ top_env(object, until = globalenv())
 \code{\link[base:tilde]{formula}}) whose top parent environment
 should be replaced with a pruned environment.}
 
-\item{until}{An \code{\link[base:environment]{environment}} to consider
+\item{until}{A \code{\link[base:environment]{environment}} to consider
 the last parent environment.  If `until` is not one of the parent
 environments, then \code{\link[base:emptyenv]{emptyenv()}} is the
-last one.}
+last one.  It is also possible to specify a list of environments.}
 }
 \value{
 An \code{\link[base:environment]{environment}}.

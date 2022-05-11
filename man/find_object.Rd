@@ -34,9 +34,22 @@ find_object("rnorm", mode = "function")
 f <- local({
   a <- 42
   b <- 3.14
-  function() a
+  function() a+b
 })
 env <- find_object("a", from = environment(f))
 utils::ls.str(env)
+
+f <- local({
+  a <- 42
+  local({
+    b <- 3.14
+    function() a+b
+  })
+})
+env_a <- find_object("a", from = environment(f))
+utils::ls.str(env_a)
+env_b <- find_object("b", from = environment(f))
+utils::ls.str(env_b)
+stopifnot(identical(parent.env(env_b), env_a))
 
 }

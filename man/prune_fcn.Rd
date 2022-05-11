@@ -2,28 +2,26 @@
 % Please edit documentation in R/prune_fcn.R
 \name{prune_fcn}
 \alias{prune_fcn}
-\title{Replace top parent environment of a function with a pruned environment}
+\title{Replace one of the parent environments of a function with a pruned environment}
 \usage{
-prune_fcn(object, populate = NULL, until = globalenv())
+prune_fcn(object, replace = globalenv(), populate = NULL)
 }
 \arguments{
 \item{object}{A \code{\link[base:function]{function}} or a
-\code{\link[base:tilde]{formula}}) whose top parent environment
-should be replaced with a pruned environment.}
+\code{\link[base:tilde]{formula}}) that should be updated.}
+
+\item{replace}{A \code{\link[base:environment]{environment}} to be
+replaced environment with a pruned version.
+It is also possible to specify a list of alternative environments.}
 
 \item{populate}{An optional, named list of objects to be assigned to
 the top parent environment.}
-
-\item{until}{A \code{\link[base:environment]{environment}} to consider
-the last parent environment.  If `until` is not one of the parent
-environments, then \code{\link[base:emptyenv]{emptyenv()}} is the
-last one.  It is also possible to specify a list of environments.}
 }
 \value{
 A pruned version of `object`.
 }
 \description{
-Replace top parent environment of a function with a pruned environment
+Replace one of the parent environments of a function with a pruned environment
 }
 \examples{
 a <- 42
@@ -33,7 +31,7 @@ f_envs <- parent_envs(environment(f), until = environment())
 names(f_envs)
 f()
 
-g <- prune_fcn(f, until = environment(), populate = list(a = 13))
+g <- prune_fcn(f, replace = environment(), populate = list(a = 13))
 g_envs <- parent_envs(environment(g), until = environment())
 names(g_envs)
 g()

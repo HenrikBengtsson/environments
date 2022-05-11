@@ -14,7 +14,8 @@ should be replaced with a pruned environment.}
 \item{until}{A \code{\link[base:environment]{environment}} to consider
 the last parent environment.  If `until` is not one of the parent
 environments, then \code{\link[base:emptyenv]{emptyenv()}} is the
-last one.  It is also possible to specify a list of environments.}
+last one.  It is also possible to specify a list of alternative
+environments.}
 }
 \value{
 An \code{\link[base:environment]{environment}}.

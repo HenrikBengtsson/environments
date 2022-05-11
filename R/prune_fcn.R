@@ -1,10 +1,11 @@
-#' Replace top parent environment of a function with a pruned environment
-#'
-#' @inheritParams parent_envs
+#' Replace one of the parent environments of a function with a pruned environment
 #'
 #' @param object A \code{\link[base:function]{function}} or a
-#' \code{\link[base:tilde]{formula}}) whose top parent environment
-#' should be replaced with a pruned environment.
+#' \code{\link[base:tilde]{formula}}) that should be updated.
+#'
+#' @param replace A \code{\link[base:environment]{environment}} to be
+#' replaced environment with a pruned version.
+#' It is also possible to specify a list of alternative environments.
 #'
 #' @param populate An optional, named list of objects to be assigned to
 #' the top parent environment.
@@ -19,7 +20,7 @@
 #' names(f_envs)
 #' f()
 #' 
-#' g <- prune_fcn(f, until = environment(), populate = list(a = 13))
+#' g <- prune_fcn(f, replace = environment(), populate = list(a = 13))
 #' g_envs <- parent_envs(environment(g), until = environment())
 #' names(g_envs)
 #' g()
@@ -30,16 +31,20 @@
 #' stopifnot(identical(f_envs, g_envs))
 #'
 #' @export
-prune_fcn <- function(object, populate = NULL, until = globalenv()) {
+prune_fcn <- function(object, replace = globalenv(), populate = NULL) {
   envir <- environment(object)
   if (!inherits(envir, "environment")) {
     stop(sprintf("Argument 'object' does not have an environment: %s", mode(object)))
   }
-  stopifnot(inherits(until, "environment"))
+
+  if (!is.list(replace)) replace <- list(replace)
+  for (env in replace) stopifnot(inherits(env, "environment"))
+
   if (!is.null(populate)) {
     stopifnot(is.list(populate), !is.null(names(populate)))
   }
 
+  until <- replace
   envirs <- parent_envs(envir, until = until)
   
   ## Nothing to do?

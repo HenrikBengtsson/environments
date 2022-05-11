@@ -2,7 +2,7 @@
 % Please edit documentation in R/prune_fcn.R
 \name{prune_fcn}
 \alias{prune_fcn}
-\title{Replace one of the parent environments of a function with a pruned environment}
+\title{Replace one of the parent environments of a function with a fresh environment}
 \usage{
 prune_fcn(object, replace = globalenv(), populate = NULL)
 }
@@ -15,13 +15,13 @@ replaced environment with a pruned version.
 It is also possible to specify a list of alternative environments.}
 
 \item{populate}{An optional, named list of objects to be assigned to
-the top parent environment.}
+the fresh environment replacing environment `replace`.}
 }
 \value{
 A pruned version of `object`.
 }
 \description{
-Replace one of the parent environments of a function with a pruned environment
+Replace one of the parent environments of a function with a fresh environment
 }
 \examples{
 a <- 42

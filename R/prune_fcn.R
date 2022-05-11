@@ -1,4 +1,4 @@
-#' Replace one of the parent environments of a function with a pruned environment
+#' Replace one of the parent environments of a function with a fresh environment
 #'
 #' @param object A \code{\link[base:function]{function}} or a
 #' \code{\link[base:tilde]{formula}}) that should be updated.
@@ -8,7 +8,7 @@
 #' It is also possible to specify a list of alternative environments.
 #'
 #' @param populate An optional, named list of objects to be assigned to
-#' the top parent environment.
+#' the fresh environment replacing environment `replace`.
 #'
 #' @return A pruned version of `object`.
 #'

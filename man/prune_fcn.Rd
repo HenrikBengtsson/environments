@@ -15,10 +15,10 @@ replaced environment with a pruned version.
 It is also possible to specify a list of alternative environments.}
 
 \item{populate}{An optional, named list of objects to be assigned to
-the fresh environment replacing environment `replace`.}
+the fresh environment replacing environment \code{replace}.}
 }
 \value{
-A pruned version of `object`.
+A pruned version of \code{object}.
 }
 \description{
 Replace one of the parent environments of a function with a fresh environment

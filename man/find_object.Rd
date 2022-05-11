@@ -22,9 +22,9 @@ An \code{\link[base:environment]{environment}}, or NULL.
 Find the environment where an object exists
 }
 \details{
-The object is looked for in environment `from`. If it is found there,
-then `from` is returned.  If not found there, the parent environment
-of `from` is searched, and so on, until the "empty" environment
+The object is looked for in environment \code{from}. If it is found there,
+then \code{from} is returned.  If not found there, the parent environment
+of \code{from} is searched, and so on, until the "empty" environment
 (\code{\link[base:emptyenv]{emptyenv()}}) is reached. In such cases,
 no matching object could be found and NULL is returned.
 }

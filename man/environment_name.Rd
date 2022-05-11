@@ -18,8 +18,8 @@ Get the name of an environment
 \details{
 This function returns what
 \code{\link[base:environmentName]{environmentName(envir)}}, except when
-it is empty, e.g. when `envir <- new.env()`.  In such cases, it returns
-the hexadecimal string that is outputted by `print(envir)`.
+it is empty, e.g. when \code{envir <- new.env()}.  In such cases, it returns
+the hexadecimal string that is outputted by \code{print(envir)}.
 }
 \examples{
 environment_name(emptyenv())

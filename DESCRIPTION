@@ -10,3 +10,4 @@ Authors@R: c(
            email = "henrikb@braju.com"))
 License: MIT + file LICENSE
 RoxygenNote: 7.1.2
+Roxygen: list(markdown = TRUE)

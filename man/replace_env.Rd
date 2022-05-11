@@ -16,11 +16,11 @@ It is also possible to specify a list of search environments.}
 \item{replace}{A \code{\link[base:environment]{environment}}.}
 
 \item{update_parent}{If TRUE, or 1L, the parent environment of
-`replace` is set to the parent environment of the replaced
+\code{replace} is set to the parent environment of the replaced
 "search" environment. If FALSE, or 0L, it is not updated.
 If a positive integer greater than one, then that parent
-generation is updated, e.g. `update_parent = 2L` will update
-the parent environment of the _parent_ of `replace`.}
+generation is updated, e.g. \code{update_parent = 2L} will update
+the parent environment of the \emph{parent} of \code{replace}.}
 }
 \value{
 Invisibly, a named list parent environments until the one

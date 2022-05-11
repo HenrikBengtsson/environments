@@ -10,7 +10,7 @@ parent_envs(envir, until = emptyenv(), extra = 0L)
 \item{envir}{An \code{\link[base:environment]{environment}}.}
 
 \item{until}{A \code{\link[base:environment]{environment}} to consider
-the last parent environment.  If `until` is not one of the parent
+the last parent environment.  If \code{until} is not one of the parent
 environments, then \code{\link[base:emptyenv]{emptyenv()}} is the
 last one.  It is also possible to specify a list of alternative
 environments.}
@@ -20,7 +20,7 @@ after a matching "until" one was identified.}
 }
 \value{
 A named list of \code{\link[base:environment]{environment}}s, where
-the first element is `envir` and the last is `until` or
+the first element is \code{envir} and the last is \code{until} or
 \code{\link[base:emptyenv]{emptyenv()}}.
 }
 \description{

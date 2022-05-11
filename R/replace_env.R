@@ -17,53 +17,8 @@
 #'
 #' @return Invisibly, the replaced environment.
 #'
-#' @examples
-#' a <- 42
-#' f <- local(function() a)
-#' 
-#' f_envs <- parent_envs(environment(f), until = environment(), extra = 1L)
-#' names(f_envs)
-#' y <- f()
-#' y
-#'
-#' new <- as.environment(list(a = 13, pi = 3.14))
-#' old <- replace_env(environment(f), search = environment(), replace = new)
-#' old
-#'
-#' f2_envs <- parent_envs(environment(f), until = list(environment(), parent.env(environment())))
-#' names(f2_envs)
-#'
-#' ## Note that f() will now see a = 13 in the replaced environment
-#' ## rather than a = 42 in the calling environment
-#' z <- f()
-#' z
-#'
-#' ## Undo changes
-#' old2 <- replace_env(environment(f), search = new, replace = old)
-#' stopifnot(identical(old2, new))
-#'
-#' f3_envs <- parent_envs(environment(f), until = environment(), extra = 1L)
-#' stopifnot(identical(f3_envs, f_envs))
-#'
-#' ## f() will now see a = 42 again
-#' z <- f()
-#' z
-#'
-#' ## Example how to do the above temporarily inside a function
-#' my_fcn <- function(globals = NULL) {
-#'   a <- 42
-#'   f <- local(function() a)
-#'   if (length(globals) > 0) {
-#'     new <- as.environment(globals)
-#'     f_env <- environment(f)
-#'     old <- replace_env(f_env, search = environment(), replace = new)
-#'     on.exit(replace_env(f_env, search = new, replace = old))
-#'   }
-#'   f()
-#' }
-#'
-#' my_fcn()
-#' my_fcn(globals = list(a = 13))
+#' @example incl/replace_env.R
+#' @example incl/replace_env_2.R
 #'
 #' @export
 replace_env <- function(envir, search, replace, update_parent = TRUE) {

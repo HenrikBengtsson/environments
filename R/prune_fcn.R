@@ -19,7 +19,7 @@
 #' names(f_envs)
 #' f()
 #' 
-#' g <- prune_function(f, until = environment(), populate = list(a = 13))
+#' g <- prune_fcn(f, until = environment(), populate = list(a = 13))
 #' g_envs <- parent_envs(environment(g), until = environment())
 #' names(g_envs)
 #' g()
@@ -30,7 +30,7 @@
 #' stopifnot(identical(f_envs, g_envs))
 #'
 #' @export
-prune_function <- function(object, populate = NULL, until = globalenv()) {
+prune_fcn <- function(object, populate = NULL, until = globalenv()) {
   envir <- environment(object)
   if (!inherits(envir, "environment")) {
     stop(sprintf("Argument 'object' does not have an environment: %s", mode(object)))

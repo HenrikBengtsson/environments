@@ -1,3 +1,4 @@
+#' @rdname draw_search
 #' @importFrom cli boxx
 #' @export
 boxx_search <- function(labels = search(), width = NULL) {
@@ -13,6 +14,19 @@ boxx_search <- function(labels = search(), width = NULL) {
   boxes
 }
 
+
+#' Draw the current search() path in the terminal
+#'
+#' @param labels Character vector
+#'
+#' @param width The common width of the boxes in number of characters.
+#' If NULL, the width of the widest box will be used.
+#'
+#' @return Nothing.
+#'
+#' @examples
+#' draw_search()
+#'
 #' @export
 draw_search <- function(labels = rev(search()), width = NULL) {
   boxes <- boxx_search(labels = labels, width = width)

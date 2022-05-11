@@ -1,3 +1,21 @@
+#' Get the name of an environment
+#'
+#' @param envir An [base::environment].
+#'
+#' @return A character string.
+#'
+#' @details
+#' This function returns what
+#' \code{\link[base:environmentName]{environmentName(envir)}}, except when
+#' it is empty, e.g. when `envir <- new.env()`.  In such cases, it returns
+#' the hexadecimal string that is outputted by `print(envir)`.
+#'
+#' @examples
+#' environment_name(emptyenv())
+#' environment_name(globalenv())
+#' environment_name(getNamespace("utils"))
+#' environment_name(new.env())
+#' 
 #' @importFrom utils capture.output
 #' @export
 environment_name <- function(envir) {

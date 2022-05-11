@@ -3,7 +3,7 @@
 export(boxx_search)
 export(draw_search)
 export(environment_name)
-export(find_variable)
+export(find_object)
 export(parent_envs)
 importFrom(cli,boxx)
 importFrom(utils,capture.output)

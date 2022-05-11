@@ -4,19 +4,23 @@
 \alias{replace_env}
 \title{Replace one of the parent environments with another}
 \usage{
-replace_env(envir, search, replace, same_parent = TRUE)
+replace_env(envir, search, replace, update_parent = TRUE)
 }
 \arguments{
 \item{envir}{An \code{\link[base:environment]{environment}}.}
 
 \item{search}{A \code{\link[base:environment]{environment}} to be
-replaced environment with a pruned version.
-It is also possible to specify a list of alternative environments.}
+replaced.
+It is also possible to specify a list of search environments.}
 
 \item{replace}{A \code{\link[base:environment]{environment}}.}
 
-\item{same_parent}{If TRUE, the parent environment of `replace` is
-set to the parent environment of the replaced "search" environment.}
+\item{update_parent}{If TRUE, or 1L, the parent environment of
+`replace` is set to the parent environment of the replaced
+"search" environment. If FALSE, or 0L, it is not updated.
+If a positive integer greater than one, then that parent
+generation is updated, e.g. `update_parent = 2L` will update
+the parent environment of the _parent_ of `replace`.}
 }
 \value{
 Invisibly, a named list parent environments until the one

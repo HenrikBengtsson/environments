@@ -3,13 +3,17 @@
 #' @param envir An \code{\link[base:environment]{environment}}.
 #'
 #' @param search A \code{\link[base:environment]{environment}} to be
-#' replaced environment with a pruned version.
-#' It is also possible to specify a list of alternative environments.
+#' replaced.
+#' It is also possible to specify a list of search environments.
 #'
 #' @param replace A \code{\link[base:environment]{environment}}.
 #'
-#' @param same_parent If TRUE, the parent environment of `replace` is
-#' set to the parent environment of the replaced "search" environment.
+#' @param update_parent If TRUE, or 1L, the parent environment of
+#' `replace` is set to the parent environment of the replaced
+#' "search" environment. If FALSE, or 0L, it is not updated.
+#' If a positive integer greater than one, then that parent
+#' generation is updated, e.g. `update_parent = 2L` will update
+#' the parent environment of the _parent_ of `replace`.
 #'
 #' @return Invisibly, a named list parent environments until the one
 #' that was replaced.
@@ -36,32 +40,62 @@
 #' z
 #'
 #' @export
-replace_env <- function(envir, search, replace, same_parent = TRUE) {
+replace_env <- function(envir, search, replace, update_parent = TRUE) {
   stopifnot(inherits(envir, "environment"))
-  stopifnot(inherits(replace, "environment"))
-  stopifnot(is.logical(same_parent), length(same_parent) == 1L, !is.na(same_parent))
-
   if (!is.list(search)) search <- list(search)
   for (env in search) stopifnot(inherits(env, "environment"))
+  stopifnot(inherits(replace, "environment"))
+  stopifnot(length(update_parent) == 1L, !is.na(update_parent))
+  if (is.logical(update_parent)) update_parent <- as.integer(update_parent)
+  stopifnot(is.numeric(update_parent), !is.na(update_parent),
+            update_parent >= 0L)
 
   envirs <- parent_envs(envir, until = search)
+
+  ## Assert that a match was found
+  found <- FALSE
+  for (env in search) {
+    for (penv in envirs) {
+      if (identical(penv, env)) {
+        found <- TRUE
+        break
+      }
+    }
+    if (found) break
+  }
+  if (!found) {
+    stop("None of the environments specified in 'search' are among the parent environments of 'envir'")
+  }
   
   ## Nothing to do?
   n <- length(envirs)
   if (n == 1L) return(envirs)
 
-  last <- envirs[[n]]
-  if (same_parent) {
-    if (identical(last, emptyenv())) {
-      ## Special case: replace the empty environment
-      parent.env(replace) <- emptyenv()
-    } else {
-      parent.env(replace) <- parent.env(last)
-    }
-  }
-  
   child <- envirs[[n - 1L]]
   parent.env(child) <- replace
 
+  ## Update parent environment of 'replace'?
+  if (update_parent > 0L) {
+    ## (a) Identify new parent environment
+    last <- envirs[[n]]
+    if (identical(last, emptyenv())) {
+      ## Special case: replace the empty environment
+      last_parent <- emptyenv()
+    } else {
+      last_parent <- parent.env(last)
+    }
+    
+    ## (b) Update parent environment of generation 'update_parent'
+    count <- update_parent - 1L
+    while (!identical(replace, emptyenv()) && count > 0L) {
+      replace <- parent.env(replace)
+      count <- count - 1L
+    }
+    if (identical(replace, emptyenv())) {
+      stop(sprintf("Cannot replace parent generation %d of 'replace', because it either doesn't exist or is the empty environment", update_parent))
+    }
+    parent.env(replace) <- last_parent
+  }
+  
   invisible(envirs)
 }

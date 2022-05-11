@@ -2,24 +2,34 @@
 % Please edit documentation in R/parent_envs.R
 \name{parent_envs}
 \alias{parent_envs}
-\title{Find all parent environment of an environment}
+\title{Find all parent environments of an environment}
 \usage{
 parent_envs(envir)
 }
 \arguments{
-\item{envir}{An [base::environment].}
+\item{envir}{An \code{\link[base:environment]{environment}}.}
 }
 \value{
-A named list of environments, where the first element is `envir`
-and the last is `emptyenv()`.
+A named list of \code{\link[base:environment]{environment}}s, where
+the first element is `envir` and the last is
+\code{\link[base:emptyenv]{emptyenv()}}.
 }
 \description{
-Find all parent environment of an environment
+Find all parent environments of an environment
 }
 \examples{
 parent_envs(emptyenv())
 parent_envs(baseenv())
 parent_envs(globalenv())
 parent_envs(new.env(parent = baseenv()))
+
+f <- local({
+  a <- 42
+  local({
+    b <- 3.14
+    function() a + b
+  })
+})
+parent_envs(environment(f))
 
 }

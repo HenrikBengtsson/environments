@@ -2,11 +2,13 @@
 #'
 #' @param name The name of the object to locate.
 #'
-#' @param mode The [base::mode] of the object to locate.
+#' @param mode The \code{\link[base:mode]{mode}} of the object to locate.
 #'
-#' @param from An [base::environment] to start search from.
+#' @param from An \code{\link[base:environment]{environment}}, or an object
+#' with an environment (e.g. a \code{\link[base:function]{function}} and a
+#' \code{\link[base:tilde]{formula}}, to start search from.
 #'
-#' @return An [base::environment], or NULL.
+#' @return An \code{\link[base:environment]{environment}}, or NULL.
 #'
 #' @details
 #' The object is looked for in environment `from`. If it is found there,
@@ -23,28 +25,34 @@
 #' f <- local({
 #'   a <- 42
 #'   b <- 3.14
-#'   function() a+b
+#'   function() a + b
 #' })
-#' env <- find_object("a", from = environment(f))
+#' env <- find_object("a", from = f)
 #' utils::ls.str(env)
 #' 
 #' f <- local({
 #'   a <- 42
 #'   local({
 #'     b <- 3.14
-#'     function() a+b
+#'     function() a + b
 #'   })
 #' })
-#' env_a <- find_object("a", from = environment(f))
+#' env_a <- find_object("a", from = f)
 #' utils::ls.str(env_a)
-#' env_b <- find_object("b", from = environment(f))
+#' env_b <- find_object("b", from = f)
 #' utils::ls.str(env_b)
 #' stopifnot(identical(parent.env(env_b), env_a))
 #' 
 #' @export
 find_object <- function(name, mode = "any", from = parent.frame()) {
-  stopifnot(inherits(from, "environment"))
-  envir <- from
+  if (inherits(from, "environment")) {
+    envir <- from
+  } else {
+    envir <- environment(from)
+    if (!inherits(envir, "environment")) {
+      stop(sprintf("Argument 'from' does not specify an environment or an object with an environment: %s", mode(from)))
+    }
+  }
   while (!identical(envir, emptyenv())) {
     if (exists(name, mode = mode, envir = envir, inherits = FALSE)) {
       return(envir)

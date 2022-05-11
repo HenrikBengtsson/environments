@@ -9,9 +9,9 @@ replace_env(envir, search, replace, update_parent = TRUE)
 \arguments{
 \item{envir}{An \code{\link[base:environment]{environment}}.}
 
-\item{search}{A \code{\link[base:environment]{environment}} to be
-replaced.
-It is also possible to specify a list of search environments.}
+\item{search}{A \code{\link[base:environment]{environment}},
+among the parents of \code{envir}, to be replaced.
+It is possible to specify a list of alternative environments.}
 
 \item{replace}{A \code{\link[base:environment]{environment}}.}
 
@@ -23,8 +23,7 @@ generation is updated, e.g. \code{update_parent = 2L} will update
 the parent environment of the \emph{parent} of \code{replace}.}
 }
 \value{
-Invisibly, a named list parent environments until the one
-that was replaced.
+Invisibly, the replaced environment.
 }
 \description{
 Replace one of the parent environments with another
@@ -39,14 +38,25 @@ y <- f()
 y
 
 new <- as.environment(list(a = 13, pi = 3.14))
-old_parents <- replace_env(environment(f), search = environment(), replace = new)
-names(old_parents)
+old <- replace_env(environment(f), search = environment(), replace = new)
+old
 
-f_envs <- parent_envs(environment(f), until = list(environment(), parent.env(environment())))
-names(f_envs)
+f2_envs <- parent_envs(environment(f), until = list(environment(), parent.env(environment())))
+names(f2_envs)
 
 ## Note that f() will now see a = 13 in the replaced environment
 ## rather than a = 42 in the calling environment
+z <- f()
+z
+
+## Undo changes
+old2 <- replace_env(environment(f), search = new, replace = old)
+stopifnot(identical(old2, new))
+
+f3_envs <- parent_envs(environment(f), until = environment(), extra = 1L)
+stopifnot(identical(f3_envs, f_envs))
+
+## f() will now see a = 42 again
 z <- f()
 z
 

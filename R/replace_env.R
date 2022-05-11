@@ -2,9 +2,9 @@
 #'
 #' @param envir An \code{\link[base:environment]{environment}}.
 #'
-#' @param search A \code{\link[base:environment]{environment}} to be
-#' replaced.
-#' It is also possible to specify a list of search environments.
+#' @param search A \code{\link[base:environment]{environment}},
+#' among the parents of `envir`, to be replaced.
+#' It is possible to specify a list of alternative environments.
 #'
 #' @param replace A \code{\link[base:environment]{environment}}.
 #'
@@ -15,8 +15,7 @@
 #' generation is updated, e.g. `update_parent = 2L` will update
 #' the parent environment of the _parent_ of `replace`.
 #'
-#' @return Invisibly, a named list parent environments until the one
-#' that was replaced.
+#' @return Invisibly, the replaced environment.
 #'
 #' @examples
 #' a <- 42
@@ -28,14 +27,25 @@
 #' y
 #'
 #' new <- as.environment(list(a = 13, pi = 3.14))
-#' old_parents <- replace_env(environment(f), search = environment(), replace = new)
-#' names(old_parents)
+#' old <- replace_env(environment(f), search = environment(), replace = new)
+#' old
 #'
-#' f_envs <- parent_envs(environment(f), until = list(environment(), parent.env(environment())))
-#' names(f_envs)
+#' f2_envs <- parent_envs(environment(f), until = list(environment(), parent.env(environment())))
+#' names(f2_envs)
 #'
 #' ## Note that f() will now see a = 13 in the replaced environment
 #' ## rather than a = 42 in the calling environment
+#' z <- f()
+#' z
+#'
+#' ## Undo changes
+#' old2 <- replace_env(environment(f), search = new, replace = old)
+#' stopifnot(identical(old2, new))
+#'
+#' f3_envs <- parent_envs(environment(f), until = environment(), extra = 1L)
+#' stopifnot(identical(f3_envs, f_envs))
+#'
+#' ## f() will now see a = 42 again
 #' z <- f()
 #' z
 #'
@@ -69,7 +79,8 @@ replace_env <- function(envir, search, replace, update_parent = TRUE) {
   
   ## Nothing to do?
   n <- length(envirs)
-  if (n == 1L) return(envirs)
+  last <- envirs[[n]]
+  if (n == 1L) return(last)
 
   child <- envirs[[n - 1L]]
   parent.env(child) <- replace
@@ -77,7 +88,6 @@ replace_env <- function(envir, search, replace, update_parent = TRUE) {
   ## Update parent environment of 'replace'?
   if (update_parent > 0L) {
     ## (a) Identify new parent environment
-    last <- envirs[[n]]
     if (identical(last, emptyenv())) {
       ## Special case: replace the empty environment
       last_parent <- emptyenv()
@@ -97,5 +107,5 @@ replace_env <- function(envir, search, replace, update_parent = TRUE) {
     parent.env(replace) <- last_parent
   }
   
-  invisible(envirs)
+  invisible(last)
 }

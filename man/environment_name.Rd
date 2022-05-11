@@ -7,10 +7,10 @@
 environment_name(envir)
 }
 \arguments{
-\item{envir}{An [base::environment].}
+\item{envir}{An \code{\link[base:environment]{environment}}.}
 }
 \value{
-A character string.
+A non-empty character string.
 }
 \description{
 Get the name of an environment

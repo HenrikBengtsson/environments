@@ -16,8 +16,8 @@
 #' f <- local({
 #'   a <- 42
 #'   local({
-#'     b <- 3.14
-#'     function() a + b
+#'     pi <- 3.14
+#'     function() pi * a
 #'   })
 #' })
 #' parent_envs(environment(f))

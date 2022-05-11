@@ -1,8 +1,8 @@
 #' Get the name of an environment
 #'
-#' @param envir An [base::environment].
+#' @param envir An \code{\link[base:environment]{environment}}.
 #'
-#' @return A character string.
+#' @return A non-empty character string.
 #'
 #' @details
 #' This function returns what

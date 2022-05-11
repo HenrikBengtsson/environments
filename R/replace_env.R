@@ -49,6 +49,22 @@
 #' z <- f()
 #' z
 #'
+#' ## Example how to do the above temporarily inside a function
+#' my_fcn <- function(globals = NULL) {
+#'   a <- 42
+#'   f <- local(function() a)
+#'   if (length(globals) > 0) {
+#'     new <- as.environment(globals)
+#'     f_env <- environment(f)
+#'     old <- replace_env(f_env, search = environment(), replace = new)
+#'     on.exit(replace_env(f_env, search = new, replace = old))
+#'   }
+#'   f()
+#' }
+#'
+#' my_fcn()
+#' my_fcn(globals = list(a = 13))
+#'
 #' @export
 replace_env <- function(envir, search, replace, update_parent = TRUE) {
   stopifnot(inherits(envir, "environment"))

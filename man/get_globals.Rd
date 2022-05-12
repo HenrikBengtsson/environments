@@ -4,10 +4,13 @@
 \alias{get_globals}
 \title{Get global variables on a function}
 \usage{
-get_globals(fcn)
+get_globals(fcn, must_exist = FALSE)
 }
 \arguments{
 \item{fcn}{The \code{\link[base:function]{function}}.}
+
+\item{must_exist}{If TRUE, an error is produced if one of the prospect
+globals cannot be located.}
 }
 \value{
 A named list of globals.

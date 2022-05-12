@@ -66,14 +66,6 @@ z
 ## to a parallel workers
 ## ------------------------------------------------------------------------
 
-## True size of an object
-size_of <- function(object) {
-  con <- rawConnection(raw(), open = "w")
-  on.exit(close(con))
-  serialize(object, connection = con)
-  length(rawConnectionValue(con))
-}
-
 ## Call a function with the option to replace the function
 ## environment with a smaller temporary environment
 do_call <- function(fcn, args = list(), envir = parent.frame(),
@@ -92,7 +84,7 @@ do_call <- function(fcn, args = list(), envir = parent.frame(),
 }
 
 my_fcn <- function(prune = FALSE) {
-  huge <- rnorm(1e6)
+  cargo <- rnorm(1e6)
   
   n <- 2
   g <- local({

@@ -14,11 +14,11 @@ size_of <- function(object) {
 
 ## Call a function with the option to replace the function
 ## environment with a smaller temporary environment
-do_call <- function(fcn, args = list(), envir = parent.frame(), globals = NULL) {
+do_call <- function(fcn, args = list(), envir = parent.frame(), fcn_envir = envir, globals = NULL) {
   if (!is.null(globals)) {
     fcn_env <- environment(fcn)
     new <- as.environment(globals)
-    old <- replace_env(fcn_env, search = envir, replace = new)
+    old <- replace_env(fcn_env, search = fcn_envir, replace = new)
     on.exit(replace_env(fcn_env, search = new, replace = old))
   }
   
@@ -42,7 +42,7 @@ my_fcn <- function(prune = FALSE) {
     NULL
   }
   
-  do_call(g, globals = globals)
+  do_call(g, fcn_envir = environment(), globals = globals)
 }
 
 my_fcn()

@@ -15,9 +15,10 @@ size_of <- function(object) {
 ## Call a function with the option to replace the function
 ## environment with a smaller temporary environment
 do_call <- function(fcn, args = list(), envir = parent.frame(),
-                    fcn_globals = NULL) {
-  if (!is.null(fcn_globals)) {
+                    prune = FALSE) {
+  if (prune) {
     fcn_env <- environment(fcn)
+    fcn_globals <- get_globals(fcn)
     new <- as.environment(fcn_globals)
     old <- replace_env(fcn_env, search = parent.frame(), replace = new)
     on.exit(replace_env(fcn_env, search = new, replace = old))
@@ -36,13 +37,8 @@ my_fcn <- function(prune = FALSE) {
     pi <- 3.14
     function() n * pi
   })
-
-  fcn_globals <- NULL
-  if (prune) {
-    fcn_globals <- list(n = n)     ## ideally find_globals(g)
-  }
   
-  do_call(g, fcn_globals = fcn_globals)
+  do_call(g, prune = prune)
 }
 
 my_fcn()

@@ -4,9 +4,12 @@
 \alias{search_path}
 \title{The set of environments searched to locate an object}
 \usage{
-search_path(until = emptyenv())
+search_path(parent = 1L, until = emptyenv())
 }
 \arguments{
+\item{parent}{The parent generation to query for the parent frame
+and the function.}
+
 \item{until}{A \code{\link[base:environment]{environment}} to consider
 the last parent environment.  If \code{until} is not one of the parent
 environments, then \code{\link[base:emptyenv]{emptyenv()}} is the

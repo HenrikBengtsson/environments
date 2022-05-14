@@ -7,7 +7,7 @@
 ## Call a function with the option to replace the function
 ## environment with a smaller temporary environment
 do_call <- function(fcn, args = list(), envir = parent.frame(),
-                    prune = FALSE, search = parent.frame()) {
+                    prune = FALSE, search = search_path(2L)) {
   fcn_name <- as.character(substitute(fcn))
   if (prune) {
     fcn <- prune_fcn(fcn, search = search)
@@ -25,18 +25,34 @@ do_call <- function(fcn, args = list(), envir = parent.frame(),
   do.call(fcn, args = args, envir = envir)
 }
 
-my_fcn <- function(prune = FALSE) {
+my_fcn <- function(g = NULL, prune = FALSE) {
   cargo <- rnorm(1e6)
   
   n <- 2
-  g <- local({
-    pi <- 3.14
-    function() n * pi
-  })
+
+  if (is.null(g)) {
+    g <- local({
+      pi <- 3.14
+      function() n * pi
+    })
+  }
   
-  do_call(g, prune = prune, search = search_path())
+  do_call(g, prune = prune)
 }
 
+
+## Use local function
 my_fcn()
 my_fcn(prune = TRUE)
 my_fcn()
+
+
+## Use global function
+g2 <- local({
+  n <- 2
+  pi <- 3.14
+  function() n * pi
+})
+
+my_fcn(g2, prune = TRUE)
+my_fcn(g2)

@@ -23,7 +23,10 @@
 #' @export
 replace_env <- function(envir, search, replace, update_parent = TRUE) {
   stopifnot(inherits(envir, "environment"))
-  if (!is.list(search)) search <- list(search)
+  if (!is.list(search)) {
+    search <- list(search)
+    names(search) <- environment_name(search[[1]])
+  }
   for (env in search) stopifnot(inherits(env, "environment"))
   stopifnot(inherits(replace, "environment"))
   stopifnot(length(update_parent) == 1L, !is.na(update_parent))
@@ -45,7 +48,7 @@ replace_env <- function(envir, search, replace, update_parent = TRUE) {
     if (found) break
   }
   if (!found) {
-    stop("None of the environments specified in 'search' are among the parent environments of 'envir'")
+    stop(sprintf("Cannot replace environment. None of the environments specified in 'search' (%s) are among the parent environments of 'envir': %s", paste(sQuote(names(search)), collapse = ", "), paste(sQuote(names(envirs)), collapse = ", ")))
   }
   
   ## Nothing to do?

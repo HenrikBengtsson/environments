@@ -10,7 +10,7 @@
 size_of <- function(object) {
   con <- rawConnection(raw(), open = "w")
   on.exit(close(con))
-  serialize(object, connection = con)
+  suppressWarnings(serialize(object, connection = con))
   size <- length(rawConnectionValue(con))
   class(size) <- c("object_size", class(size))
   size

@@ -12,5 +12,5 @@
 search_path <- function(until = emptyenv(), envir = parent.frame()) {
   envir <- list(envir)
   names(envir) <- environment_name(envir[[1]])
-  c(envir, parent_envs(environment(sys.function(which = 0)), until = until))
+  c(envir, parent_envs(environment(sys.function(which = -1L)), until = until))
 }

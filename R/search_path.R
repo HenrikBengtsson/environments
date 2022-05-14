@@ -13,8 +13,8 @@
 #' `exist(name, inherits = TRUE)` and `get(name, inherits = TRUE)`.
 #'
 #' @export
-search_path <- function(until = emptyenv(), envir = parent.frame()) {
-  envir <- list(envir)
+search_path <- function(until = emptyenv()) {
+  envir <- list(parent.frame())
   names(envir) <- environment_name(envir[[1]])
   c(envir, parent_envs(environment(sys.function(which = -1L)), until = until))
 }

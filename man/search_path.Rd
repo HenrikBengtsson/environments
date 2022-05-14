@@ -4,7 +4,7 @@
 \alias{search_path}
 \title{The set of environments searched to locate an object}
 \usage{
-search_path(until = emptyenv(), envir = parent.frame())
+search_path(until = emptyenv())
 }
 \arguments{
 \item{until}{A \code{\link[base:environment]{environment}} to consider
@@ -12,8 +12,6 @@ the last parent environment.  If \code{until} is not one of the parent
 environments, then \code{\link[base:emptyenv]{emptyenv()}} is the
 last one.  It is also possible to specify a list of alternative
 environments.}
-
-\item{envir}{An \code{\link[base:environment]{environment}}.}
 }
 \value{
 A named list of environments.

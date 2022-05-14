@@ -7,10 +7,10 @@
 ## Call a function with the option to replace the function
 ## environment with a smaller temporary environment
 do_call <- function(fcn, args = list(), envir = parent.frame(),
-                    prune = FALSE) {
+                    prune = FALSE, search = parent.frame()) {
   fcn_name <- as.character(substitute(fcn))
   if (prune) {
-    fcn <- prune_fcn(fcn, search = parent.frame())
+    fcn <- prune_fcn(fcn, search = search)
 
     ## Important: We must drop attribute 'prune_undo' before
     ## exporting object, otherwise it will carry the pruned
@@ -34,7 +34,7 @@ my_fcn <- function(prune = FALSE) {
     function() n * pi
   })
   
-  do_call(g, prune = prune)
+  do_call(g, prune = prune, search = search_path())
 }
 
 my_fcn()

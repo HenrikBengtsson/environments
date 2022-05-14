@@ -23,6 +23,10 @@ the last is the empty environment.
 \description{
 The set of environments searched to locate an object
 }
+\details{
+This is the same environment search path that is used by
+\code{exist(name, inherits = TRUE)} and \code{get(name, inherits = TRUE)}.
+}
 \examples{
 a <- 1
 

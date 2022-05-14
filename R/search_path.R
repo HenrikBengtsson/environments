@@ -8,6 +8,10 @@
 #'
 #' @example incl/search_path_1.R
 #'
+#' @details
+#' This is the same environment search path that is used by
+#' `exist(name, inherits = TRUE)` and `get(name, inherits = TRUE)`.
+#'
 #' @export
 search_path <- function(until = emptyenv(), envir = parent.frame()) {
   envir <- list(envir)

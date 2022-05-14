@@ -15,7 +15,8 @@ with an environment (e.g. a \code{\link[base:function]{function}} and a
 }
 \value{
 A named list with elements \code{name} and \code{envir}, where \code{name} is the
-name of \code{object} as it is named in environment \code{envir}.
+name of \code{object} as it is named in environment \code{envir}, i.e.
+\code{identical(envir[[name]], object)}.
 If the object could not be located when searching from environment
 \code{from}, then NULL is returned.
 }

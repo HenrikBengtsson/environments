@@ -8,7 +8,8 @@
 #'
 #' @return
 #' A named list with elements `name` and `envir`, where `name` is the
-#' name of `object` as it is named in environment `envir`.
+#' name of `object` as it is named in environment `envir`, i.e.
+#' `identical(envir[[name]], object)`.
 #' If the object could not be located when searching from environment
 #' `from`, then NULL is returned.
 #'

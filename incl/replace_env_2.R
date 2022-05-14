@@ -9,10 +9,21 @@
 do_call <- function(fcn, args = list(), envir = parent.frame(),
                     prune = FALSE) {
   if (prune) {
+    fcn_where <- locate_object(fcn, from = envir)
     fcn_env <- environment(fcn)
+    fcn_parents <- parent_envs(fcn_env, until = fcn_where$envir)
     fcn_globals <- get_globals(fcn)
+    if (getOption("debug", FALSE)) {
+      utils::str(list(
+          fcn_where = fcn_where,
+            fcn_env = fcn_env,
+        fcn_parents = fcn_parents,
+        fcn_globals = fcn_globals
+      ))
+      stopifnot(any(vapply(fcn_parents, FUN.VALUE = FALSE, FUN = identical, fcn_where$envir)))
+    }
     new <- as.environment(fcn_globals)
-    old <- replace_env(fcn_env, search = parent.frame(), replace = new)
+    old <- replace_env(fcn_env, search = fcn_where$envir, replace = new)
     on.exit(replace_env(fcn_env, search = new, replace = old))
   }
   
@@ -35,4 +46,54 @@ my_fcn <- function(prune = FALSE) {
 
 my_fcn()
 my_fcn(prune = TRUE)
+
+
+n <- 2  
+g <- local({
+  pi <- 3.14
+  function() n * pi
+})
+
+my_fcn <- function(prune = FALSE) {
+  cargo <- rnorm(1e6)
+  do_call(g, prune = prune)
+}
+
 my_fcn()
+my_fcn(prune = TRUE)
+
+
+cargo <- rnorm(1e6)
+n <- 2  
+g <- local({
+  pi <- 3.14
+  function() n * pi
+})
+
+my_fcn <- function(prune = FALSE) {
+  do_call(g, prune = prune)
+}
+
+my_fcn()
+my_fcn(prune = TRUE)
+
+rm(list = c("cargo", "n"))
+
+
+## WARNING: Large objects inside local environments of
+##          the function will not the pruned!
+g <- local({
+  cargo <- rnorm(1e6)
+  n <- 2  
+  local({
+    pi <- 3.14
+    function() n * pi
+  })
+})
+
+my_fcn <- function(prune = FALSE) {
+  do_call(g, prune = prune)
+}
+
+my_fcn()
+my_fcn(prune = TRUE)

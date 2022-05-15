@@ -34,10 +34,10 @@ Remove unused objects from a function's parent environments
 ## Call a function with the option to replace the function
 ## environment with a smaller temporary environment
 do_call <- function(fcn, args = list(), envir = parent.frame(),
-                    prune = FALSE) {
+                    prune = FALSE, from = envir) {
   fcn_name <- as.character(substitute(fcn))
   if (prune) {
-    fcn <- prune_fcn(fcn, search = locate_object(fcn, from = envir)$envir)
+    fcn <- prune_fcn(fcn, search = locate_object(fcn, from = from)$envir)
     
     ## Important: We must drop attribute 'prune_undo' before
     ## exporting object, otherwise it will carry the pruned
@@ -63,9 +63,12 @@ my_fcn <- function(g = NULL, prune = FALSE) {
       pi <- 3.14
       function() n * pi
     })
+    from <- environment()
+  } else {
+    from <- parent.frame()
   }
-  
-  do_call(g, prune = prune)
+
+  do_call(g, prune = prune, from = from)
 }
 
 
@@ -76,24 +79,17 @@ my_fcn()
 my_fcn(prune = TRUE)
 
 
+## WARNING: Large objects inside local environments of
+##          the function will not the pruned!
+g2 <- local({
+  cargo <- rnorm(1e6)
+  n <- 2
+  local({
+    pi <- 3.14
+    function() n * pi
+  })
+})
 
-## g2 <- local({
-##   cargo <- rnorm(1e6)
-##   n <- 2
-##   local({
-##     pi <- 3.14
-##     function() n * pi
-##   })
-## })
-## 
-## ## Non-pruned global function does not carry large 'cargo' object,
-## ## because it's located in the global environment, which is never
-## ## serialized/exported
-## my_fcn(g2)
-## 
-## ## Pruning a global function makes no difference
-## my_fcn(g2, prune = TRUE)
-## 
-## ## Proof that g2() is only temporarily pruned and undone automatically
-## my_fcn(g2)
+my_fcn(g2)
+my_fcn(g2, prune = TRUE)
 }

@@ -272,6 +272,7 @@ my_fcn(prune = TRUE)
 
 rm(list = c("cargo", "n"))
 
+
 ## WARNING: Large objects inside local environments of
 ##          the function will not the pruned!
 g <- local({

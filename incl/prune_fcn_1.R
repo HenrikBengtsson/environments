@@ -54,7 +54,7 @@ my_fcn(prune = TRUE)
 
 ## WARNING: Large objects inside local environments of
 ##          the function will not the pruned!
-g2 <- local({
+g <- local({
   cargo <- rnorm(1e6)
   n <- 2
   local({
@@ -63,5 +63,5 @@ g2 <- local({
   })
 })
 
-my_fcn(g2)
-my_fcn(g2, prune = TRUE)
+my_fcn(g)
+my_fcn(g, prune = TRUE)

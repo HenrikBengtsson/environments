@@ -28,6 +28,147 @@ Invisibly, the replaced environment.
 \description{
 Replace one of the parent environments with another
 }
+\section{Replace single environment or a sequence of environments}{
+
+
+Consider below function \code{f()} where \code{pi} is part of \code{environment(f)},
+which is a local environment, and \code{a} is a global variable part of
+\code{parent.env(environment(f))}, which we \emph{denote} as \code{environment^2(f)}:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{cargo <- rnorm(1e6)
+a <- 2
+f <- local(\{
+  pi <- 3.14
+  function() \{
+    n <- 4
+    a * pi / n
+  \}
+\})
+}\if{html}{\out{</div>}}
+
+We can visualize this as:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{+----------------------+
+| environment^2(f):    |
+| cargo = \{ 1e6 \}      |
+| a = 2                |
+| f                    |
++----------------------+
+           ^
+           |
++----------------------+
+| environment(f):      |
+| pi = 3.14            |
++----------------------+
+           ^
+           |
++======================+
+| f():                 | (frame at runtime)
+| n = 4                |
++======================+
+}\if{html}{\out{</div>}}
+
+In order to evaluate \code{f()}, variables \code{a} and \code{pi}, which are global
+("free") variables defined outside and not at runtime in the call
+frame, like \code{n} is.  To clarify further what the difference is:
+we cannot query \code{n} from \code{f}, but we can query both \code{pi} and \code{a} as
+\code{environment(f)$pi} and \code{parent.env(environment(f))$a}.
+Similarly, we can also do \code{parent.env(environment(f))$cargo}, but
+it is a variable useless for evalating \code{f()}.
+
+When we serialize \code{f} (e.g. export it to a parallel worker), the body
+and the formals of the function is included, as well as all
+the environments of \code{f} up to where \code{f} itself lives, e.g.
+\code{environment(f)} and \code{parent.env(environment(f))} in our example.
+However, if the environment where \code{f} lives is the global environment
+(= \code{globalenv()}), then it is \emph{not} part of the serialization output.
+Imagine we save \code{f} to file, restart R, and load it back, e.g.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{saveRDS(f, "f.rds")
+quit(save = "no")
+f <- readRDS(f)
+}\if{html}{\out{</div>}}
+
+In this case, we will lose \code{a} and \code{cargo}, which is good and bad.
+It's bad, because we need to bring \code{a} back, in order to evaluate \code{f()},
+e.g.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{f()
+#> Error in f() : object 'a' not found
+}\if{html}{\out{</div>}}
+
+It's good, because we don't have to pay the price of serializing the
+large \code{cargo} object.  Continuing, our unserialized \code{f()} looks like:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{+----------------------+
+| environment^2(f):    | (= globalenv())
+| f                    |
++----------------------+
+           ^
+           |
++----------------------+
+| environment(f):      |
+| pi = 3.14            |
++----------------------+
+           ^
+           |
++======================+
+| f():                 | (frame at runtime)
+| n = 4                |
++======================+
+}\if{html}{\out{</div>}}
+
+One way to revive \code{a} is to inject a new grandparent environment that
+holds a copy of \code{a}, e.g.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{new <- new.env(parent = parent.env(environment(f)))
+new$a <- 2
+parent.env(environment(f)) <- new
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{+----------------------+
+| environment^3(f):    | (= globalenv())
+| f                    |
++----------------------+
+           ^
+           |
++----------------------+
+| environment^2(f):    | (injected environment)
+| a = 2                |
++----------------------+
+           ^
+           |
++----------------------+
+| environment(f):      |
+| pi = 3.14            |
++----------------------+
+           ^
+           |
++======================+
+| f():                 | (frame at runtime)
+| n = 4                |
++======================+
+}\if{html}{\out{</div>}}
+
+and we can evaluate \code{f()} again;
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{f()
+#> 1.57
+}\if{html}{\out{</div>}}
+
+We can of course built up the above version of \code{f()} \emph{before} serializing,
+e.g before we saved to file above. Then it is ready to use when
+unserialized, e.g. read back from file.
+An alternative way to achive this is to use the \code{replace_env()} function;
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{new <- as.environment(list(a = a))
+replace_env(environment(f), search = locate_object(f)$envir, replace = new)
+}\if{html}{\out{</div>}}
+
+If we save this to file, restart R, and load it back in, we'll see that
+we have a fully functional version of \code{f}, e.g. \code{f()} gives 1.57.
+}
+
 \examples{
 a <- 42
 f <- local(function() a)
@@ -85,12 +226,38 @@ do_call <- function(fcn, args = list(), envir = parent.frame(),
       stopifnot(any(vapply(fcn_parents, FUN.VALUE = FALSE, FUN = identical, fcn_where$envir)))
     }
     new <- as.environment(fcn_globals)
-    old <- replace_env(fcn_env, search = fcn_where$envir, replace = new)
-    on.exit(replace_env(fcn_env, search = new, replace = old))
+    message("Now environment holding globals:")
+    print(new)
+    search <- list(fcn_env = parent.env(fcn_env), "fcn_where$envir" = fcn_where$envir)
+    old <- replace_env(environment(fcn), search = search, replace = new)
+    on.exit(replace_env(environment(fcn), search = new, replace = old))
   }
   
   message(sprintf("Size of '\%s': \%s bytes",
           as.character(substitute(fcn)), size_of(fcn)))
+
+    fcn_where <- locate_object(fcn, from = envir)
+    fcn_env <- environment(fcn)
+    fcn_parents <- parent_envs(fcn_env, until = list(fcn_where$envir, globalenv()))
+    fcn_globals <- get_globals(fcn)
+    if (getOption("debug", FALSE)) {
+      utils::str(list(
+          fcn_where = fcn_where,
+            fcn_env = fcn_env,
+        fcn_parents = fcn_parents,
+        fcn_globals = fcn_globals
+      ))
+#      stopifnot(any(vapply(fcn_parents, FUN.VALUE = FALSE, FUN = identical, fcn_where$envir)))
+      print(fcn_env)
+      print(ls.str(fcn_env))
+      for (name in names(fcn_parents)[1:2]) {
+        message(sprintf("\%s:", name))
+        print(ls.str(fcn_parents[[name]]))
+      }
+    }
+
+  print(ls.str(environment(fcn)))
+
   do.call(fcn, args = args, envir = envir)
 }
 

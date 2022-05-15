@@ -4,7 +4,7 @@
 \alias{parent_envs}
 \title{Find all parent environments of an environment}
 \usage{
-parent_envs(envir, until = emptyenv(), extra = 0L)
+parent_envs(envir = parent.frame(), until = emptyenv(), extra = 0L)
 }
 \arguments{
 \item{envir}{An \code{\link[base:environment]{environment}}

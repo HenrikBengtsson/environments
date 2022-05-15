@@ -19,7 +19,7 @@ caller <- function(fcn, envir = parent.frame()) {
 #  envs <- envs[-length(envs)]
 #  ls_str_envs(envs)
   if (identical(fcn, last2$g)) {
-    penv <- new.env(parent = parent.env(last))
+    penv <- new.env(parent = parent_env(last))
     penv$a <- 13
     print(last2)
     environment(last2) <- penv

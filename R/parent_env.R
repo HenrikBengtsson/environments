@@ -13,6 +13,8 @@
 #' An \code{\link[base:environment]{environment}}.
 #'
 #' @examples
+#' parent_env()
+#'
 #' ns <- getNamespace("stats")
 #' parent_env(ns, n = 0)
 #' parent_env(ns, n = 1)
@@ -32,7 +34,7 @@
 #' parent_env(f, n = 3)
 #'
 #' @export
-parent_env <- function(envir, n = 1L) {
+parent_env <- function(envir = parent.frame(), n = 1L) {
   if (!inherits(envir, "environment")) {
      e <- environment(envir)
      if (is.null(e)) {

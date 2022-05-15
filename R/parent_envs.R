@@ -36,7 +36,7 @@
 #' names(f_envs)
 #'
 #' @export
-parent_envs <- function(envir, until = emptyenv(), extra = 0L) {
+parent_envs <- function(envir = parent.frame(), until = emptyenv(), extra = 0L) {
   if (!inherits(envir, "environment")) {
      e <- environment(envir)
      if (is.null(e)) {

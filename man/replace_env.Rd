@@ -73,14 +73,14 @@ In order to evaluate \code{f()}, variables \code{a} and \code{pi}, which are glo
 ("free") variables defined outside and not at runtime in the call
 frame, like \code{n} is.  To clarify further what the difference is:
 we cannot query \code{n} from \code{f}, but we can query both \code{pi} and \code{a} as
-\code{environment(f)$pi} and \code{parent.env(environment(f))$a}.
-Similarly, we can also do \code{parent.env(environment(f))$cargo}, but
-it is a variable useless for evalating \code{f()}.
+\code{environment(f)$pi} and \code{parent_env(f)$a}.
+Similarly, we can also do \code{parent_env(f)$cargo}, but it is a variable
+useless for evalating \code{f()}.
 
 When we serialize \code{f} (e.g. export it to a parallel worker), the body
 and the formals of the function is included, as well as all
 the environments of \code{f} up to where \code{f} itself lives, e.g.
-\code{environment(f)} and \code{parent.env(environment(f))} in our example.
+\code{environment(f)} and \code{parent_env(f)} in our example.
 However, if the environment where \code{f} lives is the global environment
 (= \code{globalenv()}), then it is \emph{not} part of the serialization output.
 Imagine we save \code{f} to file, restart R, and load it back, e.g.
@@ -122,7 +122,7 @@ large \code{cargo} object.  Continuing, our unserialized \code{f()} looks like:
 One way to revive \code{a} is to inject a new grandparent environment that
 holds a copy of \code{a}, e.g.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{new <- new.env(parent = parent.env(environment(f)))
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{new <- new.env(parent = parent_env(f))
 new$a <- 2
 parent.env(environment(f)) <- new
 }\if{html}{\out{</div>}}
@@ -199,7 +199,7 @@ new <- as.environment(list(a = 13, pi = 3.14))
 old <- replace_env(f, search = environment(), replace = new)
 old
 
-f2_envs <- parent_envs(f, until = list(environment(), parent.env(environment())))
+f2_envs <- parent_envs(f, until = list(environment(), parent_env()))
 names(f2_envs)
 
 ## Note that f() will now see a = 13 in the replaced environment

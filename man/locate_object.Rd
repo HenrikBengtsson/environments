@@ -32,7 +32,7 @@ locate_object(rnorm)
 my_sum <- rnorm
 locate_object(my_sum)
 
-locate_object(my_sum, from = parent.env(environment()))
+locate_object(my_sum, from = parent_env())
 
 my_sum <- local(sum)
 locate_object(my_sum)

@@ -10,7 +10,7 @@ new <- as.environment(list(a = 13, pi = 3.14))
 old <- replace_env(f, search = environment(), replace = new)
 old
 
-f2_envs <- parent_envs(f, until = list(environment(), parent.env(environment())))
+f2_envs <- parent_envs(f, until = list(environment(), parent_env()))
 names(f2_envs)
 
 ## Note that f() will now see a = 13 in the replaced environment

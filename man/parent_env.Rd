@@ -4,7 +4,7 @@
 \alias{parent_env}
 \title{Get ancestral environments of an environment}
 \usage{
-parent_env(envir, n = 1L)
+parent_env(envir = parent.frame(), n = 1L)
 }
 \arguments{
 \item{envir}{An \code{\link[base:environment]{environment}}
@@ -23,6 +23,8 @@ An \code{\link[base:environment]{environment}}.
 Get ancestral environments of an environment
 }
 \examples{
+parent_env()
+
 ns <- getNamespace("stats")
 parent_env(ns, n = 0)
 parent_env(ns, n = 1)

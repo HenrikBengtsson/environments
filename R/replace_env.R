@@ -62,14 +62,14 @@
 #' ("free") variables defined outside and not at runtime in the call
 #' frame, like `n` is.  To clarify further what the difference is:
 #' we cannot query `n` from `f`, but we can query both `pi` and `a` as
-#' `environment(f)$pi` and `parent.env(environment(f))$a`.
-#' Similarly, we can also do `parent.env(environment(f))$cargo`, but
-#' it is a variable useless for evalating `f()`.
+#' `environment(f)$pi` and `parent_env(f)$a`.
+#' Similarly, we can also do `parent_env(f)$cargo`, but it is a variable
+#' useless for evalating `f()`.
 #'
 #' When we serialize `f` (e.g. export it to a parallel worker), the body
 #' and the formals of the function is included, as well as all
 #' the environments of `f` up to where `f` itself lives, e.g.
-#' `environment(f)` and `parent.env(environment(f))` in our example.
+#' `environment(f)` and `parent_env(f)` in our example.
 #' However, if the environment where `f` lives is the global environment
 #' (= `globalenv()`), then it is _not_ part of the serialization output.
 #' Imagine we save `f` to file, restart R, and load it back, e.g.
@@ -115,7 +115,7 @@
 #' holds a copy of `a`, e.g.
 #'
 #' ```r
-#' new <- new.env(parent = parent.env(environment(f)))
+#' new <- new.env(parent = parent_env(f))
 #' new$a <- 2
 #' parent.env(environment(f)) <- new
 #' ```

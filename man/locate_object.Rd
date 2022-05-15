@@ -4,7 +4,7 @@
 \alias{locate_object}
 \title{Locate the original name and location of an object}
 \usage{
-locate_object(object, from = parent.frame())
+locate_object(object, from = parent.frame(), first = TRUE)
 }
 \arguments{
 \item{object}{The R object whose location should be identified.}
@@ -12,6 +12,9 @@ locate_object(object, from = parent.frame())
 \item{from}{An \code{\link[base:environment]{environment}}, or an object
 with an environment (e.g. a \code{\link[base:function]{function}} and a
 \code{\link[base:tilde]{formula}}), to start search from.}
+
+\item{first}{If TRUE, the first occurance of \code{object} among the parent
+frames is identified, otherwise the last.}
 }
 \value{
 A named list with elements \code{name} and \code{envir}, where \code{name} is the

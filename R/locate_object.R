@@ -6,6 +6,9 @@
 #' with an environment (e.g. a \code{\link[base:function]{function}} and a
 #' \code{\link[base:tilde]{formula}}), to start search from.
 #'
+#' @param first If TRUE, the first occurance of `object` among the parent
+#' frames is identified, otherwise the last.
+#'
 #' @return
 #' A named list with elements `name` and `envir`, where `name` is the
 #' name of `object` as it is named in environment `envir`, i.e.
@@ -16,7 +19,7 @@
 #' @example incl/locate_object_1.R
 #'
 #' @export
-locate_object <- function(object, from = parent.frame()) {
+locate_object <- function(object, from = parent.frame(), first = TRUE) {
   if (inherits(from, "environment")) {
     envir <- from
   } else {
@@ -25,7 +28,8 @@ locate_object <- function(object, from = parent.frame()) {
       stop(sprintf("Argument 'from' does not specify an environment or an object with an environment: %s", mode(from)))
     }
   }
-
+  stopifnot(length(first) == 1L, is.logical(first), !is.na(first))
+  
   mode <- mode(object) ## scan for objects of this mode
 
   ## WORKAROUND: R CMD check will add mockup 'F' and 'T' objects
@@ -37,7 +41,8 @@ locate_object <- function(object, from = parent.frame()) {
   if ("CheckExEnv" %in% search()) {
     skip <- as.environment("CheckExEnv")
   }
-  
+
+  res <- NULL
   while (!identical(envir, emptyenv())) {
     ## Skip?
     if (identical(envir, skip)) {
@@ -53,12 +58,14 @@ locate_object <- function(object, from = parent.frame()) {
         tmp <- get(name, mode = mode, envir = envir, inherits = FALSE)
         ## ... are the identical?
         if (identical(tmp, object)) {
-          return(list(name = name, envir = envir))
+          res <- list(name = name, envir = envir)
+          if (first) return(res)
         }
       }
     }
     envir <- parent.env(envir)
   }
-  
-  NULL
+
+  res
 }
+

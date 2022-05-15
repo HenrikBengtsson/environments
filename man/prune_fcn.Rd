@@ -33,11 +33,10 @@ Remove unused objects from a function's parent environments
 
 ## Call a function with the option to replace the function
 ## environment with a smaller temporary environment
-do_call <- function(fcn, args = list(), envir = parent.frame(),
-                    prune = FALSE, from = envir) {
+do_call <- function(fcn, args = list(), envir = parent.frame(), prune = FALSE) {
   fcn_name <- as.character(substitute(fcn))
   if (prune) {
-    fcn <- prune_fcn(fcn, search = locate_object(fcn, from = from)$envir)
+    fcn <- prune_fcn(fcn, search = locate_object(fcn, from = envir, first = FALSE)$envir)
     
     ## Important: We must drop attribute 'prune_undo' before
     ## exporting object, otherwise it will carry the pruned
@@ -63,12 +62,9 @@ my_fcn <- function(g = NULL, prune = FALSE) {
       pi <- 3.14
       function() n * pi
     })
-    from <- environment()
-  } else {
-    from <- parent.frame()
   }
 
-  do_call(g, prune = prune, from = from)
+  do_call(g, prune = prune)
 }
 
 

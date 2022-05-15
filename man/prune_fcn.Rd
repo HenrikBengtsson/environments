@@ -4,7 +4,7 @@
 \alias{prune_fcn}
 \title{Remove unused objects from a function's parent environments}
 \usage{
-prune_fcn(fcn, search = parent.frame())
+prune_fcn(fcn, search = locate_object(fcn)$envir)
 }
 \arguments{
 \item{fcn}{A \code{\link[base:function]{function}}.}
@@ -20,64 +20,4 @@ remove it before exporting the function to an external process.}
 }
 \description{
 Remove unused objects from a function's parent environments
-}
-\examples{
-## ------------------------------------------------------------------------
-## Example how to avoid huge local objects being part of a local function,
-## which might be costly if the function is serialized, e.g. exported
-## to a parallel workers
-## ------------------------------------------------------------------------
-
-## Call a function with the option to replace the function
-## environment with a smaller temporary environment
-do_call <- function(fcn, args = list(), envir = parent.frame(),
-                    prune = FALSE, search = search_path(2L)) {
-  fcn_name <- as.character(substitute(fcn))
-  if (prune) {
-    fcn <- prune_fcn(fcn, search = search)
-
-    ## Important: We must drop attribute 'prune_undo' before
-    ## exporting object, otherwise it will carry the pruned
-    ## environment as cargo
-    fcn_undo <- attr(fcn, "prune_undo")
-    attr(fcn, "prune_undo") <- NULL
-    
-    on.exit(fcn_undo())
-  }
-  
-  message(sprintf("Size of '\%s': \%s bytes", fcn_name, size_of(fcn)))
-  do.call(fcn, args = args, envir = envir)
-}
-
-my_fcn <- function(g = NULL, prune = FALSE) {
-  cargo <- rnorm(1e6)
-  
-  n <- 2
-
-  if (is.null(g)) {
-    g <- local({
-      pi <- 3.14
-      function() n * pi
-    })
-  }
-  
-  do_call(g, prune = prune)
-}
-
-
-## Use local function
-my_fcn()
-my_fcn(prune = TRUE)
-my_fcn()
-
-
-## Use global function
-g2 <- local({
-  n <- 2
-  pi <- 3.14
-  function() n * pi
-})
-
-my_fcn(g2, prune = TRUE)
-my_fcn(g2)
 }

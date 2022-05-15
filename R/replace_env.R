@@ -1,6 +1,6 @@
 #' Replace one of the parent environments with another
 #'
-#' @param envir An \code{\link[base:environment]{environment}}.
+#' @inheritParams parent_env
 #'
 #' @param search A \code{\link[base:environment]{environment}},
 #' among the parents of `envir`, to be replaced.
@@ -21,7 +21,7 @@
 #'
 #' Consider below function `f()` where `pi` is part of `environment(f)`,
 #' which is a local environment, and `a` is a global variable part of
-#' `parent.env(environment(f))`, which we _denote_ as `environment^2(f)`:
+#' `parent_env(f)`.
 #'
 #' ```r
 #' cargo <- rnorm(1e6)
@@ -39,7 +39,7 @@
 #'
 #' ```
 #' +----------------------+
-#' | environment^2(f):    |
+#' | parent_env(f):       |
 #' | cargo = { 1e6 }      |
 #' | a = 2                |
 #' | f                    |
@@ -94,6 +94,7 @@
 #'
 #' ```
 #' +----------------------+
+#' | parent_env(f):       |
 #' | environment^2(f):    | (= globalenv())
 #' | f                    |
 #' +----------------------+
@@ -121,28 +122,28 @@
 #' ```
 #'
 #' ```
-#' +----------------------+
-#' | environment^3(f):    | (= globalenv())
-#' | f                    |
-#' +----------------------+
+#' +-----------------------+
+#' | parent_env(f, n = 2): | (= globalenv())
+#' | f                     |
+#' +-----------------------+
 #'            ^
 #'            |
-#' +----------------------+
-#' | environment^2(f):    | (injected environment)
-#' | a = 2                |
-#' +----------------------+
+#' +-----------------------+
+#' | parent_env(f):        | (injected environment)
+#' | a = 2                 |
+#' +-----------------------+
 #'            ^
 #'            |
-#' +----------------------+
-#' | environment(f):      |
-#' | pi = 3.14            |
-#' +----------------------+
+#' +-----------------------+
+#' | environment(f):       |
+#' | pi = 3.14             |
+#' +-----------------------+
 #'            ^
 #'            |
-#' +======================+
-#' | f():                 | (frame at runtime)
-#' | n = 4                |
-#' +======================+
+#' +=======================+
+#' | f():                  | (frame at runtime)
+#' | n = 4                 |
+#' +=======================+
 #' ```
 #'
 #' and we can evaluate `f()` again;
@@ -159,18 +160,24 @@
 #'
 #' ```r
 #' new <- as.environment(list(a = a))
-#' replace_env(environment(f), search = locate_object(f)$envir, replace = new)
+#' replace_env(f, search = locate_object(f)$envir, replace = new)
 #' ```
 #'
 #' If we save this to file, restart R, and load it back in, we'll see that
 #' we have a fully functional version of `f`, e.g. `f()` gives 1.57.
 #' 
 #' @example incl/replace_env.R
-#' @example incl/replace_env_2.R
+## @example incl/replace_env_2.R
 #'
 #' @export
 replace_env <- function(envir, search, replace, update_parent = TRUE) {
-  stopifnot(inherits(envir, "environment"))
+  if (!inherits(envir, "environment")) {
+     e <- environment(envir)
+     if (is.null(e)) {
+       stop(sprintf("Argument 'envir' must be an environment or an object with an environment: %s", mode(envir)))
+     }
+     envir <- e
+  }
   if (!is.list(search)) {
     search <- list(search)
     names(search) <- environment_name(search[[1]])

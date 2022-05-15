@@ -7,11 +7,17 @@
 ## Call a function with the option to replace the function
 ## environment with a smaller temporary environment
 do_call <- function(fcn, args = list(), envir = parent.frame(),
-                    prune = FALSE, search = search_path(2L)) {
+                    prune = FALSE, search = locate_object(fcn, from = envir)) {
   fcn_name <- as.character(substitute(fcn))
   if (prune) {
-    fcn <- prune_fcn(fcn, search = search)
+    message("search_path():")
+    str(search)
+    print(utils::ls.str(search))
+    message("--------------")
 
+    print(search)
+    fcn <- prune_fcn(fcn, search = search$envir)
+    
     ## Important: We must drop attribute 'prune_undo' before
     ## exporting object, otherwise it will carry the pruned
     ## environment as cargo
@@ -20,7 +26,14 @@ do_call <- function(fcn, args = list(), envir = parent.frame(),
     
     on.exit(fcn_undo())
   }
-  
+
+  envs <- parent_envs(environment(fcn), until = list(globalenv(), parent.env(globalenv())))
+  stopifnot("pi" %in% names(envs[[1]]), identical("pi", names(envs[[1]])))
+  message("Pruned env #2:")
+  print(utils::ls.str(envs[[2]]))
+  stopifnot("n" %in% names(envs[[2]]))
+#  if (prune) stopifnot(identical("n", names(envs[[2]])))
+
   message(sprintf("Size of '%s': %s bytes", fcn_name, size_of(fcn)))
   do.call(fcn, args = args, envir = envir)
 }
@@ -41,18 +54,30 @@ my_fcn <- function(g = NULL, prune = FALSE) {
 }
 
 
-## Use local function
+## Non-pruned function local to a function carries also large 'cargo' object
 my_fcn()
+
+## Pruned function local to a function without large 'cargo' object
 my_fcn(prune = TRUE)
-my_fcn()
 
 
-## Use global function
+
 g2 <- local({
+  cargo <- rnorm(1e6)
   n <- 2
-  pi <- 3.14
-  function() n * pi
+  local({
+    pi <- 3.14
+    function() n * pi
+  })
 })
 
+## Non-pruned global function does not carry large 'cargo' object,
+## because it's located in the global environment, which is never
+## serialized/exported
+my_fcn(g2)
+
+## Pruning a global function makes no difference
 my_fcn(g2, prune = TRUE)
+
+## Proof that g2() is only temporarily pruned and undone automatically
 my_fcn(g2)

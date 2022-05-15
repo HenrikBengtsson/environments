@@ -8,10 +8,10 @@
 #' an "undo" function. _WARNING: Make sure to copy this attribute and then
 #' remove it before exporting the function to an external process._
 #'
-#' @example incl/prune_fcn_1.R
+## @example incl/prune_fcn_1.R
 #' 
 #' @export
-prune_fcn <- function(fcn, search = parent.frame()) {
+prune_fcn <- function(fcn, search = locate_object(fcn)$envir) {
   stopifnot(is.function(fcn))
 
   fcn_env <- environment(fcn)

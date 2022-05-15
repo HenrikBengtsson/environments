@@ -1,5 +1,5 @@
 Package: environments
-Version: 0.0.0-9005
+Version: 0.0.0-9006
 Title: Working with Environments and Closures in R
 Description: A set of tools to work with environments and closures in R for the purpose of demonstrating how they work.
 Imports:

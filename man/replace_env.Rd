@@ -7,7 +7,8 @@
 replace_env(envir, search, replace, update_parent = TRUE)
 }
 \arguments{
-\item{envir}{An \code{\link[base:environment]{environment}}.}
+\item{envir}{An \code{\link[base:environment]{environment}}
+or an object with an environment, e.g. a function or a formula.}
 
 \item{search}{A \code{\link[base:environment]{environment}},
 among the parents of \code{envir}, to be replaced.
@@ -33,7 +34,7 @@ Replace one of the parent environments with another
 
 Consider below function \code{f()} where \code{pi} is part of \code{environment(f)},
 which is a local environment, and \code{a} is a global variable part of
-\code{parent.env(environment(f))}, which we \emph{denote} as \code{environment^2(f)}:
+\code{parent_env(f)}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{cargo <- rnorm(1e6)
 a <- 2
@@ -49,7 +50,7 @@ f <- local(\{
 We can visualize this as:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{+----------------------+
-| environment^2(f):    |
+| parent_env(f):       |
 | cargo = \{ 1e6 \}      |
 | a = 2                |
 | f                    |
@@ -101,6 +102,7 @@ It's good, because we don't have to pay the price of serializing the
 large \code{cargo} object.  Continuing, our unserialized \code{f()} looks like:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{+----------------------+
+| parent_env(f):       |
 | environment^2(f):    | (= globalenv())
 | f                    |
 +----------------------+
@@ -126,28 +128,28 @@ new$a <- 2
 parent.env(environment(f)) <- new
 }\if{html}{\out{</div>}}
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{+----------------------+
-| environment^3(f):    | (= globalenv())
-| f                    |
-+----------------------+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{+-----------------------+
+| parent_env(f, n = 2): | (= globalenv())
+| f                     |
++-----------------------+
            ^
            |
-+----------------------+
-| environment^2(f):    | (injected environment)
-| a = 2                |
-+----------------------+
++-----------------------+
+| parent_env(f):        | (injected environment)
+| a = 2                 |
++-----------------------+
            ^
            |
-+----------------------+
-| environment(f):      |
-| pi = 3.14            |
-+----------------------+
++-----------------------+
+| environment(f):       |
+| pi = 3.14             |
++-----------------------+
            ^
            |
-+======================+
-| f():                 | (frame at runtime)
-| n = 4                |
-+======================+
++=======================+
+| f():                  | (frame at runtime)
+| n = 4                 |
++=======================+
 }\if{html}{\out{</div>}}
 
 and we can evaluate \code{f()} again;
@@ -162,7 +164,7 @@ unserialized, e.g. read back from file.
 An alternative way to achive this is to use the \code{replace_env()} function;
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{new <- as.environment(list(a = a))
-replace_env(environment(f), search = locate_object(f)$envir, replace = new)
+replace_env(f, search = locate_object(f)$envir, replace = new)
 }\if{html}{\out{</div>}}
 
 If we save this to file, restart R, and load it back in, we'll see that
@@ -173,16 +175,16 @@ we have a fully functional version of \code{f}, e.g. \code{f()} gives 1.57.
 a <- 42
 f <- local(function() a)
 
-f_envs <- parent_envs(environment(f), until = environment(), extra = 1L)
+f_envs <- parent_envs(f, until = environment(), extra = 1L)
 names(f_envs)
 y <- f()
 y
 
 new <- as.environment(list(a = 13, pi = 3.14))
-old <- replace_env(environment(f), search = environment(), replace = new)
+old <- replace_env(f, search = environment(), replace = new)
 old
 
-f2_envs <- parent_envs(environment(f), until = list(environment(), parent.env(environment())))
+f2_envs <- parent_envs(f, until = list(environment(), parent.env(environment())))
 names(f2_envs)
 
 ## Note that f() will now see a = 13 in the replaced environment
@@ -191,139 +193,14 @@ z <- f()
 z
 
 ## Undo changes
-old2 <- replace_env(environment(f), search = new, replace = old)
+old2 <- replace_env(f, search = new, replace = old)
 stopifnot(identical(old2, new))
 
-f3_envs <- parent_envs(environment(f), until = environment(), extra = 1L)
+f3_envs <- parent_envs(f, until = environment(), extra = 1L)
 stopifnot(identical(f3_envs, f_envs))
 
 ## f() will now see a = 42 again
 z <- f()
 z
 
-## ------------------------------------------------------------------------
-## Example how to avoid huge local objects being part of a local function,
-## which might be costly if the function is serialized, e.g. exported
-## to a parallel workers
-## ------------------------------------------------------------------------
-
-## Call a function with the option to replace the function
-## environment with a smaller temporary environment
-do_call <- function(fcn, args = list(), envir = parent.frame(),
-                    prune = FALSE) {
-  if (prune) {
-    fcn_where <- locate_object(fcn, from = envir)
-    fcn_env <- environment(fcn)
-    fcn_parents <- parent_envs(fcn_env, until = fcn_where$envir)
-    fcn_globals <- get_globals(fcn)
-    if (getOption("debug", FALSE)) {
-      utils::str(list(
-          fcn_where = fcn_where,
-            fcn_env = fcn_env,
-        fcn_parents = fcn_parents,
-        fcn_globals = fcn_globals
-      ))
-      stopifnot(any(vapply(fcn_parents, FUN.VALUE = FALSE, FUN = identical, fcn_where$envir)))
-    }
-    new <- as.environment(fcn_globals)
-    message("Now environment holding globals:")
-    print(new)
-    search <- list(fcn_env = parent.env(fcn_env), "fcn_where$envir" = fcn_where$envir)
-    old <- replace_env(environment(fcn), search = search, replace = new)
-    on.exit(replace_env(environment(fcn), search = new, replace = old))
-  }
-  
-  message(sprintf("Size of '\%s': \%s bytes",
-          as.character(substitute(fcn)), size_of(fcn)))
-
-    fcn_where <- locate_object(fcn, from = envir)
-    fcn_env <- environment(fcn)
-    fcn_parents <- parent_envs(fcn_env, until = list(fcn_where$envir, globalenv()))
-    fcn_globals <- get_globals(fcn)
-    if (getOption("debug", FALSE)) {
-      utils::str(list(
-          fcn_where = fcn_where,
-            fcn_env = fcn_env,
-        fcn_parents = fcn_parents,
-        fcn_globals = fcn_globals
-      ))
-#      stopifnot(any(vapply(fcn_parents, FUN.VALUE = FALSE, FUN = identical, fcn_where$envir)))
-      print(fcn_env)
-      print(ls.str(fcn_env))
-      for (name in names(fcn_parents)[1:2]) {
-        message(sprintf("\%s:", name))
-        print(ls.str(fcn_parents[[name]]))
-      }
-    }
-
-  print(ls.str(environment(fcn)))
-
-  do.call(fcn, args = args, envir = envir)
-}
-
-my_fcn <- function(prune = FALSE) {
-  cargo <- rnorm(1e6)
-  
-  n <- 2
-  g <- local({
-    pi <- 3.14
-    function() n * pi
-  })
-  
-  do_call(g, prune = prune)
-}
-
-my_fcn()
-my_fcn(prune = TRUE)
-
-
-n <- 2  
-g <- local({
-  pi <- 3.14
-  function() n * pi
-})
-
-my_fcn <- function(prune = FALSE) {
-  cargo <- rnorm(1e6)
-  do_call(g, prune = prune)
-}
-
-my_fcn()
-my_fcn(prune = TRUE)
-
-
-cargo <- rnorm(1e6)
-n <- 2  
-g <- local({
-  pi <- 3.14
-  function() n * pi
-})
-
-my_fcn <- function(prune = FALSE) {
-  do_call(g, prune = prune)
-}
-
-my_fcn()
-my_fcn(prune = TRUE)
-
-rm(list = c("cargo", "n"))
-
-
-## WARNING: Large objects inside local environments of
-##          the function will not the pruned!
-g <- local({
-  cargo <- rnorm(1e6)
-  n <- 2  
-  local({
-    pi <- 3.14
-    function() n * pi
-  })
-})
-
-my_fcn <- function(prune = FALSE) {
-  do_call(g, prune = prune)
-}
-
-my_fcn()
-my_fcn(prune = TRUE)
 }

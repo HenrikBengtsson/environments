@@ -10,25 +10,46 @@ do_call <- function(fcn, args = list(), envir = parent.frame(),
                     prune = FALSE) {
   if (prune) {
     fcn_where <- locate_object(fcn, from = envir)
-    fcn_env <- environment(fcn)
-    fcn_parents <- parent_envs(fcn_env, until = fcn_where$envir)
+    fcn_parents <- parent_envs(fcn, until = fcn_where$envir)
     fcn_globals <- get_globals(fcn)
     if (getOption("debug", FALSE)) {
       utils::str(list(
           fcn_where = fcn_where,
-            fcn_env = fcn_env,
         fcn_parents = fcn_parents,
         fcn_globals = fcn_globals
       ))
       stopifnot(any(vapply(fcn_parents, FUN.VALUE = FALSE, FUN = identical, fcn_where$envir)))
     }
     new <- as.environment(fcn_globals)
-    old <- replace_env(fcn_env, search = fcn_where$envir, replace = new)
-    on.exit(replace_env(fcn_env, search = new, replace = old))
+    message("Now environment holding globals:")
+    print(new)
+    search <- list(fcn_env = environment(fcn), "fcn_where$envir" = fcn_where$envir)
+    old <- replace_env(fcn, search = search, replace = new)
+    on.exit(replace_env(fcn, search = new, replace = old))
   }
   
   message(sprintf("Size of '%s': %s bytes",
           as.character(substitute(fcn)), size_of(fcn)))
+
+    fcn_where <- locate_object(fcn, from = envir)
+    fcn_parents <- parent_envs(fcn, until = list(fcn_where$envir, globalenv()))
+    fcn_globals <- get_globals(fcn)
+    if (getOption("debug", FALSE)) {
+      utils::str(list(
+          fcn_where = fcn_where,
+        fcn_parents = fcn_parents,
+        fcn_globals = fcn_globals
+      ))
+#      stopifnot(any(vapply(fcn_parents, FUN.VALUE = FALSE, FUN = identical, fcn_where$envir)))
+      print(ls.str(environment(fcn)))
+      for (name in names(fcn_parents)[1:2]) {
+        message(sprintf("%s:", name))
+        print(ls.str(fcn_parents[[name]]))
+      }
+    }
+
+  print(ls.str(environment(fcn)))
+
   do.call(fcn, args = args, envir = envir)
 }
 

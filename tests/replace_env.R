@@ -1,6 +1,11 @@
 library(environments)
 
-## Temporary file used in this test
+message("*** Setup")
+
+tf <- tempfile(fileext = ".rds")
+tf2 <- tempfile(fileext = ".rds")
+tf3 <- tempfile(fileext = ".rds")
+
 
 message("*** Exporting function in global environment (without globals)")
 cargo <- rnorm(1e6)
@@ -13,11 +18,10 @@ f <- local({
   }
 })
 stopifnot(
-  identical(environment(f)$pi, 3.14),
-  identical(parent.env(environment(f))$a, 2),
-  length(parent.env(environment(f))$cargo) == 1e6
+  identical(parent_env(f, n = 0)$pi, 3.14),
+  identical(parent_env(f, n = 1)$a, 2),
+     length(parent_env(f, n = 1)$cargo) == 1e6
 )
-tf <- tempfile(fileext = ".rds")
 saveRDS(f, file = tf)
 truth <- f()
 print(truth)
@@ -29,11 +33,10 @@ new <- new.env()
 new$a <- a
 parent.env(environment(f)) <- new
 stopifnot(
-  identical(environment(f)$pi, 3.14),
-  identical(parent.env(environment(f))$a, 2),
-  is.null(parent.env(environment(f))$cargo)
+  identical(parent_env(f, n = 0)$pi, 3.14),
+  identical(parent_env(f, n = 1)$a, 2),
+    is.null(parent_env(f, n = 1)$cargo)
 )
-tf2 <- tempfile(fileext = ".rds")
 saveRDS(f, file = tf2)
 
 
@@ -41,12 +44,11 @@ message("*** Exporting replace_env() modified function in global environment wit
 new <- as.environment(list(a = a))
 replace_env(environment(f), search = locate_object(f)$envir, replace = new)
 stopifnot(
-  identical(environment(f)$pi, 3.14),
-  identical(parent.env(environment(f))$a, 2),
-  is.null(parent.env(environment(f))$cargo)
+  identical(parent_env(f, n = 0)$pi, 3.14),
+  identical(parent_env(f, n = 1)$a, 2),
+    is.null(parent_env(f, n = 1)$cargo)
 )
-tf3 <- tempfile(fileext = ".rds")
-saveRDS(f, file = tf3)
+suppressWarnings(saveRDS(f, file = tf3))  ## produces a warning; expected
 
 rm(list = c("cargo", "a", "f", "new"))
 
@@ -54,9 +56,9 @@ rm(list = c("cargo", "a", "f", "new"))
 message("*** Verify exported function without globals")
 f <- readRDS(tf)
 stopifnot(
-  identical(environment(f)$pi, 3.14),
-  is.null(parent.env(environment(f))$a),
-  is.null(parent.env(environment(f))$cargo)
+  identical(parent_env(f, n = 0)$pi, 3.14),
+    is.null(parent_env(f, n = 1)$a),
+    is.null(parent_env(f, n = 1)$cargo)
 )
 res <- tryCatch({ f() }, error = identity)
 print(res)
@@ -68,9 +70,9 @@ message("*** Verify manually modified function")
 
 f <- readRDS(tf2)
 stopifnot(
-  identical(environment(f)$pi, 3.14),
-  identical(parent.env(environment(f))$a, 2),
-  is.null(parent.env(environment(f))$cargo)
+  identical(parent_env(f, n = 0)$pi, 3.14),
+  identical(parent_env(f, n = 1)$a, 2),
+    is.null(parent_env(f, n = 1)$cargo)
 )
 res <- f()
 print(res)
@@ -82,9 +84,9 @@ message("*** Verify replace_env() modified function")
 
 f <- readRDS(tf3)
 stopifnot(
-  identical(environment(f)$pi, 3.14),
-  identical(parent.env(environment(f))$a, 2),
-  is.null(parent.env(environment(f))$cargo)
+  identical(parent_env(f, n = 0)$pi, 3.14),
+  identical(parent_env(f, n = 1)$a, 2),
+    is.null(parent_env(f, n = 1)$cargo)
 )
 res <- f()
 print(res)

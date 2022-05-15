@@ -7,7 +7,8 @@
 parent_env(envir, n = 1L)
 }
 \arguments{
-\item{envir}{An \code{\link[base:environment]{environment}}.}
+\item{envir}{An \code{\link[base:environment]{environment}}
+or an object with an environment, e.g. a function or a formula.}
 
 \item{n}{The generation of parent environment to get.
 If \code{n = 0}, then \code{envir} is returned.
@@ -36,8 +37,8 @@ f <- local({
     function() pi * a
   })
 })
-parent_env(environment(f), n = 1)
-parent_env(environment(f), n = 2)
-parent_env(environment(f), n = 3)
+parent_env(f, n = 1)
+parent_env(f, n = 2)
+parent_env(f, n = 3)
 
 }

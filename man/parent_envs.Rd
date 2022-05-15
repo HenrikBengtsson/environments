@@ -7,7 +7,8 @@
 parent_envs(envir, until = emptyenv(), extra = 0L)
 }
 \arguments{
-\item{envir}{An \code{\link[base:environment]{environment}}.}
+\item{envir}{An \code{\link[base:environment]{environment}}
+or an object with an environment, e.g. a function or a formula.}
 
 \item{until}{A \code{\link[base:environment]{environment}} to consider
 the last parent environment.  If \code{until} is not one of the parent
@@ -39,10 +40,10 @@ f <- local({
     function() pi * a
   })
 })
-f_envs <- parent_envs(environment(f), until = environment())
+f_envs <- parent_envs(f, until = environment())
 names(f_envs)
 
-f_envs <- parent_envs(environment(f), until = environment(), extra = 1L)
+f_envs <- parent_envs(f, until = environment(), extra = 1L)
 names(f_envs)
 
 }

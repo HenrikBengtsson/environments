@@ -20,9 +20,9 @@ local({
     }
   })
   stopifnot(
-    identical(environment(f)$pi, 3.14),
-    identical(parent.env(environment(f))$a, 2),
-    length(parent.env(environment(f))$cargo) == 1e6
+    identical(parent_env(f, n = 0)$pi, 3.14),
+    identical(parent_env(f, n = 1)$a, 2),
+       length(parent_env(f, n = 1)$cargo) == 1e6
   )
   saveRDS(f, file = tf)
   truth <<- f()
@@ -33,18 +33,18 @@ local({
   new$a <- a
   parent.env(environment(f)) <- new
   stopifnot(
-    identical(environment(f)$pi, 3.14),
-    identical(parent.env(environment(f))$a, 2),
-    is.null(parent.env(environment(f))$cargo)
+    identical(parent_env(f, n = 0)$pi, 3.14),
+    identical(parent_env(f, n = 1)$a, 2),
+      is.null(parent_env(f, n = 1)$cargo)
   )
   saveRDS(f, file = tf2)
 
   new <- as.environment(list(a = a))
   replace_env(environment(f), search = locate_object(f)$envir, replace = new)
   stopifnot(
-    identical(environment(f)$pi, 3.14),
-    identical(parent.env(environment(f))$a, 2),
-    is.null(parent.env(environment(f))$cargo)
+    identical(parent_env(f, n = 0)$pi, 3.14),
+    identical(parent_env(f, n = 1)$a, 2),
+      is.null(parent_env(f, n = 1)$cargo)
   )
   saveRDS(f, file = tf3)
 })  
@@ -56,9 +56,9 @@ message("*** Verify exported functions")
 ## all of the local environment is brought along
 f <- readRDS(tf)
 stopifnot(
-  identical(environment(f)$pi, 3.14),
-  identical(parent.env(environment(f))$a, 2),
-  length(parent.env(environment(f))$cargo) == 1e6
+  identical(parent_env(f, n = 0)$pi, 3.14),
+  identical(parent_env(f, n = 1)$a, 2),
+     length(parent_env(f, n = 1)$cargo) == 1e6
 )
 res <- f()
 print(res)
@@ -69,9 +69,9 @@ rm(list = c("f"))
 ## However, the serialized, modified versions behave as expected
 f <- readRDS(tf2)
 stopifnot(
-  identical(environment(f)$pi, 3.14),
-  identical(parent.env(environment(f))$a, 2),
-  is.null(parent.env(environment(f))$cargo)
+  identical(parent_env(f, n = 0)$pi, 3.14),
+  identical(parent_env(f, n = 1)$a, 2),
+    is.null(parent_env(f, n = 1)$cargo)
 )
 res <- f()
 print(res)
@@ -81,9 +81,9 @@ rm(list = c("f"))
 
 f <- readRDS(tf3)
 stopifnot(
-  identical(environment(f)$pi, 3.14),
-  identical(parent.env(environment(f))$a, 2),
-  is.null(parent.env(environment(f))$cargo)
+  identical(parent_env(f, n = 0)$pi, 3.14),
+  identical(parent_env(f, n = 1)$a, 2),
+    is.null(parent_env(f, n = 1)$cargo)
 )
 res <- f()
 print(res)

@@ -1,6 +1,6 @@
 #' Find all parent environments of an environment
 #'
-#' @param envir An \code{\link[base:environment]{environment}}.
+#' @inheritParams parent_env
 #'
 #' @param until A \code{\link[base:environment]{environment}} to consider
 #' the last parent environment.  If `until` is not one of the parent
@@ -29,15 +29,21 @@
 #'     function() pi * a
 #'   })
 #' })
-#' f_envs <- parent_envs(environment(f), until = environment())
+#' f_envs <- parent_envs(f, until = environment())
 #' names(f_envs)
 #'
-#' f_envs <- parent_envs(environment(f), until = environment(), extra = 1L)
+#' f_envs <- parent_envs(f, until = environment(), extra = 1L)
 #' names(f_envs)
 #'
 #' @export
 parent_envs <- function(envir, until = emptyenv(), extra = 0L) {
-  stopifnot(inherits(envir, "environment"))
+  if (!inherits(envir, "environment")) {
+     e <- environment(envir)
+     if (is.null(e)) {
+       stop(sprintf("Argument 'envir' must be an environment or an object with an environment: %s", mode(envir)))
+     }
+     envir <- e
+  }
   if (!is.list(until)) until <- list(until)
   for (env in until) stopifnot(inherits(env, "environment"))
   stopifnot(is.numeric(extra), length(extra) == 1L, !is.na(extra), extra >= 0L)

@@ -94,8 +94,7 @@
 #'
 #' ```
 #' +----------------------+
-#' | parent_env(f):       |
-#' | environment^2(f):    | (= globalenv())
+#' | parent_env(f):       | (= globalenv())
 #' | f                    |
 #' +----------------------+
 #'            ^
@@ -166,8 +165,8 @@
 #' If we save this to file, restart R, and load it back in, we'll see that
 #' we have a fully functional version of `f`, e.g. `f()` gives 1.57.
 #' 
-#' @example incl/replace_env.R
-## @example incl/replace_env_2.R
+#' @example incl/replace_env_1.R
+#' @example incl/replace_env_2.R
 #'
 #' @export
 replace_env <- function(envir, search, replace, update_parent = TRUE) {

@@ -29,7 +29,7 @@ Invisibly, the replaced environment.
 \description{
 Replace one of the parent environments with another
 }
-\section{Replace single environment or a sequence of environments}{
+\section{Serialization of functions}{
 
 
 Consider below function \code{f()} where \code{pi} is part of \code{environment(f)},
@@ -168,6 +168,22 @@ replace_env(f, search = locate_object(f)$envir, replace = new)
 
 If we save this to file, restart R, and load it back in, we'll see that
 we have a fully functional version of \code{f}, e.g. \code{f()} gives 1.57.
+
+Another alternative is to use \code{\link[=prune_fcn]{prune_fcn()}};
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{globals <- list(a = a)
+prune_fcn(f, globals = globals)
+}\if{html}{\out{</div>}}
+
+And we can even identify global variables automatically:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{prune_fcn(f, globals = get_globals(f))
+}\if{html}{\out{</div>}}
+
+which is the same as the default:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{prune_fcn(f)
+}\if{html}{\out{</div>}}
 }
 
 \examples{

@@ -17,7 +17,7 @@
 #'
 #' @return Invisibly, the replaced environment.
 #'
-#' @section Replace single environment or a sequence of environments:
+#' @section Serialization of functions:
 #'
 #' Consider below function `f()` where `pi` is part of `environment(f)`,
 #' which is a local environment, and `a` is a global variable part of
@@ -164,6 +164,25 @@
 #'
 #' If we save this to file, restart R, and load it back in, we'll see that
 #' we have a fully functional version of `f`, e.g. `f()` gives 1.57.
+#'
+#' Another alternative is to use [prune_fcn()];
+#'
+#' ```r
+#' globals <- list(a = a)
+#' prune_fcn(f, globals = globals)
+#' ```
+#'
+#' And we can even identify global variables automatically:
+#'
+#' ```r
+#' prune_fcn(f, globals = get_globals(f))
+#' ```
+#'
+#' which is the same as the default:
+#' 
+#' ```r
+#' prune_fcn(f)
+#' ```
 #' 
 #' @example incl/replace_env_1.R
 #' @example incl/replace_env_2.R

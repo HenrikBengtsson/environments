@@ -14,8 +14,13 @@
 #' @example incl/prune_fcn_1.R
 #' 
 #' @export
-prune_fcn <- function(fcn, search = locate_object(fcn)$envir, globals = get_globals(fcn)) {
+prune_fcn <- function(fcn, search = locate_object(fcn, from = parent.frame(), first = FALSE)$envir, globals = get_globals(fcn)) {
   stopifnot(is.function(fcn))
+  if (!is.list(search)) {
+    search <- list(search)
+    names(search) <- environment_name(search[[1]])
+  }
+  for (env in search) stopifnot(inherits(env, "environment"))
   if (is.null(globals)) globals <- list()
   stopifnot(is.list(globals), !is.null(names(globals)))
   

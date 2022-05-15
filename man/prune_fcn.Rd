@@ -4,7 +4,11 @@
 \alias{prune_fcn}
 \title{Remove unused objects from a function's parent environments}
 \usage{
-prune_fcn(fcn, search = locate_object(fcn)$envir, globals = get_globals(fcn))
+prune_fcn(
+  fcn,
+  search = locate_object(fcn, from = parent.frame(), first = FALSE)$envir,
+  globals = get_globals(fcn)
+)
 }
 \arguments{
 \item{fcn}{A \code{\link[base:function]{function}}.}

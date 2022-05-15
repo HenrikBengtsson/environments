@@ -157,8 +157,8 @@ and we can evaluate \code{f()} again;
 #> 1.57
 }\if{html}{\out{</div>}}
 
-We can of course built up the above version of \code{f()} \emph{before} serializing,
-e.g before we saved to file above. Then it is ready to use when
+We can of course build up the above version of \code{f()} \emph{before} serializing,
+e.g before we save to file above. Then it is ready to use when
 unserialized, e.g. read back from file.
 An alternative way to achive this is to use the \code{replace_env()} function;
 
@@ -169,7 +169,7 @@ replace_env(f, search = locate_object(f)$envir, replace = new)
 If we save this to file, restart R, and load it back in, we'll see that
 we have a fully functional version of \code{f}, e.g. \code{f()} gives 1.57.
 
-Another alternative is to use \code{\link[=prune_fcn]{prune_fcn()}};
+Another, less verbose, alternative is to use \code{\link[=prune_fcn]{prune_fcn()}};
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{globals <- list(a = a)
 prune_fcn(f, globals = globals)

@@ -34,22 +34,25 @@ local({
   )
 
   ## Get globals and prune any functions among them
+  prune_undos <- list()
   globals <- get_globals(f)
   for (name in names(globals)) {
     global <- globals[[name]]
     if (is.function(global)) {
       ## Prune
       global <- prune_fcn(global)
-      fcn_undo <- attr(global, "prune_undo")
+      prune_undo <- attr(global, "prune_undo")
       attr(global, "prune_undo") <- NULL
-      on.exit(fcn_undo(), add = TRUE)
+      prune_undos[[name]] <- prune_undo
     }
   }
 
   f <- prune_fcn(f, search = environment(f), globals = globals)
-  fcn_undo <- attr(f, "prune_undo")
+  prune_undo <- attr(f, "prune_undo")
   attr(f, "prune_undo") <- NULL
-  on.exit(fcn_undo(), add = TRUE)
+  prune_undos <- c(prune_undos, prune_undo)
+
+  on.exit({ for (prune_undo in prune_undos) prune_undo() }, add = TRUE)
 
   globals <- get_globals(f)
   stopifnot(

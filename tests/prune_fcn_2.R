@@ -32,6 +32,8 @@ f <- function() {
 }
 
 saveRDS(f, file = tf)
+message(sprintf("Size of exported 'f': %s bytes", file.size(tf)))
+
 truth <<- f()
 print(truth)
 rm(list = c("f"))
@@ -73,6 +75,8 @@ f <- function() {
 }
 
 saveRDS(f, file = tf)
+message(sprintf("Size of exported 'f': %s bytes", file.size(tf)))
+
 rm(list = c("f"))
 
 ## Assert expected behavior
@@ -83,7 +87,7 @@ stopifnot(identical(res, truth))
 rm(list = c("f"))
 
 
-message("*** Similar with 'cargo' pruned away")
+message("*** Similar with internal functions g() and h() pruned, but not f() itself")
 
 local({
   cargo <- rnorm(1e6)
@@ -112,8 +116,78 @@ local({
   }
   
   saveRDS(f, file = tf)
+  message(sprintf("Size of exported 'f': %s bytes", file.size(tf)))
 })
 
+
+## Assert expected behavior
+f <- readRDS(tf)
+res <- f()
+print(res)
+stopifnot(identical(res, truth))
+rm(list = c("f"))
+
+
+
+message("*** Function with \"cargo\" without automatic pruning")
+local({
+  cargo <- rnorm(1e6)
+  
+  f <- local({
+    g <- local({
+      a <- 1
+      function() a
+    })
+  
+    h <- local({
+      a <- 2
+      function() a
+    })
+  
+    function() g() * h()
+  })
+
+  res <- f()
+  stopifnot(identical(res, truth))
+
+  saveRDS(f, file = tf)
+  message(sprintf("Size of exported 'f': %s bytes", file.size(tf)))
+})
+
+## Assert expected behavior
+f <- readRDS(tf)
+res <- f()
+print(res)
+stopifnot(identical(res, truth))
+rm(list = c("f"))
+
+
+message("*** Ditto with automatic pruning")
+local({
+  cargo <- rnorm(1e6)
+  
+  f <- local({
+    g <- local({
+      a <- 1
+      function() a
+    })
+  
+    h <- local({
+      a <- 2
+      function() a
+    })
+  
+    function() g() * h()
+  })
+
+  res <- f()
+  stopifnot(identical(res, truth))
+
+  prune_fcn(f)
+
+  saveRDS(f, file = tf)
+  message(sprintf("Size of exported 'f': %s bytes", file.size(tf)))
+})
 
 ## Assert expected behavior
 f <- readRDS(tf)

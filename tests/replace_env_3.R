@@ -39,7 +39,7 @@ local({
     global <- globals[[name]]
     if (is.function(global)) {
       ## Prune
-      if (TRUE) {
+      if (FALSE) {
         gg <- get_globals(global)
         new <- as.environment(gg)
         old <- replace_env(global, search = environment(), replace = new)
@@ -48,10 +48,10 @@ local({
           environment(global) <- new
         }
       } else {
-        ## FIXME:
-        global <- prune_fcn(global, search = environment(global))
+        global <- prune_fcn(global)
         fcn_undo <- attr(global, "prune_undo")
         attr(global, "prune_undo") <- NULL
+        on.exit(fcn_undo(), add = TRUE)
       }
 
       stopifnot(is.null(parent_env(global, n = 0)$cargo))

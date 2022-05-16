@@ -39,16 +39,20 @@ local({
     global <- globals[[name]]
     if (is.function(global)) {
       ## Prune
-      gg <- get_globals(global)
-      new <- as.environment(gg)
-      old <- replace_env(global, search = environment(), replace = new)
-      if (identical(old, environment(global))) {
-        parent.env(new) <- parent.env(environment(global))
-        environment(global) <- new
+      if (TRUE) {
+        gg <- get_globals(global)
+        new <- as.environment(gg)
+        old <- replace_env(global, search = environment(), replace = new)
+        if (identical(old, environment(global))) {
+          parent.env(new) <- parent.env(environment(global))
+          environment(global) <- new
+        }
+      } else {
+        ## FIXME:
+        global <- prune_fcn(global, search = environment(global))
+        fcn_undo <- attr(global, "prune_undo")
+        attr(global, "prune_undo") <- NULL
       }
-
-      ## FIXME:
-      ## prune_fcn(global, search = environment(global))
 
       stopifnot(is.null(parent_env(global, n = 0)$cargo))
       globals[[name]] <- global
@@ -62,14 +66,20 @@ local({
       is.null(parent_env(globals$h, n = 1)$cargo)
   )
 
-  new <- as.environment(globals)
-  old <- replace_env(f, search = environment(), replace = new)
-  if (identical(old, environment(f))) {
-    parent.env(new) <- parent.env(environment(f))
-    environment(f) <- new
+  if (FALSE) {
+    new <- as.environment(globals)
+    old <- replace_env(f, search = environment(), replace = new)
+    if (identical(old, environment(f))) {
+      parent.env(new) <- parent.env(environment(f))
+      environment(f) <- new
+    }
+  } else {
+    f <- prune_fcn(f, search = environment(f), globals = globals)
+    fcn_undo <- attr(f, "prune_undo")
+    attr(f, "prune_undo") <- NULL
+    on.exit(fcn_undo(), add = TRUE)
   }
-#  prune_fcn(f, gl)
-  
+
   globals <- get_globals(f)
   stopifnot(
       identical(parent_env(globals$g, n = 0)$a, 1),

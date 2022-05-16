@@ -56,11 +56,13 @@ prune_fcn <- function(fcn, search = locate_object(fcn, from = parent.frame(), fi
     environment(fcn) <- new
     prune_undo <- function() {
       environment(fcn) <- old
+      attr(fcn, "prune_undo") <- NULL
       fcn
     }
   } else {
     prune_undo <- function() {
-      replace_env(fcn_env, search = new, replace = old)
+      replace_env(fcn, search = new, replace = old)
+      attr(fcn, "prune_undo") <- NULL
       fcn
     }
   }  
@@ -70,6 +72,8 @@ prune_fcn <- function(fcn, search = locate_object(fcn, from = parent.frame(), fi
   ## IMPORTANT: This needs to be dropped before exporting
   prune_undo <- function() {
     for (prune_undo in prune_undos) prune_undo()
+    attr(fcn, "prune_undo") <- NULL
+    fcn
   }
   attr(fcn, "prune_undo") <- prune_undo
   

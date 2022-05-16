@@ -28,6 +28,12 @@ prune_fcn <- function(fcn, search = locate_object(fcn, from = parent.frame(), fi
   new <- as.environment(globals)
   old <- replace_env(fcn_env, search = search, replace = new)
 
+  ## Special case: Nothing replaced?
+  if (identical(old, fcn_env)) {
+    parent.env(new) <- parent.env(fcn_env)
+    environment(f) <- new
+  }
+
   ## Provide a function that undoes the pruning
   ## IMPORTANT: This needs to be dropped before exporting
   attr(fcn, "prune_undo") <- function() {

@@ -7,7 +7,8 @@
 prune_fcn(
   fcn,
   search = locate_object(fcn, from = parent.frame(), first = FALSE)$envir,
-  globals = get_globals(fcn)
+  globals = get_globals(fcn),
+  depth = 0L
 )
 }
 \arguments{
@@ -19,6 +20,10 @@ It is possible to specify a list of alternative environments.}
 
 \item{globals}{A named list of variables to be part of the injected
 environment.}
+
+\item{depth}{Depth of recursive pruning.
+If \code{depth = 1L}, functions among the globals are pruned.
+If \code{depth = 0L}, then no globals are pruned.}
 }
 \value{
 A pruned version of \code{fcn}, with \code{prune_undo} attribute holding

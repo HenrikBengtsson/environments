@@ -9,6 +9,10 @@ tf <- tempfile(fileext = ".rds")
 message("*** Name-clashes of variables in local function environment")
 truth <- NULL
 
+for (method in c("replace_env", "prune_fcn")) {
+
+message("- prune method: ", method)
+
 local({
   cargo <- rnorm(1e6)
   
@@ -39,7 +43,7 @@ local({
     global <- globals[[name]]
     if (is.function(global)) {
       ## Prune
-      if (FALSE) {
+      if (method == "replace_env") {
         gg <- get_globals(global)
         new <- as.environment(gg)
         old <- replace_env(global, search = environment(), replace = new)
@@ -66,7 +70,7 @@ local({
       is.null(parent_env(globals$h, n = 1)$cargo)
   )
 
-  if (FALSE) {
+  if (method == "replace_env") {
     new <- as.environment(globals)
     old <- replace_env(f, search = environment(), replace = new)
     if (identical(old, environment(f))) {
@@ -105,6 +109,7 @@ print(res)
 stopifnot(identical(res, truth))
 rm(list = c("f"))
 
+} ## for (method in c("replace_env", "prune_fcn"))
 
 
 message("*** Cleanup")

@@ -98,6 +98,7 @@ f2 <- local({
     f_undone = names(parent_envs(h))
   ))
   stopifnot(identical(parent_envs(h), h_envs))
+
   message("undoing ... done")
 
   f_org

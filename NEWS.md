@@ -8,7 +8,7 @@
 ## New Features
 
 * Created package with functions `environment_name()`, `find_object()`,
-  `locate_object(), `get_globals()`, `parent_env()`, `parent_envs()`,
+  `locate_object()`, `get_globals()`, `parent_env()`, `parent_envs()`,
   `top_env()`, `replace_env()`, `prune_fcn()`, `search_path()`,
   `size_of()`, `draw_search()`, and `boxx_search()`.
 

@@ -29,7 +29,8 @@ prune_fcn <- function(fcn, search = locate_object(fcn, from = parent.frame(), fi
   stopifnot(is.list(globals), !is.null(names(globals)))
   stopifnot(length(depth) == 1L, is.numeric(depth), !is.na(depth), depth >= 0L)
 
-  prune_undos <- list()
+  undo_data <- attr(fcn, "prune_undo_data")
+  if (is.null(undo_data)) undo_data <- list()
   
   if (length(globals) >= 0L && depth >= 1L) {
     if (depth > 1L) {
@@ -40,8 +41,10 @@ prune_fcn <- function(fcn, search = locate_object(fcn, from = parent.frame(), fi
       if (is.function(global)) {
         global <- prune_fcn(global, search = environment(fcn))
         prune_undo <- attr(global, "prune_undo")
-        attr(global, "prune_undo") <- NULL
-        prune_undos[[name]] <- prune_undo
+        attr(global, "undo_data") <- NULL
+        undos <- environment(prune_undo)[["undo_data"]]
+        stopifnot(is.list(undos))
+        if (length(undos) > 0) undo_data <- c(undo_data, undos)
       }
     }
   }
@@ -54,27 +57,37 @@ prune_fcn <- function(fcn, search = locate_object(fcn, from = parent.frame(), fi
   if (identical(old, fcn_env)) {
     parent.env(new) <- parent.env(fcn_env)
     environment(fcn) <- new
-    prune_undo <- function() {
-      environment(fcn) <- old
-      attr(fcn, "prune_undo") <- NULL
-      fcn
-    }
+    undo <- list(
+      fcn = fcn,
+      new = NULL,
+      old = old
+    )
   } else {
-    prune_undo <- function() {
-      replace_env(fcn, search = new, replace = old)
-      attr(fcn, "prune_undo") <- NULL
+    undo <- list(
+      fcn = fcn,
+      new = new,
+      old = old
+    )
+  }  
+  undo_data <- c(undo_data, list(undo))
+
+  prune_undo <- local({
+    undo_data <- list()
+    function() {
+      fcn <- NULL
+      for (undo in undo_data) {
+        fcn <- undo$fcn
+        stopifnot(is.function(fcn))
+        if (is.null(undo$new)) {
+          environment(fcn) <- undo$old
+        } else {
+          replace_env(fcn, search = undo$new, replace = undo$old)
+        }
+      }
       fcn
     }
-  }  
-  prune_undos <- c(prune_undos, prune_undo)
-
-  ## Provide a function that undoes the pruning
-  ## IMPORTANT: This needs to be dropped before exporting
-  prune_undo <- function() {
-    for (prune_undo in prune_undos) prune_undo()
-    attr(fcn, "prune_undo") <- NULL
-    fcn
-  }
+  })
+  environment(prune_undo)[["undo_data"]] <- undo_data
   attr(fcn, "prune_undo") <- prune_undo
   
   fcn

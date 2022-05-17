@@ -1,5 +1,4 @@
 #' @rdname draw_search
-#' @importFrom cli boxx
 #' @export
 boxx_search <- function(labels = search(), width = NULL) {
   if (is.null(width)) width <- max(nchar(labels)) + 4L
@@ -25,7 +24,9 @@ boxx_search <- function(labels = search(), width = NULL) {
 #' @return Nothing.
 #'
 #' @examples
-#' draw_search()
+#' if (requireNamespace("cli", quietly = TRUE)) {
+#'   draw_search()
+#' }
 #'
 #' @export
 draw_search <- function(labels = rev(search()), width = NULL) {

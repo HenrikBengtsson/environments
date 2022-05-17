@@ -22,6 +22,8 @@ Nothing.
 Draw the current search() path in the terminal
 }
 \examples{
-draw_search()
+if (requireNamespace("cli", quietly = TRUE)) {
+  draw_search()
+}
 
 }

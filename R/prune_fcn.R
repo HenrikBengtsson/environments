@@ -20,6 +20,10 @@
 #' @export
 prune_fcn <- function(fcn, search = locate_object(fcn, from = parent.frame(), first = FALSE)$envir, globals = get_globals(fcn), depth = 0L) {
   stopifnot(is.function(fcn))
+  
+  ## Nothing to do?
+  if (is.primitive(fcn)) return(fcn)
+  
   if (!is.list(search)) {
     search <- list(search)
     names(search) <- environment_name(search[[1]])

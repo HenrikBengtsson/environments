@@ -19,3 +19,11 @@ stopifnot(identical(y, truth))
 
 prune_undo <- attr(my_rnorm, "prune_undo")
 prune_undo()
+
+
+message("*** Prune stats::rnorm (2)")
+my_rnorm <- prune_fcn(stats::rnorm, search = environment(stats::rnorm))
+res <- tryCatch(y <- my_rnorm(10), error = identity)
+stopifnot(inherits(res, "error"))
+prune_undo <- attr(my_rnorm, "prune_undo")
+prune_undo()

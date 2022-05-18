@@ -52,6 +52,9 @@ locate_object <- function(object, from = parent.frame(), first = TRUE) {
     
     ## Scan all objects in the current environment ...
     names <- ls(envir, all.names = TRUE)
+    if (identical(envir, baseenv())) {
+      names <- setdiff(names, ".Last.value")
+    }
     for (name in names) {
       ## ... consider only those with the same mode as 'object' ...
       if (exists(name, mode = mode, envir = envir, inherits = FALSE)) {

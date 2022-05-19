@@ -8,8 +8,11 @@
 #' environment.
 #'
 #' @param depth Depth of recursive pruning.
-#' If `depth = 1L`, functions among the globals are pruned.
-#' If `depth = 0L`, then no globals are pruned.
+#' If `depth = 0L`, no globals are pruned.
+#' If `depth = 1L`, "first-generation" functions among the globals are pruned.
+#' If `depth = 2L`, functions among the globals of the first-generation
+#' functions are pruned.
+#' And, so on.
 #'
 #' @return A pruned version of `fcn`, with `prune_undo` attribute holding
 #' an "undo" function. _WARNING: Make sure to copy this attribute and then
@@ -37,13 +40,13 @@ prune_fcn <- function(fcn, search = locate_object(fcn, from = parent.frame(), fi
   if (is.null(undo_data)) undo_data <- list()
   
   if (length(globals) >= 0L && depth >= 1L) {
-    if (depth > 1L) {
-      stop(sprintf("Only depth = 0L and depth = 1L is implemented: %d", depth))
-    }
+#    if (depth > 1L) {
+#      stop(sprintf("Only depth = 0L and depth = 1L is implemented: %d", depth))
+#    }
     for (name in names(globals)) {
       global <- globals[[name]]
       if (is.function(global)) {
-        global <- prune_fcn(global, search = environment(fcn))
+        global <- prune_fcn(global, search = environment(fcn), depth = depth - 1L)
         prune_undo <- attr(global, "prune_undo")
         attr(global, "undo_data") <- NULL
         undos <- environment(prune_undo)[["undo_data"]]

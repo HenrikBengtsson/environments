@@ -30,7 +30,7 @@ prune_fcn <- function(fcn, search = locate_object(fcn, from = parent.frame(), fi
   }
   for (env in search) stopifnot(inherits(env, "environment"))
   if (is.null(globals)) globals <- list()
-  stopifnot(is.list(globals), !is.null(names(globals)))
+  stopifnot(is.list(globals), length(names(globals)) == length(globals))
   stopifnot(length(depth) == 1L, is.numeric(depth), !is.na(depth), depth >= 0L)
 
   undo_data <- attr(fcn, "prune_undo_data")

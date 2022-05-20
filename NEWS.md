@@ -1,6 +1,19 @@
 # Version (development version)
 
-* ...
+## New Features
+
+* Add support for `prune_fcn()` with `depth > 1`.
+
+* Now `locate_object()` ignores `base::.Last.value`.
+
+* Now `prune_fcn()` ingnores primitive functions.
+
+* Moved **cli** to `Suggests:`.
+
+
+## Bug Fixes
+
+* `prune_fcn()` gave an error with `globals = list()`.
 
 
 # Version 0.1.0 (2022-05-16)

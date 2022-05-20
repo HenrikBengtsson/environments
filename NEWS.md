@@ -1,5 +1,9 @@
 # Version (development version)
 
+## New Features
+
+* `prune_fcn()` will now skip already pruned functions.
+
 ## Bug Fixes
 
 * `environment_name()` would return more than one string if

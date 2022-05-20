@@ -36,6 +36,12 @@ remove it before exporting the function to an external process.}
 \description{
 Remove unused objects from a function's parent environments
 }
+\details{
+An already pruned function will skipped, by returning the pruned version.
+This works by setting attribute \code{pruned} of the injected environment
+(the new \code{environment(fcn)}) to TRUE, and checking for such a flag in
+each call to \code{prune_fcn()}.
+}
 \examples{
 ## ------------------------------------------------------------------------
 ## Example how to avoid huge local objects being part of a local function,

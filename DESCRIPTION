@@ -1,11 +1,12 @@
 Package: environments
-Version: 0.1.0
+Version: 0.2.0
 Title: Working with Environments and Closures in R
 Description: A set of tools to work with environments and closures in R for the purpose of demonstrating how they work.
 Imports:
-    cli,
     globals,
     utils
+Suggests:
+    cli
 Authors@R: c(
     person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),
            email = "henrikb@braju.com"))

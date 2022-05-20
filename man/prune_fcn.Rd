@@ -22,8 +22,11 @@ It is possible to specify a list of alternative environments.}
 environment.}
 
 \item{depth}{Depth of recursive pruning.
-If \code{depth = 1L}, functions among the globals are pruned.
-If \code{depth = 0L}, then no globals are pruned.}
+If \code{depth = 0L}, no globals are pruned.
+If \code{depth = 1L}, "first-generation" functions among the globals are pruned.
+If \code{depth = 2L}, functions among the globals of the first-generation
+functions are pruned.
+And, so on.}
 }
 \value{
 A pruned version of \code{fcn}, with \code{prune_undo} attribute holding

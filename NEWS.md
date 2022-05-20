@@ -1,7 +1,10 @@
 # Version (development version)
 
-* ...
+## Bug Fixes
 
+* `environment_name()` would return more than one string if
+  the environment had attributes.
+  
 
 # Version 0.2.0 (2022-05-19)
 

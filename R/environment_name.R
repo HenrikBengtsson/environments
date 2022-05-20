@@ -23,7 +23,14 @@ environment_name <- function(envir) {
   name <- environmentName(envir)
   if (!nzchar(name)) {
     name <- capture.output(print(envir))
-    name <- gsub("(^<.*[[:space:]]+|>$)", "", name)
+    pattern <- "^<.*[[:space:]]+(0x[[:alnum:]]+)>$"
+    res <- grep(pattern, name, value = TRUE)
+    if (length(res) == 0L) {
+      stop("Failed to parse environment hexadecimal string. Unexpected print(<env>) output:\n", paste(name, collapse = "\n"))
+    } else if (length(res) > 1L) {
+      stop("Failed to parse environment hexadecimal string. Found more than one match in print(<env>) output:\n", paste(name, collapse = "\n"))
+    }
+    name <- gsub(pattern, "\\1", res)
   }
   name
 }

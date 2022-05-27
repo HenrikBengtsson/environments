@@ -91,9 +91,9 @@ message("*** my_fcn(g2)")
 local({
   cargo <- rnorm(1e6)
   g2 <- local({
-    n <- 2
+    n <- 3
     local({
-      pi <- 3.14
+      pi <- 3.141
       function() n * pi
     })
   })
@@ -104,15 +104,20 @@ local({
   message("Relative size: ", rel_size)
   stopifnot(abs(rel_size - 1) < 0.01)
 
-  ## FIXME: Gives:
+  ## FIXME:
+  ## prune_fcn() finds g() instead of g2(), thinking it's the
+  ## same function. /HB 2022-05-26
+  ## Gives:
   ## Error in replace_env(fcn_env, search = search, replace = new) : 
   ## Cannot replace environment. None of the environments specified ...
-#  res <- my_fcn(g2, prune = TRUE)
-#  message("Result: ", res)
-#  stopifnot(identical(res, truth))
-#  rel_size <- fcn_size_1 / fcn_size_0
-#  message("Relative size: ", rel_size)
-#  stopifnot(abs(rel_size - 1) < 0.01)
+  if (FALSE) {
+  res <- my_fcn(g2, prune = TRUE)
+  message("Result: ", res)
+  stopifnot(identical(res, truth))
+  rel_size <- fcn_size_1 / fcn_size_0
+  message("Relative size: ", rel_size)
+  stopifnot(abs(rel_size - 1) < 0.01)
+  }
 })
 
 

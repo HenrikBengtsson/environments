@@ -23,10 +23,11 @@ do_call <- function(fcn, args = list(), envir = parent.frame(), prune = FALSE) {
   fcn_name <- as.character(substitute(fcn))
   
   if (prune) {
-    fcn <- prune_fcn(
-      fcn,
-      search = locate_object(fcn, from = envir, first = FALSE)$envir
+    ## FIXME: Does not always pick up the right function /HB 2022-05-26
+    search <- list(
+      locate_object(fcn, from = envir, first = FALSE)$envir
     )
+    fcn <- prune_fcn(fcn, search = search)
     
     ## Important: We must drop attribute 'prune_undo' before exporting object,
     ## otherwise it will carry the pruned environment as cargo

@@ -1,0 +1,40 @@
+#' Prune and call a function with a set arguments
+#'
+#' @param fcn A \code{\link[base:function]{function}}.
+#'
+#' @param args A \code{\link[base:list]{list}} of arguments passed to
+#' the function `fcn`.
+#'
+#' @param envir An \code{\link[base:environment]{environment}} within
+#' which to evaluate the call.
+#'
+#' @param prune If TRUE, the environment stack of `fcn` is pruned.
+#'
+#' @return
+#' Return the value of function call.
+#'
+#' @example incl/do_call_1.R
+#'
+#' @seealso
+#' [base::do.call]
+#'
+#' @export
+do_call <- function(fcn, args = list(), envir = parent.frame(), prune = FALSE) {
+  fcn_name <- as.character(substitute(fcn))
+  
+  if (prune) {
+    fcn <- prune_fcn(
+      fcn,
+      search = locate_object(fcn, from = envir, first = FALSE)$envir
+    )
+    
+    ## Important: We must drop attribute 'prune_undo' before exporting object,
+    ## otherwise it will carry the pruned environment as cargo
+    fcn_undo <- attr(fcn, "prune_undo")
+    attr(fcn, "prune_undo") <- NULL
+    
+    on.exit(fcn_undo(), add = TRUE)
+  }
+
+  do.call(fcn, args = args, envir = envir)
+}

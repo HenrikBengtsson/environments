@@ -4,28 +4,9 @@
 ## to a parallel workers
 ## ------------------------------------------------------------------------
 
-## Call a function with the option to replace the function
-## environment with a smaller temporary environment
-my_do_call <- function(fcn, args = list(), envir = parent.frame(), prune = FALSE) {
-  fcn_name <- as.character(substitute(fcn))
-  if (prune) {
-    fcn <- prune_fcn(fcn, search = locate_object(fcn, from = envir, first = FALSE)$envir)
-    
-    ## Important: We must drop attribute 'prune_undo' before
-    ## exporting object, otherwise it will carry the pruned
-    ## environment as cargo
-    fcn_undo <- attr(fcn, "prune_undo")
-    attr(fcn, "prune_undo") <- NULL
-    
-    on.exit(fcn_undo())
-  }
-  
-  do.call(fcn, args = args, envir = envir)
-}
-
 ## Report on the 'fcn' size before and after pruning
 trace(
-  my_do_call,
+  do_call,
   at = 3L, tracer = quote(fcn_size <- size_of(fcn)),
   exit = quote({
     if (prune) {
@@ -51,7 +32,7 @@ my_fcn <- function(g = NULL, prune = FALSE) {
     })
   }
 
-  my_do_call(g, prune = prune)
+  do_call(g, prune = prune)
 }
 
 
@@ -75,3 +56,5 @@ g <- local({
 
 my_fcn(g)
 my_fcn(g, prune = TRUE)
+
+untrace(do_call)

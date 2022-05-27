@@ -4,6 +4,8 @@
 
 * `prune_fcn()` will now skip already pruned functions.
 
+* Add `do_call()`.
+
 ## Bug Fixes
 
 * `environment_name()` would return more than one string if

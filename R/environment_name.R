@@ -22,7 +22,9 @@ environment_name <- function(envir) {
   stopifnot(inherits(envir, "environment"))
   name <- environmentName(envir)
   if (!nzchar(name)) {
-    name <- capture.output(print(envir))
+    ## Here we call print.default(), instead of generic print(), to
+    ## avoid the risk of someone defining a print.environment().
+    name <- capture.output(print.default(envir))
     pattern <- "^<.*[[:space:]]+(0x[[:alnum:]]+)>$"
     res <- grep(pattern, name, value = TRUE)
     if (length(res) == 0L) {

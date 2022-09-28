@@ -27,6 +27,16 @@ then \code{from} is returned.  If not found there, the parent environment
 of \code{from} is searched, and so on, until the "empty" environment
 (\code{\link[base:emptyenv]{emptyenv()}}) is reached. In such cases,
 no matching object could be found and NULL is returned.
+
+\code{find_object()} is how \code{\link[base:exists]{base::exists()}}, \code{\link[base:get]{base::get()}}, and
+\code{\link[base:assign]{base::assign()}} locate an object with \code{inherits = TRUE} (default).
+For example, \code{exists(name) == !is.null(find_object(name))}. Similarly,
+\code{object <- get(name)} is the same as:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{envir <- find_object(name)
+if (is.null(envir)) stop(sprintf("Object \%d not found", sQuote(name)))
+object <- get(name, envir = envir, inherits = FALSE)
+}\if{html}{\out{</div>}}
 }
 \examples{
 find_object("pi")

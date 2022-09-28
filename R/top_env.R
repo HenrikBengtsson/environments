@@ -1,5 +1,3 @@
-#' @inheritParams parent_envs
-#'
 #' @return
 #' `top_env()` returns the top parent
 #' \code{\link[base:environment]{environment}}, which

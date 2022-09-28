@@ -29,12 +29,12 @@ of \code{from} is searched, and so on, until the "empty" environment
 no matching object could be found and NULL is returned.
 
 \code{find_object()} is how \code{\link[base:exists]{base::exists()}}, \code{\link[base:get]{base::get()}}, and
-\code{\link[base:assign]{base::assign()}} locate an object with \code{inherits = TRUE} (default).
+\code{\link[base:assign]{base::assign()}} locate an object based on its name and mode.
 For example, \code{exists(name) == !is.null(find_object(name))}. Similarly,
 \code{object <- get(name)} is the same as:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{envir <- find_object(name)
-if (is.null(envir)) stop(sprintf("Object \%d not found", sQuote(name)))
+if (is.null(envir)) stop(sprintf("Object \%s not found", sQuote(name)))
 object <- get(name, envir = envir, inherits = FALSE)
 }\if{html}{\out{</div>}}
 }

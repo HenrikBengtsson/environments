@@ -18,13 +18,13 @@
 #' no matching object could be found and NULL is returned.
 #'
 #' `find_object()` is how [base::exists()], [base::get()], and
-#' [base::assign()] locate an object with `inherits = TRUE` (default).
+#' [base::assign()] locate an object based on its name and mode.
 #' For example, `exists(name) == !is.null(find_object(name))`. Similarly,
 #' `object <- get(name)` is the same as:
 #'
 #' ```r
 #' envir <- find_object(name)
-#' if (is.null(envir)) stop(sprintf("Object %d not found", sQuote(name)))
+#' if (is.null(envir)) stop(sprintf("Object %s not found", sQuote(name)))
 #' object <- get(name, envir = envir, inherits = FALSE)
 #' ```
 #'

@@ -1,14 +1,8 @@
-#' Find the top environments of a function or a formula
-#'
-#' The top environment is the top parent environment 
-#'
 #' @inheritParams parent_envs
 #'
-#' @param object A \code{\link[base:function]{function}} or a
-#' \code{\link[base:tilde]{formula}}) whose top parent environment
-#' should be found.
-#'
-#' @return An \code{\link[base:environment]{environment}}, which
+#' @return
+#' `top_env()` returns the top parent
+#' \code{\link[base:environment]{environment}}, which
 #' is either the `until` environment or the empty environment.
 #'
 #' @examples
@@ -40,14 +34,15 @@
 #' print(env)
 #' #stopifnot(identical(env, environment()))
 #'
-#' @seealso
-#' [parent_env()] and [parent_envs()].
-#'
+#' @rdname parent_envs
 #' @export
-top_env <- function(object, until = globalenv()) {
-  envir <- environment(object)
+top_env <- function(envir, until = globalenv()) {
   if (!inherits(envir, "environment")) {
-    stop(sprintf("Argument 'object' does not have an environment: %s", mode(object)))
+     e <- environment(envir)
+     if (is.null(e)) {
+       stop(sprintf("Argument 'envir' must be an environment or an object with an environment: %s", mode(envir)))
+     }
+     envir <- e
   }
   stopifnot(inherits(until, "environment"))
 

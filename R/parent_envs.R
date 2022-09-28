@@ -1,6 +1,7 @@
 #' Get the ancestral environments of an environment
 #'
-#' @inheritParams parent_env
+#' @param envir An \code{\link[base:environment]{environment}}
+#' or an object with an environment, e.g. a function or a formula.
 #'
 #' @param until A \code{\link[base:environment]{environment}} to consider
 #' the last parent environment.  If `until` is not one of the parent

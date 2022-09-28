@@ -60,7 +60,7 @@ locate_object <- function(object, from = parent.frame(), first = TRUE) {
       if (exists(name, mode = mode, envir = envir, inherits = FALSE)) {
         tmp <- get(name, mode = mode, envir = envir, inherits = FALSE)
         ## ... are the identical?
-        if (identical(tmp, object)) {
+        if (identical(tmp, object, ignore.environment = FALSE, ignore.bytecode = FALSE, ignore.srcref = FALSE)) {
           res <- list(name = name, envir = envir)
           if (first) return(res)
         }

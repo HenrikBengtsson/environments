@@ -1,3 +1,17 @@
+# Version 0.3.0 (2022-09-27)
+
+## New Features
+
+* `prune_fcn()` will now skip already pruned functions.
+
+* Add `do_call()`.
+
+## Bug Fixes
+
+* `environment_name()` would return more than one string if
+  the environment had attributes.
+  
+
 # Version 0.2.0 (2022-05-19)
 
 ## New Features

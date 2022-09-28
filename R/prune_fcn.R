@@ -18,12 +18,22 @@
 #' an "undo" function. _WARNING: Make sure to copy this attribute and then
 #' remove it before exporting the function to an external process._
 #'
+#' @details
+#' An already pruned function will skipped, by returning the pruned version.
+#' This works by setting attribute `pruned` of the injected environment
+#' (the new `environment(fcn)`) to TRUE, and checking for such a flag in
+#' each call to `prune_fcn()`.
+#'
 #' @example incl/prune_fcn_1.R
 #' 
 #' @export
 prune_fcn <- function(fcn, search = locate_object(fcn, from = parent.frame(), first = FALSE)$envir, globals = get_globals(fcn), depth = 0L) {
   stopifnot(is.function(fcn))
-  
+
+  ## Already pruned?
+  fcn_env <- environment(fcn)
+  if (isTRUE(attr(fcn_env, "pruned"))) return(fcn)
+
   ## Nothing to do?
   if (is.primitive(fcn)) return(fcn)
   
@@ -56,8 +66,8 @@ prune_fcn <- function(fcn, search = locate_object(fcn, from = parent.frame(), fi
     }
   }
   
-  fcn_env <- environment(fcn)
   new <- as.environment(globals)
+  attr(new, "pruned") <- TRUE
   old <- replace_env(fcn_env, search = search, replace = new)
 
   ## Special case: Nothing replaced?

@@ -22,8 +22,17 @@ environment_name <- function(envir) {
   stopifnot(inherits(envir, "environment"))
   name <- environmentName(envir)
   if (!nzchar(name)) {
-    name <- capture.output(print(envir))
-    name <- gsub("(^<.*[[:space:]]+|>$)", "", name)
+    ## Here we call print.default(), instead of generic print(), to
+    ## avoid the risk of someone defining a print.environment().
+    name <- capture.output(print.default(envir))
+    pattern <- "^<.*[[:space:]]+(0x[[:alnum:]]+)>$"
+    res <- grep(pattern, name, value = TRUE)
+    if (length(res) == 0L) {
+      stop("Failed to parse environment hexadecimal string. Unexpected print(<env>) output:\n", paste(name, collapse = "\n"))
+    } else if (length(res) > 1L) {
+      stop("Failed to parse environment hexadecimal string. Found more than one match in print(<env>) output:\n", paste(name, collapse = "\n"))
+    }
+    name <- gsub(pattern, "\\1", res)
   }
   name
 }

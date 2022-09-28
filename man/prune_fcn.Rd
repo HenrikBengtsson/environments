@@ -36,6 +36,12 @@ remove it before exporting the function to an external process.}
 \description{
 Remove unused objects from a function's parent environments
 }
+\details{
+An already pruned function will skipped, by returning the pruned version.
+This works by setting attribute \code{pruned} of the injected environment
+(the new \code{environment(fcn)}) to TRUE, and checking for such a flag in
+each call to \code{prune_fcn()}.
+}
 \examples{
 ## ------------------------------------------------------------------------
 ## Example how to avoid huge local objects being part of a local function,
@@ -45,7 +51,7 @@ Remove unused objects from a function's parent environments
 
 ## Call a function with the option to replace the function
 ## environment with a smaller temporary environment
-do_call <- function(fcn, args = list(), envir = parent.frame(), prune = FALSE) {
+my_do_call <- function(fcn, args = list(), envir = parent.frame(), prune = FALSE) {
   fcn_name <- as.character(substitute(fcn))
   if (prune) {
     fcn <- prune_fcn(fcn, search = locate_object(fcn, from = envir, first = FALSE)$envir)
@@ -58,11 +64,25 @@ do_call <- function(fcn, args = list(), envir = parent.frame(), prune = FALSE) {
     
     on.exit(fcn_undo())
   }
-
-  message(sprintf("Size of '\%s': \%s bytes", fcn_name, size_of(fcn)))
   
   do.call(fcn, args = args, envir = envir)
 }
+
+## Report on the 'fcn' size before and after pruning
+trace(
+  my_do_call,
+  at = 3L, tracer = quote(fcn_size <- size_of(fcn)),
+  exit = quote({
+    if (prune) {
+      message(sprintf("Size of '\%s': \%s bytes (\%s bytes when pruned)",
+                      fcn_name, fcn_size, size_of(fcn)))
+    } else {
+      message(sprintf("Size of '\%s': \%s bytes",
+                      fcn_name, fcn_size))
+    }
+  }),
+  print = FALSE
+)
 
 my_fcn <- function(g = NULL, prune = FALSE) {
   cargo <- rnorm(1e6)
@@ -76,7 +96,7 @@ my_fcn <- function(g = NULL, prune = FALSE) {
     })
   }
 
-  do_call(g, prune = prune)
+  my_do_call(g, prune = prune)
 }
 
 

@@ -37,9 +37,6 @@
     <loc>/reference/locate_object.html</loc>
   </url>
   <url>
-    <loc>/reference/parent_env.html</loc>
-  </url>
-  <url>
     <loc>/reference/parent_envs.html</loc>
   </url>
   <url>
@@ -53,8 +50,5 @@
   </url>
   <url>
     <loc>/reference/size_of.html</loc>
-  </url>
-  <url>
-    <loc>/reference/top_env.html</loc>
   </url>
 </urlset>

@@ -77,8 +77,8 @@ We can retrieve these two "ancestral" environments of \code{f()} using
 \if{html}{\out{<div class="sourceCode">}}\preformatted{+----------------------+
 | parent_env(f):       | == parent_envs(f)[[2]]
 | cargo = \{ 1e6 \}      | == parent_env(f, n = 1L)
-| a = 2                | == globalenv()
-| f                    |
+| a = 2                | == top_env(f)
+| f                    | == globalenv()
 +----------------------+
            ^
            |

@@ -58,7 +58,7 @@ and the function.</p></dd>
 
 
 <dt>until</dt>
-<dd><p>A <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></code> to consider
+<dd><p>An <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></code> to consider
 the last parent environment.  If <code>until</code> is not one of the parent
 environments, then <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">emptyenv()</a></code> is the
 last one.  It is also possible to specify a list of alternative
@@ -81,18 +81,18 @@ the last is the empty environment.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fl">1</span>  <span class="co">## &lt;== f() only sees this 'a'</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="va">b</span> <span class="op">&lt;-</span> <span class="fl">2</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co">## Get the environments scanned for 'a'. This shows that the current</span></span></span>
 <span class="r-in"><span>  <span class="co">## environment (= environment()) is first searched, then the parent</span></span></span>
-<span class="r-in"><span>  <span class="co">## environments of 'f' (= parent_envs(environment(f))) are searched.</span></span></span>
-<span class="r-in"><span>  <span class="co">## This is the reason why 'a' (a == 1) in the top environment is used.</span></span></span>
-<span class="r-in"><span>  <span class="co">## Note that, if we call f() from g(), the environment from where f()</span></span></span>
-<span class="r-in"><span>  <span class="co">## is called, which holds another 'a' (a == 42), is *not* involved.</span></span></span>
-<span class="r-in"><span>  <span class="co">## Thus, we get the same result regardless from where f() is called.</span></span></span>
+<span class="r-in"><span>  <span class="co">## environments of 'f' (= parent_envs(f)) are searched. This is the</span></span></span>
+<span class="r-in"><span>  <span class="co">## reason why 'a' (a == 1) in the top environment is used. Note that,</span></span></span>
+<span class="r-in"><span>  <span class="co">## if we call f() from g(), the environment from where f() is called,</span></span></span>
+<span class="r-in"><span>  <span class="co">## which holds another 'a' (a == 42), is *not* involved. Thus, we get</span></span></span>
+<span class="r-in"><span>  <span class="co">## the same result regardless from where f() is called.</span></span></span>
 <span class="r-in"><span>  <span class="va">envirs</span> <span class="op">&lt;-</span> <span class="fu">search_path</span><span class="op">(</span>until <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">globalenv</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">envirs</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  </span></span>
@@ -100,26 +100,27 @@ the last is the empty environment.</p>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">a</span> <span class="op">&lt;-</span> <span class="fl">42</span></span></span>
+<span class="r-in"><span>  <span class="va">a</span> <span class="op">&lt;-</span> <span class="fl">42</span>  <span class="co">## &lt;== this 'a' is never seen by f()</span></span></span>
 <span class="r-in"><span>  <span class="fu">f</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">f</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x559afa483fb8:&lt;environment: 0x559afa483fb8&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x559afa2f9b50:&lt;environment: 0x559afa2f9b50&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x559afa1732c0:&lt;environment: 0x559afa1732c0&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x559afa126f68:&lt;environment: 0x559afa126f68&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x559af591a158:&lt;environment: 0x559af591a158&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x55ea289ac938:&lt;environment: 0x55ea289ac938&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x55ea2882c628:&lt;environment: 0x55ea2882c628&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x55ea28680c70:&lt;environment: 0x55ea28680c70&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x55ea2863a4a8:&lt;environment: 0x55ea2863a4a8&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x55ea23e2dad8:&lt;environment: 0x55ea23e2dad8&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ R_GlobalEnv   :&lt;environment: R_GlobalEnv&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">g</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x559afa5dcb08:&lt;environment: 0x559afa5dcb08&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x559afa2f9b50:&lt;environment: 0x559afa2f9b50&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x559afa1732c0:&lt;environment: 0x559afa1732c0&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x559afa126f68:&lt;environment: 0x559afa126f68&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x559af591a158:&lt;environment: 0x559af591a158&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x55ea28b0d408:&lt;environment: 0x55ea28b0d408&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x55ea2882c628:&lt;environment: 0x55ea2882c628&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x55ea28680c70:&lt;environment: 0x55ea28680c70&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x55ea2863a4a8:&lt;environment: 0x55ea2863a4a8&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ 0x55ea23e2dad8:&lt;environment: 0x55ea23e2dad8&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ R_GlobalEnv   :&lt;environment: R_GlobalEnv&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
 </code></pre></div>

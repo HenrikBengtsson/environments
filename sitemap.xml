@@ -28,13 +28,13 @@
     <loc>/reference/find_object.html</loc>
   </url>
   <url>
+    <loc>/reference/find_object_by_value.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_globals.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/locate_object.html</loc>
   </url>
   <url>
     <loc>/reference/parent_envs.html</loc>

@@ -11,5 +11,5 @@ Authors@R: c(
     person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),
            email = "henrikb@braju.com"))
 License: MIT + file LICENSE
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)

@@ -6,7 +6,7 @@
 \usage{
 prune_fcn(
   fcn,
-  search = locate_object(fcn, from = parent.frame(), first = FALSE)$envir,
+  search = find_object_by_value(fcn, from = parent.frame(), first = FALSE)$envir,
   globals = get_globals(fcn),
   depth = 0L
 )
@@ -54,7 +54,7 @@ each call to \code{prune_fcn()}.
 my_do_call <- function(fcn, args = list(), envir = parent.frame(), prune = FALSE) {
   fcn_name <- as.character(substitute(fcn))
   if (prune) {
-    fcn <- prune_fcn(fcn, search = locate_object(fcn, from = envir, first = FALSE)$envir)
+    fcn <- prune_fcn(fcn, search = find_object_by_value(fcn, from = envir, first = FALSE)$envir)
     
     ## Important: We must drop attribute 'prune_undo' before
     ## exporting object, otherwise it will carry the pruned

@@ -25,7 +25,7 @@ do_call <- function(fcn, args = list(), envir = parent.frame(), prune = FALSE) {
   if (prune) {
     ## FIXME: Does not always pick up the right function /HB 2022-05-26
     search <- list(
-      locate_object(fcn, from = envir, first = FALSE)$envir
+      find_object_by_value(fcn, from = envir, first = FALSE)$envir
     )
     fcn <- prune_fcn(fcn, search = search)
     

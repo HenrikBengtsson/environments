@@ -16,10 +16,10 @@
 #' If the object could not be located when searching from environment
 #' `from`, then NULL is returned.
 #'
-#' @example incl/locate_object_1.R
+#' @example incl/find_object_by_value_1.R
 #'
 #' @export
-locate_object <- function(object, from = parent.frame(), first = TRUE) {
+find_object_by_value <- function(object, from = parent.frame(), first = TRUE) {
   if (inherits(from, "environment")) {
     envir <- from
   } else {

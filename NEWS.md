@@ -4,6 +4,8 @@
 
  * Argument `until` for `parent_envs()` now defaults to `globalenv()`
    rather than `emptyenv()`.
+   
+ * Rename `locate_object()` to `find_object_by_value()`.
  
 
 # Version 0.3.0 (2022-09-27)

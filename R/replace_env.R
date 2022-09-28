@@ -159,7 +159,7 @@
 #'
 #' ```r
 #' new <- as.environment(list(a = a))
-#' replace_env(f, search = locate_object(f)$envir, replace = new)
+#' replace_env(f, search = find_object_by_value(f)$envir, replace = new)
 #' ```
 #'
 #' If we save this to file, restart R, and load it back in, we'll see that

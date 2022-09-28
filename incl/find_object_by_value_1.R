@@ -1,16 +1,16 @@
-locate_object(rnorm)
+find_object_by_value(rnorm)
 
 my_sum <- rnorm
-locate_object(my_sum)
+find_object_by_value(my_sum)
 
-locate_object(my_sum, from = parent_env())
+find_object_by_value(my_sum, from = parent_env())
 
 my_sum <- local(sum)
-locate_object(my_sum)
+find_object_by_value(my_sum)
 
 
 my_find <- function(object, envir = parent.frame()) {
-  locate_object(object, from = envir)
+  find_object_by_value(object, from = envir)
 }
 
 my_fcn <- local({

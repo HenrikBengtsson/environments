@@ -11,7 +11,7 @@ prune_check_env <- function(envir = parent.frame()) {
 }
 
 message("*** Locate stats::rnorm()")
-res <- locate_object(stats::rnorm)
+res <- find_object_by_value(stats::rnorm)
 str(res)
 stopifnot(
   is.list(res),
@@ -23,7 +23,7 @@ stopifnot(
 message("*** Locate local copy of stats::rnorm()")
 my_rnorm <- stats::rnorm
 prune_check_env()
-res <- locate_object(my_rnorm)
+res <- find_object_by_value(my_rnorm)
 str(res)
 stopifnot(
   is.list(res),
@@ -35,7 +35,7 @@ stopifnot(
 message("*** Locate stats::rnorm() from parent environment")
 my_rnorm <- stats::rnorm
 prune_check_env()
-res <- locate_object(my_rnorm, from = parent.env(environment()))
+res <- find_object_by_value(my_rnorm, from = parent.env(environment()))
 str(res)
 stopifnot(
   is.list(res),
@@ -47,7 +47,7 @@ stopifnot(
 message("*** Locate stats::rnorm() despite local copy")
 my_rnorm <- stats::rnorm
 prune_check_env()
-res <- locate_object(my_rnorm, first = FALSE)
+res <- find_object_by_value(my_rnorm, first = FALSE)
 str(res)
 stopifnot(
   is.list(res),
@@ -59,7 +59,7 @@ stopifnot(
 message("*** Locate local-environment copy of stats::rnorm()")
 local({
   my_rnorm <- stats::rnorm
-  res <- locate_object(my_rnorm)
+  res <- find_object_by_value(my_rnorm)
   str(res)
   stopifnot(
     is.list(res),
@@ -72,7 +72,7 @@ local({
 message("*** Locate from within function")
 
 my_find <- function(object, first = TRUE) {
-  locate_object(object, first = first)
+  find_object_by_value(object, first = first)
 }
 
 my_fcn <- local({

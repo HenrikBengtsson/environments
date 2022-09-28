@@ -163,7 +163,7 @@ unserialized, e.g. read back from file.
 An alternative way to achive this is to use the \code{replace_env()} function;
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{new <- as.environment(list(a = a))
-replace_env(f, search = locate_object(f)$envir, replace = new)
+replace_env(f, search = find_object_by_value(f)$envir, replace = new)
 }\if{html}{\out{</div>}}
 
 If we save this to file, restart R, and load it back in, we'll see that
@@ -229,7 +229,7 @@ z
 do_call <- function(fcn, args = list(), envir = parent.frame(),
                     prune = FALSE) {
   if (prune) {
-    fcn_where <- locate_object(fcn, from = envir, first = FALSE)
+    fcn_where <- find_object_by_value(fcn, from = envir, first = FALSE)
     fcn_globals <- get_globals(fcn)
     new <- as.environment(fcn_globals)
     old <- replace_env(fcn, search = fcn_where$envir, replace = new)

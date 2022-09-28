@@ -22,7 +22,7 @@ If \code{n = 1}, then \code{parent.env(envir)} is returned.
 If \code{n = 2}, then \code{parent.env(parent.env(envir))} is returned,
 and so on, until \code{emptyenv()} is returned.}
 
-\item{until}{A \code{\link[base:environment]{environment}} to consider
+\item{until}{An \code{\link[base:environment]{environment}} to consider
 the last parent environment.  If \code{until} is not one of the parent
 environments, then \code{\link[base:emptyenv]{emptyenv()}} is the
 last one.  It is also possible to specify a list of alternative

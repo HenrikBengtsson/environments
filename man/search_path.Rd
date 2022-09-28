@@ -10,7 +10,7 @@ search_path(parent = 1L, until = emptyenv())
 \item{parent}{The parent generation to query for the parent frame
 and the function.}
 
-\item{until}{A \code{\link[base:environment]{environment}} to consider
+\item{until}{An \code{\link[base:environment]{environment}} to consider
 the last parent environment.  If \code{until} is not one of the parent
 environments, then \code{\link[base:emptyenv]{emptyenv()}} is the
 last one.  It is also possible to specify a list of alternative
@@ -29,18 +29,18 @@ This is the same environment search path that is used by
 \code{exist(name, inherits = TRUE)} and \code{get(name, inherits = TRUE)}.
 }
 \examples{
-a <- 1
+a <- 1  ## <== f() only sees this 'a'
 
 f <- function() {
   b <- 2
 
   ## Get the environments scanned for 'a'. This shows that the current
   ## environment (= environment()) is first searched, then the parent
-  ## environments of 'f' (= parent_envs(environment(f))) are searched.
-  ## This is the reason why 'a' (a == 1) in the top environment is used.
-  ## Note that, if we call f() from g(), the environment from where f()
-  ## is called, which holds another 'a' (a == 42), is *not* involved.
-  ## Thus, we get the same result regardless from where f() is called.
+  ## environments of 'f' (= parent_envs(f)) are searched. This is the
+  ## reason why 'a' (a == 1) in the top environment is used. Note that,
+  ## if we call f() from g(), the environment from where f() is called,
+  ## which holds another 'a' (a == 42), is *not* involved. Thus, we get
+  ## the same result regardless from where f() is called.
   envirs <- search_path(until = globalenv())
   utils::str(envirs)
   
@@ -48,10 +48,11 @@ f <- function() {
 }
 
 g <- function() {
-  a <- 42
+  a <- 42  ## <== this 'a' is never seen by f()
   f()
 }
 
 f()
+
 g()
 }

@@ -86,5 +86,5 @@ my_fcn(g, prune = TRUE)
 untrace(do_call)
 }
 \seealso{
-\link[base:do.call]{base::do.call}
+\code{\link[base:do.call]{base::do.call()}}
 }

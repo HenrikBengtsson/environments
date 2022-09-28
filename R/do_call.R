@@ -16,7 +16,7 @@
 #' @example incl/do_call_1.R
 #'
 #' @seealso
-#' [base::do.call]
+#' [base::do.call()]
 #'
 #' @export
 do_call <- function(fcn, args = list(), envir = parent.frame(), prune = FALSE) {

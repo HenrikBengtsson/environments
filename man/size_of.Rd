@@ -2,7 +2,7 @@
 % Please edit documentation in R/size_of.R
 \name{size_of}
 \alias{size_of}
-\title{Get the seralization size of an object}
+\title{Get the serialization size of an object}
 \usage{
 size_of(object)
 }
@@ -10,10 +10,11 @@ size_of(object)
 \item{object}{An R object whose size should be calculated.}
 }
 \value{
-The number of bytes the object will consume when serialized.
+The number of bytes the object consumes if serialized.
+The value inherits class \code{object_size}.
 }
 \description{
-Get the seralization size of an object
+Get the serialization size of an object
 }
 \examples{
 ## Size of integer vector 1, 2, ..., 1000

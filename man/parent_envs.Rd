@@ -17,16 +17,62 @@ last one.  It is also possible to specify a list of alternative
 environments.}
 
 \item{extra}{Maximum number of additional parent environments to include
-after a matching "until" one was identified.}
+after a matching "until" environment was identified.}
 }
 \value{
 A named list of \code{\link[base:environment]{environment}}s, where
 the first element is \code{envir} and the last is \code{until} or
-\code{\link[base:emptyenv]{emptyenv()}}.
+\code{\link[base:emptyenv]{emptyenv()}}, if \code{extra = 0L}.
 }
 \description{
 Find all parent environments of an environment
 }
+\details{
+Consider the following R script evaluated in the global environment:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{cargo <- rnorm(1e6)
+a <- 2
+f <- local(\{
+  pi <- 3.14
+  function() \{
+    n <- 4
+    a * pi / n
+  \}
+\})
+}\if{html}{\out{</div>}}
+
+The environment of function \code{f()} is the local environment that
+contains the \code{pi} object, i.e. \code{environment(f)$pi} exists.
+The parent environment of this environment is
+\code{parent.envir(environment(f))}, which can also be obtained as
+\code{parent_env(f)}.  This environment contains objects \code{a} and \code{cargo},
+i.e. \code{parent_env(f)$a} and \code{parent_env(f)$cargo} exist.
+If we sourced the script in the global environment, then
+\code{parent_env(f)} is the global environment.
+
+We can retrieve these two "ancestral" environments of \code{f()} using
+\code{parent_envs(f)}, which can be represented visually as:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{+----------------------+
+| parent_env(f):       | == parent_envs(f)[[2]] == globalenv()
+| cargo = \{ 1e6 \}      |
+| a = 2                |
+| f                    |
++----------------------+
+           ^
+           |
++----------------------+
+| environment(f):      | == parent_envs(f)[[1]] == parent_env(f)
+| pi = 3.14            |
++----------------------+
+}\if{html}{\out{</div>}}
+}
+\section{Related functions}{
+
+When \code{extra = 0L} (default), the last environment returned by
+\code{parent_envs()}#' equals \code{\link[=top_env]{top_env()}}.
+}
+
 \examples{
 parent_envs(emptyenv())
 parent_envs(baseenv())
@@ -46,4 +92,7 @@ names(f_envs)
 f_envs <- parent_envs(f, until = environment(), extra = 1L)
 names(f_envs)
 
+}
+\seealso{
+\code{\link[=parent_env]{parent_env()}} and \code{\link[=top_env]{top_env()}}.
 }

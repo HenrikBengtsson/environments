@@ -17,7 +17,8 @@ If \code{n = 2}, then \code{parent.env(parent.env(envir))} is returned,
 and so on.}
 }
 \value{
-An \code{\link[base:environment]{environment}}.
+An \code{\link[base:environment]{environment}}.  If no more parent
+environments are found, the empty environment is returned.
 }
 \description{
 Get ancestral environments of an environment
@@ -43,4 +44,7 @@ parent_env(f, n = 1)
 parent_env(f, n = 2)
 parent_env(f, n = 3)
 
+}
+\seealso{
+\code{\link[=parent_envs]{parent_envs()}} and \code{\link[=top_env]{top_env()}}.
 }

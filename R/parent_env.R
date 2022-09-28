@@ -10,7 +10,8 @@
 #' and so on.
 #'
 #' @return
-#' An \code{\link[base:environment]{environment}}.
+#' An \code{\link[base:environment]{environment}}.  If no more parent
+#' environments are found, the empty environment is returned.
 #'
 #' @examples
 #' parent_env()
@@ -32,6 +33,9 @@
 #' parent_env(f, n = 1)
 #' parent_env(f, n = 2)
 #' parent_env(f, n = 3)
+#'
+#' @seealso
+#' [parent_envs()] and [top_env()].
 #'
 #' @export
 parent_env <- function(envir = parent.frame(), n = 1L) {

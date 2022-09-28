@@ -1,12 +1,15 @@
-#' Find the top environments of a function
+#' Find the top environments of a function or a formula
+#'
+#' The top environment is the top parent environment 
 #'
 #' @inheritParams parent_envs
 #'
 #' @param object A \code{\link[base:function]{function}} or a
 #' \code{\link[base:tilde]{formula}}) whose top parent environment
-#' should be replaced with a pruned environment.
+#' should be found.
 #'
-#' @return An \code{\link[base:environment]{environment}}.
+#' @return An \code{\link[base:environment]{environment}}, which
+#' is either the `until` environment or the empty environment.
 #'
 #' @examples
 #' a <- 42
@@ -37,6 +40,9 @@
 #' print(env)
 #' #stopifnot(identical(env, environment()))
 #'
+#' @seealso
+#' [parent_env()] and [parent_envs()].
+#'
 #' @export
 top_env <- function(object, until = globalenv()) {
   envir <- environment(object)
@@ -49,5 +55,5 @@ top_env <- function(object, until = globalenv()) {
     envir <- parent.env(envir)
   }
   
-  envir  
+  envir
 }

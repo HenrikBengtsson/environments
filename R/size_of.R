@@ -1,8 +1,9 @@
-#' Get the seralization size of an object
+#' Get the serialization size of an object
 #'
 #' @param object An R object whose size should be calculated.
 #'
-#' @return The number of bytes the object will consume when serialized.
+#' @return The number of bytes the object consumes if serialized.
+#' The value inherits class `object_size`.
 #'
 #' @example incl/size_of.R
 #' 

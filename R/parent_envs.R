@@ -1,4 +1,4 @@
-#' Find all parent environments of an environment
+#' Get the ancestral environments of an environment
 #'
 #' @inheritParams parent_env
 #'
@@ -12,13 +12,12 @@
 #' after a matching "until" environment was identified.
 #'
 #' @return
-#' A named list of \code{\link[base:environment]{environment}}s, where
-#' the first element is `envir` and the last is `until` or
-#' \code{\link[base:emptyenv]{emptyenv()}}, if `extra = 0L`.
-#'
-#' @section Related functions:
-#' When `extra = 0L` (default), the last environment returned by
-#' `parent_envs()`#' equals [top_env()].
+#' `parent_envs()` returns a named list of
+#' \code{\link[base:environment]{environment}}s, where the names correspond
+#' to [environment_name()] of each environment.
+#' The first element is always `envir`.
+#' If `extra = 0L` (default), the last is `until` or
+#' \code{\link[base:emptyenv]{emptyenv()}}, which equals [top_env()].
 #'
 #' @details
 #' Consider the following R script evaluated in the global environment:
@@ -49,16 +48,16 @@
 #'
 #' ```
 #' +----------------------+
-#' | parent_env(f):       | == parent_envs(f)[[2]] == globalenv()
-#' | cargo = { 1e6 }      |
-#' | a = 2                |
+#' | parent_env(f):       | == parent_envs(f)[[2]]
+#' | cargo = { 1e6 }      | == parent_env(f, n = 1L)
+#' | a = 2                | == globalenv()
 #' | f                    |
 #' +----------------------+
 #'            ^
 #'            |
 #' +----------------------+
-#' | environment(f):      | == parent_envs(f)[[1]] == parent_env(f)
-#' | pi = 3.14            |
+#' | environment(f):      | == parent_envs(f)[[1]]
+#' | pi = 3.14            | == parent_env(f, n = 0L)
 #' +----------------------+
 #' ```
 #'
@@ -80,9 +79,6 @@
 #'
 #' f_envs <- parent_envs(f, until = environment(), extra = 1L)
 #' names(f_envs)
-#'
-#' @seealso
-#' [parent_env()] and [top_env()].
 #'
 #' @export
 parent_envs <- function(envir = parent.frame(), until = emptyenv(), extra = 0L) {

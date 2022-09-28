@@ -7,9 +7,6 @@
 replace_env(envir, search, replace, update_parent = TRUE)
 }
 \arguments{
-\item{envir}{An \code{\link[base:environment]{environment}}
-or an object with an environment, e.g. a function or a formula.}
-
 \item{search}{A \code{\link[base:environment]{environment}},
 among the parents of \code{envir}, to be replaced.
 It is possible to specify a list of alternative environments.}

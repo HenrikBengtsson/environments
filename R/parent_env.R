@@ -1,17 +1,11 @@
-#' Get ancestral environments of an environment
-#'
-#' @param envir An \code{\link[base:environment]{environment}}
-#' or an object with an environment, e.g. a function or a formula.
-#'
 #' @param n The generation of parent environment to get.
 #' If `n = 0`, then `envir` is returned.
 #' If `n = 1`, then `parent.env(envir)` is returned.
 #' If `n = 2`, then `parent.env(parent.env(envir))` is returned,
-#' and so on.
+#' and so on, until `emptyenv()` is returned.
 #'
 #' @return
-#' An \code{\link[base:environment]{environment}}.  If no more parent
-#' environments are found, the empty environment is returned.
+#' `parent_env()` returns an \code{\link[base:environment]{environment}}.
 #'
 #' @examples
 #' parent_env()
@@ -34,9 +28,7 @@
 #' parent_env(f, n = 2)
 #' parent_env(f, n = 3)
 #'
-#' @seealso
-#' [parent_envs()] and [top_env()].
-#'
+#' @rdname parent_envs
 #' @export
 parent_env <- function(envir = parent.frame(), n = 1L) {
   if (!inherits(envir, "environment")) {

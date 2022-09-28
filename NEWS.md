@@ -1,6 +1,9 @@
 # Version (development version)
 
- * ...
+## Significant Changes
+
+ * Argument `until` for `parent_envs()` now defaults to `globalenv()`
+   rather than `emptyenv()`.
  
 
 # Version 0.3.0 (2022-09-27)

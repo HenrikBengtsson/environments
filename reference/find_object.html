@@ -79,6 +79,13 @@ then <code>from</code> is returned.  If not found there, the parent environment
 of <code>from</code> is searched, and so on, until the "empty" environment
 (<code><a href="https://rdrr.io/r/base/environment.html" class="external-link">emptyenv()</a></code>) is reached. In such cases,
 no matching object could be found and NULL is returned.</p>
+<p><code>find_object()</code> is how <code><a href="https://rdrr.io/r/base/exists.html" class="external-link">base::exists()</a></code>, <code><a href="https://rdrr.io/r/base/get.html" class="external-link">base::get()</a></code>, and
+<code><a href="https://rdrr.io/r/base/assign.html" class="external-link">base::assign()</a></code> locate an object with <code>inherits = TRUE</code> (default).
+For example, <code>exists(name) == !is.null(find_object(name))</code>. Similarly,
+<code>object &lt;- get(name)</code> is the same as:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">envir</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_object.html">find_object</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">envir</span><span class="op">)</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Object %d not found"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sQuote.html" class="external-link">sQuote</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">object</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="va">name</span>, envir <span class="op">=</span> <span class="va">envir</span>, inherits <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre><p></p></div>
     </div>
 
     <div id="ref-examples">

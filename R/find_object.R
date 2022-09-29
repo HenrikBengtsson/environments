@@ -15,9 +15,10 @@
 #' @details
 #' The object is looked for in environment `from`. If it is found there,
 #' then `from` is returned.  If not found there, the parent environment
-#' of `from` is searched, and so on, until the "empty" environment
-#' (\code{\link[base:emptyenv]{emptyenv()}}) is reached. In such cases,
-#' no matching object could be found and NULL is returned.
+#' of `from` is searched, and so on, until an environment in `until`, or
+#' the "empty" environment (\code{\link[base:emptyenv]{emptyenv()}}) is
+#' reached. In such cases, no matching object could be found and NULL is
+#' returned.
 #'
 #' `find_object()` is how [base::exists()], [base::get()], and
 #' [base::assign()] locate an object based on its name and mode.

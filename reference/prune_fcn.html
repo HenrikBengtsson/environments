@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">environments</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0-9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0-9005</span>
       </span>
     </div>
 
@@ -49,7 +49,7 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">prune_fcn</span><span class="op">(</span></span>
 <span>  <span class="va">fcn</span>,</span>
-<span>  search <span class="op">=</span> <span class="fu"><a href="find_object_by_value.html">find_object_by_value</a></span><span class="op">(</span><span class="va">fcn</span>, from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span>, first <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">envir</span>,</span>
+<span>  search <span class="op">=</span> <span class="fu"><a href="find_object_by_value.html">find_object_by_value</a></span><span class="op">(</span><span class="va">fcn</span>, from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span>, which <span class="op">=</span> <span class="st">"last"</span><span class="op">)</span><span class="op">$</span><span class="va">envir</span>,</span>
 <span>  globals <span class="op">=</span> <span class="fu"><a href="get_globals.html">get_globals</a></span><span class="op">(</span><span class="va">fcn</span><span class="op">)</span>,</span>
 <span>  depth <span class="op">=</span> <span class="fl">0L</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -112,7 +112,7 @@ each call to <code>prune_fcn()</code>.</p>
 <span class="r-in"><span><span class="va">my_do_call</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">fcn</span>, <span class="va">args</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">envir</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">prune</span> <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="va">fcn_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">substitute</a></span><span class="op">(</span><span class="va">fcn</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="kw">if</span> <span class="op">(</span><span class="va">prune</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>    <span class="va">fcn</span> <span class="op">&lt;-</span> <span class="fu">prune_fcn</span><span class="op">(</span><span class="va">fcn</span>, search <span class="op">=</span> <span class="fu"><a href="find_object_by_value.html">find_object_by_value</a></span><span class="op">(</span><span class="va">fcn</span>, from <span class="op">=</span> <span class="va">envir</span>, first <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">envir</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">fcn</span> <span class="op">&lt;-</span> <span class="fu">prune_fcn</span><span class="op">(</span><span class="va">fcn</span>, search <span class="op">=</span> <span class="fu"><a href="find_object_by_value.html">find_object_by_value</a></span><span class="op">(</span><span class="va">fcn</span>, from <span class="op">=</span> <span class="va">envir</span>, which <span class="op">=</span> <span class="st">"last"</span><span class="op">)</span><span class="op">$</span><span class="va">envir</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    </span></span>
 <span class="r-in"><span>    <span class="co">## Important: We must drop attribute 'prune_undo' before</span></span></span>
 <span class="r-in"><span>    <span class="co">## exporting object, otherwise it will carry the pruned</span></span></span>

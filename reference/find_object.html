@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">environments</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0-9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0-9005</span>
       </span>
     </div>
 
@@ -47,7 +47,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_object</span><span class="op">(</span><span class="va">name</span>, mode <span class="op">=</span> <span class="st">"any"</span>, from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_object</span><span class="op">(</span><span class="va">name</span>, mode <span class="op">=</span> <span class="st">"any"</span>, from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span>, until <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">emptyenv</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -65,6 +65,14 @@
 with an environment (e.g. a <code><a href="https://rdrr.io/r/base/function.html" class="external-link">function</a></code> and a
 <code><a href="https://rdrr.io/r/base/tilde.html" class="external-link">formula</a></code>), to start search from.</p></dd>
 
+
+<dt>until</dt>
+<dd><p>An <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></code> to consider
+the last parent environment.  If <code>until</code> is not one of the parent
+environments, then <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">emptyenv()</a></code> is the
+last one.  It is also possible to specify a list of alternative
+environments.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -76,9 +84,10 @@ with an environment (e.g. a <code><a href="https://rdrr.io/r/base/function.html"
     <h2>Details</h2>
     <p>The object is looked for in environment <code>from</code>. If it is found there,
 then <code>from</code> is returned.  If not found there, the parent environment
-of <code>from</code> is searched, and so on, until the "empty" environment
-(<code><a href="https://rdrr.io/r/base/environment.html" class="external-link">emptyenv()</a></code>) is reached. In such cases,
-no matching object could be found and NULL is returned.</p>
+of <code>from</code> is searched, and so on, until an environment in <code>until</code>, or
+the "empty" environment (<code><a href="https://rdrr.io/r/base/environment.html" class="external-link">emptyenv()</a></code>) is
+reached. In such cases, no matching object could be found and NULL is
+returned.</p>
 <p><code>find_object()</code> is how <code><a href="https://rdrr.io/r/base/exists.html" class="external-link">base::exists()</a></code>, <code><a href="https://rdrr.io/r/base/get.html" class="external-link">base::get()</a></code>, and
 <code><a href="https://rdrr.io/r/base/assign.html" class="external-link">base::assign()</a></code> locate an object based on its name and mode.
 For example, <code>exists(name) == !is.null(find_object(name))</code>. Similarly,

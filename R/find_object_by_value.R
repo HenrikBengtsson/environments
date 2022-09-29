@@ -1,10 +1,8 @@
 #' Locate the original name and location of an object
 #'
-#' @param object The R object whose location should be identified.
+#' @inheritParams find_object
 #'
-#' @param from An \code{\link[base:environment]{environment}}, or an object
-#' with an environment (e.g. a \code{\link[base:function]{function}} and a
-#' \code{\link[base:tilde]{formula}}), to start search from.
+#' @param object The R object whose location should be identified.
 #'
 #' @param which If `"first"` or `"last"`, then the first or the last
 #' occurance of `object` among the parent frames is identified and returned.
@@ -23,7 +21,7 @@
 #' @example incl/find_object_by_value_1.R
 #'
 #' @export
-find_object_by_value <- function(object, from = parent.frame(), which = c("first", "last", "all")) {
+find_object_by_value <- function(object, from = parent.frame(), until = emptyenv(), which = c("first", "last", "all")) {
   if (inherits(from, "environment")) {
     envir <- from
   } else {
@@ -32,6 +30,20 @@ find_object_by_value <- function(object, from = parent.frame(), which = c("first
       stop(sprintf("Argument 'from' does not specify an environment or an object with an environment: %s", mode(from)))
     }
   }
+
+  if (!is.list(until)) until <- list(until)
+  for (env in until) stopifnot(inherits(env, "environment"))
+
+  ## Make sure there's always an empty environment at the end
+  until <- c(until, list(emptyenv()))
+
+  in_until <- function(envir) {
+    for (env in until) {
+      if (identical(envir, env)) return(TRUE)
+    }
+    FALSE
+  }
+  
   which <- match.arg(which)
   
   mode <- mode(object) ## scan for objects of this mode
@@ -47,7 +59,7 @@ find_object_by_value <- function(object, from = parent.frame(), which = c("first
   }
 
   res <- list()
-  while (!identical(envir, emptyenv())) {
+  while (!in_until(envir)) {
     ## Skip?
     if (identical(envir, skip)) {
       envir <- parent.env(envir)

@@ -1,5 +1,7 @@
 #' Find the environment where an object exists
 #'
+#' @inheritParams parent_envs
+#'
 #' @param name The name of the object to locate.
 #'
 #' @param mode The \code{\link[base:mode]{mode}} of the object to locate.
@@ -58,7 +60,7 @@
 #' )
 #' 
 #' @export
-find_object <- function(name, mode = "any", from = parent.frame()) {
+find_object <- function(name, mode = "any", from = parent.frame(), until = emptyenv()) {
   if (inherits(from, "environment")) {
     envir <- from
   } else {
@@ -67,7 +69,21 @@ find_object <- function(name, mode = "any", from = parent.frame()) {
       stop(sprintf("Argument 'from' does not specify an environment or an object with an environment: %s", mode(from)))
     }
   }
-  while (!identical(envir, emptyenv())) {
+
+  if (!is.list(until)) until <- list(until)
+  for (env in until) stopifnot(inherits(env, "environment"))
+
+  ## Make sure there's always an empty environment at the end
+  until <- c(until, list(emptyenv()))
+
+  in_until <- function(envir) {
+    for (env in until) {
+      if (identical(envir, env)) return(TRUE)
+    }
+    FALSE
+  }
+  
+  while (!in_until(envir)) {
     if (exists(name, mode = mode, envir = envir, inherits = FALSE)) {
       return(envir)
     }

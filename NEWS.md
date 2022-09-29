@@ -9,7 +9,9 @@
  
  * Replaced argument `first` of `find_object_by_value()` with a new
    argument `which`.
- 
+
+ * `find_object()` and `find_object_by_value()` gained argument `until`.
+
 
 # Version 0.3.0 (2022-09-27)
 

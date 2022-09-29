@@ -4,7 +4,7 @@
 \alias{find_object}
 \title{Find the environment where an object exists}
 \usage{
-find_object(name, mode = "any", from = parent.frame())
+find_object(name, mode = "any", from = parent.frame(), until = emptyenv())
 }
 \arguments{
 \item{name}{The name of the object to locate.}
@@ -14,6 +14,12 @@ find_object(name, mode = "any", from = parent.frame())
 \item{from}{An \code{\link[base:environment]{environment}}, or an object
 with an environment (e.g. a \code{\link[base:function]{function}} and a
 \code{\link[base:tilde]{formula}}), to start search from.}
+
+\item{until}{An \code{\link[base:environment]{environment}} to consider
+the last parent environment.  If \code{until} is not one of the parent
+environments, then \code{\link[base:emptyenv]{emptyenv()}} is the
+last one.  It is also possible to specify a list of alternative
+environments.}
 }
 \value{
 An \code{\link[base:environment]{environment}}, or NULL.

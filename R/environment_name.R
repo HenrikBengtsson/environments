@@ -11,17 +11,14 @@
 #' the hexadecimal string that is outputted by `print(envir)`.
 #'
 #' @examples
-#' environment_name(emptyenv())
-#' #> [1] "R_EmptyEnv"
+#' environment_name(emptyenv())             ## "R_EmptyEnv"
 #'
-#' environment_name(globalenv())
-#' #> [1] "R_GlobalEnv"
+#' environment_name(globalenv())            ## "R_GlobalEnv"
 #'
-#' environment_name(getNamespace("utils"))
-#' #> [1] "utils"
+#' environment_name(getNamespace("utils"))  ## "utils"
 #'
-#' environment_name(new.env())
-#' #> [1] "0x55ff679a1ce0"
+#' environment_name(new.env())              ## e.g. "0x55ff679a1ce0"
+#' 
 #' 
 #' @importFrom utils capture.output
 #' @export

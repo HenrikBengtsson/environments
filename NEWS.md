@@ -7,6 +7,9 @@
    
  * Rename `locate_object()` to `find_object_by_value()`.
  
+ * Replaced argument `first` of `find_object_by_value()` with a new
+   argument `which`.
+ 
 
 # Version 0.3.0 (2022-09-27)
 

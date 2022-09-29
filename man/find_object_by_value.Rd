@@ -4,7 +4,11 @@
 \alias{find_object_by_value}
 \title{Locate the original name and location of an object}
 \usage{
-find_object_by_value(object, from = parent.frame(), first = TRUE)
+find_object_by_value(
+  object,
+  from = parent.frame(),
+  which = c("first", "last", "all")
+)
 }
 \arguments{
 \item{object}{The R object whose location should be identified.}
@@ -13,13 +17,17 @@ find_object_by_value(object, from = parent.frame(), first = TRUE)
 with an environment (e.g. a \code{\link[base:function]{function}} and a
 \code{\link[base:tilde]{formula}}), to start search from.}
 
-\item{first}{If TRUE, the first occurance of \code{object} among the parent
-frames is identified, otherwise the last.}
+\item{which}{If \code{"first"} or \code{"last"}, then the first or the last
+occurance of \code{object} among the parent frames is identified and returned.
+If \code{"all"}, then all occurances are returned.}
 }
 \value{
-A named list with elements \code{name} and \code{envir}, where \code{name} is the
-name of \code{object} as it is named in environment \code{envir}, i.e.
+If \code{which = "first"} or \code{which = "last"}, then a named list with
+elements \code{name} and \code{envir}, where \code{name} is the name of \code{object}
+as it is named in environment \code{envir}, i.e.
 \code{identical(envir[[name]], object)}.
+If \code{which = "all"}, then a list of (name, environment) lists are
+returned; one for each matching occurence.
 If the object could not be located when searching from environment
 \code{from}, then NULL is returned.
 }

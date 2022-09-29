@@ -27,7 +27,7 @@
 #' @example incl/prune_fcn_1.R
 #' 
 #' @export
-prune_fcn <- function(fcn, search = find_object_by_value(fcn, from = parent.frame(), first = FALSE)$envir, globals = get_globals(fcn), depth = 0L) {
+prune_fcn <- function(fcn, search = find_object_by_value(fcn, from = parent.frame(), which = "last")$envir, globals = get_globals(fcn), depth = 0L) {
   stopifnot(is.function(fcn))
 
   ## Already pruned?

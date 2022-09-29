@@ -47,7 +47,7 @@ stopifnot(
 message("*** Locate stats::rnorm() despite local copy")
 my_rnorm <- stats::rnorm
 prune_check_env()
-res <- find_object_by_value(my_rnorm, first = FALSE)
+res <- find_object_by_value(my_rnorm, which = "last")
 str(res)
 stopifnot(
   is.list(res),
@@ -71,8 +71,8 @@ local({
 
 message("*** Locate from within function")
 
-my_find <- function(object, first = TRUE) {
-  find_object_by_value(object, first = first)
+my_find <- function(object, which = "first") {
+  find_object_by_value(object, which = which)
 }
 
 my_fcn <- local({
@@ -82,7 +82,7 @@ my_fcn <- local({
       f <- g  ## this is found first
       my_find(f)
     } else {
-      my_find(f, first = FALSE) # skip argument 'f'
+      my_find(f, which = "last") # skip argument 'f'
     }
   }
 })

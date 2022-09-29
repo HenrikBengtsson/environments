@@ -9,7 +9,7 @@
 my_do_call <- function(fcn, args = list(), envir = parent.frame(), prune = FALSE) {
   fcn_name <- as.character(substitute(fcn))
   if (prune) {
-    fcn <- prune_fcn(fcn, search = find_object_by_value(fcn, from = envir, first = FALSE)$envir)
+    fcn <- prune_fcn(fcn, search = find_object_by_value(fcn, from = envir, which = "last")$envir)
     
     ## Important: We must drop attribute 'prune_undo' before
     ## exporting object, otherwise it will carry the pruned

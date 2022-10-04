@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">environments</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0-9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0-9007</span>
       </span>
     </div>
 
@@ -95,34 +95,44 @@ If <code>"all"</code>, then all occurances are returned.</p></dd>
     <h2>Value</h2>
     
 
-<p>If <code>which = "first"</code> or <code>which = "last"</code>, then a named list with
-elements <code>name</code> and <code>envir</code>, where <code>name</code> is the name of <code>object</code></p>
+<p>A named list with elements <code>name</code> and <code>envir</code>, where <code>name</code> is the
+name of the located object in environment <code>envir</code>.
+If no object could be located, then NULL is returned.
+If more than one matching object could be located, then a list of
+all matching (name, environment) lists is returned if <code>which = "all"</code>.
+If <code>which = "first"</code>, then the first match is returned,
+and if <code>which = "last"</code>, then the last match is returned.</p>
+    </div>
+    <div id="environments-searched">
+    <h2>Environments searched</h2>
+    
 
-
-<p>as it is named in environment <code>envir</code>, i.e.
-<code>identical(envir[[name]], object)</code>.
-If <code>which = "all"</code>, then a list of (name, environment) lists are
-returned; one for each matching occurence.
-If the object could not be located when searching from environment
-<code>from</code>, then NULL is returned.</p>
+<p>A matching object is looked for in environment <code>from</code>. If it is found
+there, then <code>from</code> is returned.  If not found there, the parent
+environment of <code>from</code> is searched, and so on, until an environment in
+<code>until</code>, or the "empty" environment
+(<code><a href="https://rdrr.io/r/base/environment.html" class="external-link">emptyenv()</a></code>) is reached. In such cases,
+no matching object could be found and NULL is returned.</p>
     </div>
     <div id="find-an-object-by-its-name-and-mode">
     <h2>Find an object by its name and mode</h2>
     
 
-<p>The object is looked for in environment <code>from</code>. If it is found there,
-then <code>from</code> is returned.  If not found there, the parent environment
-of <code>from</code> is searched, and so on, until an environment in <code>until</code>, or
-the "empty" environment (<code><a href="https://rdrr.io/r/base/environment.html" class="external-link">emptyenv()</a></code>) is
-reached. In such cases, no matching object could be found and NULL is
-returned.</p>
-<p><code>find_object()</code> with arguments <code>name</code> and <code>mode</code> is how <code><a href="https://rdrr.io/r/base/exists.html" class="external-link">base::exists()</a></code>,
-<code><a href="https://rdrr.io/r/base/get.html" class="external-link">base::get()</a></code>, and <code><a href="https://rdrr.io/r/base/assign.html" class="external-link">base::assign()</a></code> locate an object based on its name
-and mode.
-For example, <code>exists(name) == !is.null(find_object_by_name(name))</code>.</p>
+<p><code>find_object()</code> with arguments <code>name</code> and <code>mode</code> locates an object
+with name <code>name</code> and mode <code>mode</code> in one of the environments searched.
+This is how <code><a href="https://rdrr.io/r/base/exists.html" class="external-link">base::exists()</a></code>, <code><a href="https://rdrr.io/r/base/get.html" class="external-link">base::get()</a></code>, and <code><a href="https://rdrr.io/r/base/assign.html" class="external-link">base::assign()</a></code> locate
+an object based on its name and mode.
+For example, <code>exists(name) == !is.null(find_object(name = name))</code>.</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">envir</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_object.html">find_object</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">name</span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">envir</span><span class="op">)</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Object %s not found"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sQuote.html" class="external-link">sQuote</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">object</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="va">name</span>, envir <span class="op">=</span> <span class="va">envir</span>, inherits <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre><p></p></div>
+    </div>
+    <div id="find-an-object-by-its-value">
+    <h2>Find an object by its value</h2>
+    
+
+<p><code>find_object()</code> with arguments <code>value</code> locates an object of any name
+with value <code>value</code> in one of the environments searched.</p>
     </div>
 
     <div id="ref-examples">
@@ -194,7 +204,7 @@ For example, <code>exists(name) == !is.null(find_object_by_name(name))</code>.</
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "my_sum"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $envir</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5561e92cd380&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5600928c6e58&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">find_object</span><span class="op">(</span>value <span class="op">=</span> <span class="va">my_sum</span>, from <span class="op">=</span> <span class="fu"><a href="parent_envs.html">parent_env</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -215,7 +225,7 @@ For example, <code>exists(name) == !is.null(find_object_by_name(name))</code>.</
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "my_sum"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $envir</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5561e92cd380&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5600928c6e58&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
@@ -239,14 +249,14 @@ For example, <code>exists(name) == !is.null(find_object_by_name(name))</code>.</
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "f"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $envir</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5561ea1edcd0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560092e19e80&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">my_fcn</span><span class="op">(</span><span class="va">my_sum</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "my_sum"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $envir</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5561e92cd380&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5600928c6e58&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/ns-topenv.html" class="external-link">topenv</a></span><span class="op">(</span><span class="op">)</span></span></span>

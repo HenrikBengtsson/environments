@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">environments</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0-9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0-9007</span>
       </span>
     </div>
 
@@ -212,7 +212,7 @@ we have a fully functional version of <code>f</code>, e.g. <code>f()</code> give
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">f_envs</span> <span class="op">&lt;-</span> <span class="fu"><a href="parent_envs.html">parent_envs</a></span><span class="op">(</span><span class="va">f</span>, until <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="op">)</span>, extra <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">f_envs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x5561e8233ec0" "0x5561e85bb370" "0x5561ea263a70"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x560092481068" "0x560092e310f0" "0x56009206e3b0"</span>
 <span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">f</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">y</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 42</span>
@@ -220,11 +220,11 @@ we have a fully functional version of <code>f</code>, e.g. <code>f()</code> give
 <span class="r-in"><span><span class="va">new</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.environment.html" class="external-link">as.environment</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">13</span>, pi <span class="op">=</span> <span class="fl">3.14</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">old</span> <span class="op">&lt;-</span> <span class="fu">replace_env</span><span class="op">(</span><span class="va">f</span>, search <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="op">)</span>, replace <span class="op">=</span> <span class="va">new</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">old</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5561e85bb370&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560092e310f0&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">f2_envs</span> <span class="op">&lt;-</span> <span class="fu"><a href="parent_envs.html">parent_envs</a></span><span class="op">(</span><span class="va">f</span>, until <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="parent_envs.html">parent_env</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">f2_envs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x5561e8233ec0" "0x5561e9264020" "0x5561ea263a70"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x560092481068" "0x5600910aefd8" "0x56009206e3b0"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Note that f() will now see a = 13 in the replaced environment</span></span></span>
 <span class="r-in"><span><span class="co">## rather than a = 42 in the calling environment</span></span></span>

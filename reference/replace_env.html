@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">environments</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0-9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0-9006</span>
       </span>
     </div>
 
@@ -193,7 +193,7 @@ e.g before we save to file above. Then it is ready to use when
 unserialized, e.g. read back from file.
 An alternative way to achive this is to use the <code>replace_env()</code> function;</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">new</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.environment.html" class="external-link">as.environment</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="va">a</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/replace_env.html">replace_env</a></span><span class="op">(</span><span class="va">f</span>, search <span class="op">=</span> <span class="fu"><a href="../reference/find_object_by_value.html">find_object_by_value</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">$</span><span class="va">envir</span>, replace <span class="op">=</span> <span class="va">new</span><span class="op">)</span></span></code></pre><p></p></div>
+<span><span class="fu"><a href="../reference/replace_env.html">replace_env</a></span><span class="op">(</span><span class="va">f</span>, search <span class="op">=</span> <span class="fu">find_object_by_value</span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">$</span><span class="va">envir</span>, replace <span class="op">=</span> <span class="va">new</span><span class="op">)</span></span></code></pre><p></p></div>
 <p>If we save this to file, restart R, and load it back in, we'll see that
 we have a fully functional version of <code>f</code>, e.g. <code>f()</code> gives 1.57.</p>
 <p>Another, less verbose, alternative is to use <code><a href="prune_fcn.html">prune_fcn()</a></code>;</p>
@@ -212,7 +212,7 @@ we have a fully functional version of <code>f</code>, e.g. <code>f()</code> give
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">f_envs</span> <span class="op">&lt;-</span> <span class="fu"><a href="parent_envs.html">parent_envs</a></span><span class="op">(</span><span class="va">f</span>, until <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="op">)</span>, extra <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">f_envs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x555697136a98" "0x5556970bfc30" "0x555696708f58"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x5561e8233ec0" "0x5561e85bb370" "0x5561ea263a70"</span>
 <span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">f</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">y</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 42</span>
@@ -220,11 +220,11 @@ we have a fully functional version of <code>f</code>, e.g. <code>f()</code> give
 <span class="r-in"><span><span class="va">new</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.environment.html" class="external-link">as.environment</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">13</span>, pi <span class="op">=</span> <span class="fl">3.14</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">old</span> <span class="op">&lt;-</span> <span class="fu">replace_env</span><span class="op">(</span><span class="va">f</span>, search <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="op">)</span>, replace <span class="op">=</span> <span class="va">new</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">old</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5556970bfc30&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5561e85bb370&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">f2_envs</span> <span class="op">&lt;-</span> <span class="fu"><a href="parent_envs.html">parent_envs</a></span><span class="op">(</span><span class="va">f</span>, until <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="parent_envs.html">parent_env</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">f2_envs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x555697136a98" "0x555697358e28" "0x555696708f58"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x5561e8233ec0" "0x5561e9264020" "0x5561ea263a70"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Note that f() will now see a = 13 in the replaced environment</span></span></span>
 <span class="r-in"><span><span class="co">## rather than a = 42 in the calling environment</span></span></span>
@@ -255,7 +255,7 @@ we have a fully functional version of <code>f</code>, e.g. <code>f()</code> give
 <span class="r-in"><span><span class="va">do_call</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">fcn</span>, <span class="va">args</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">envir</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                    <span class="va">prune</span> <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="kw">if</span> <span class="op">(</span><span class="va">prune</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>    <span class="va">fcn_where</span> <span class="op">&lt;-</span> <span class="fu"><a href="find_object_by_value.html">find_object_by_value</a></span><span class="op">(</span><span class="va">fcn</span>, from <span class="op">=</span> <span class="va">envir</span>, which <span class="op">=</span> <span class="st">"last"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">fcn_where</span> <span class="op">&lt;-</span> <span class="fu"><a href="find_object.html">find_object</a></span><span class="op">(</span>value <span class="op">=</span> <span class="va">fcn</span>, from <span class="op">=</span> <span class="va">envir</span>, which <span class="op">=</span> <span class="st">"last"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">fcn_globals</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_globals.html">get_globals</a></span><span class="op">(</span><span class="va">fcn</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">new</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.environment.html" class="external-link">as.environment</a></span><span class="op">(</span><span class="va">fcn_globals</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">old</span> <span class="op">&lt;-</span> <span class="fu">replace_env</span><span class="op">(</span><span class="va">fcn</span>, search <span class="op">=</span> <span class="va">fcn_where</span><span class="op">$</span><span class="va">envir</span>, replace <span class="op">=</span> <span class="va">new</span><span class="op">)</span></span></span>
@@ -281,10 +281,10 @@ we have a fully functional version of <code>f</code>, e.g. <code>f()</code> give
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">my_fcn</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 8056038 bytes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 8056154 bytes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6.28</span>
 <span class="r-in"><span><span class="fu">my_fcn</span><span class="op">(</span>prune <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 55864 bytes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 55980 bytes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6.28</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2</span>  </span></span>
@@ -299,10 +299,10 @@ we have a fully functional version of <code>f</code>, e.g. <code>f()</code> give
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">my_fcn</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 55091 bytes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 55207 bytes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6.28</span>
 <span class="r-in"><span><span class="fu">my_fcn</span><span class="op">(</span>prune <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 50935 bytes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 51043 bytes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6.28</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
@@ -318,10 +318,10 @@ we have a fully functional version of <code>f</code>, e.g. <code>f()</code> give
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">my_fcn</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 8054948 bytes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 8055064 bytes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6.28</span>
 <span class="r-in"><span><span class="fu">my_fcn</span><span class="op">(</span>prune <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 50935 bytes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 51043 bytes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6.28</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cargo"</span>, <span class="st">"n"</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -343,10 +343,10 @@ we have a fully functional version of <code>f</code>, e.g. <code>f()</code> give
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">my_fcn</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 8055088 bytes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 8055204 bytes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6.28</span>
 <span class="r-in"><span><span class="fu">my_fcn</span><span class="op">(</span>prune <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 8051128 bytes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Size of 'g': 8051236 bytes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6.28</span>
 </code></pre></div>
     </div>

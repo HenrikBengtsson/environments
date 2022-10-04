@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">environments</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0-9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0-9006</span>
       </span>
     </div>
 
@@ -47,7 +47,14 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_object</span><span class="op">(</span><span class="va">name</span>, mode <span class="op">=</span> <span class="st">"any"</span>, from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span>, until <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">emptyenv</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_object</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mode <span class="op">=</span> <span class="st">"any"</span>,</span>
+<span>  value <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  until <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">emptyenv</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"first"</span>, <span class="st">"last"</span>, <span class="st">"all"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -58,6 +65,10 @@
 
 <dt>mode</dt>
 <dd><p>The <code><a href="https://rdrr.io/r/base/mode.html" class="external-link">mode</a></code> of the object to locate.</p></dd>
+
+
+<dt>value</dt>
+<dd><p>The R object whose location should be identified.</p></dd>
 
 
 <dt>from</dt>
@@ -73,49 +84,76 @@ environments, then <code><a href="https://rdrr.io/r/base/environment.html" class
 last one.  It is also possible to specify a list of alternative
 environments.</p></dd>
 
+
+<dt>which</dt>
+<dd><p>If <code>"first"</code> or <code>"last"</code>, then the first or the last
+occurance of <code>object</code> among the parent frames is identified and returned.
+If <code>"all"</code>, then all occurances are returned.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>An <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></code>, or NULL.</p>
+<p>If <code>which = "first"</code> or <code>which = "last"</code>, then a named list with
+elements <code>name</code> and <code>envir</code>, where <code>name</code> is the name of <code>object</code></p>
+
+
+<p>as it is named in environment <code>envir</code>, i.e.
+<code>identical(envir[[name]], object)</code>.
+If <code>which = "all"</code>, then a list of (name, environment) lists are
+returned; one for each matching occurence.
+If the object could not be located when searching from environment
+<code>from</code>, then NULL is returned.</p>
     </div>
-    <div id="details">
-    <h2>Details</h2>
-    <p>The object is looked for in environment <code>from</code>. If it is found there,
+    <div id="find-an-object-by-its-name-and-mode">
+    <h2>Find an object by its name and mode</h2>
+    
+
+<p>The object is looked for in environment <code>from</code>. If it is found there,
 then <code>from</code> is returned.  If not found there, the parent environment
 of <code>from</code> is searched, and so on, until an environment in <code>until</code>, or
 the "empty" environment (<code><a href="https://rdrr.io/r/base/environment.html" class="external-link">emptyenv()</a></code>) is
 reached. In such cases, no matching object could be found and NULL is
 returned.</p>
-<p><code>find_object()</code> is how <code><a href="https://rdrr.io/r/base/exists.html" class="external-link">base::exists()</a></code>, <code><a href="https://rdrr.io/r/base/get.html" class="external-link">base::get()</a></code>, and
-<code><a href="https://rdrr.io/r/base/assign.html" class="external-link">base::assign()</a></code> locate an object based on its name and mode.
-For example, <code>exists(name) == !is.null(find_object(name))</code>. Similarly,
-<code>object &lt;- get(name)</code> is the same as:</p>
-<p></p><div class="sourceCode r"><pre><code><span><span class="va">envir</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_object.html">find_object</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span></span>
+<p><code>find_object()</code> with arguments <code>name</code> and <code>mode</code> is how <code><a href="https://rdrr.io/r/base/exists.html" class="external-link">base::exists()</a></code>,
+<code><a href="https://rdrr.io/r/base/get.html" class="external-link">base::get()</a></code>, and <code><a href="https://rdrr.io/r/base/assign.html" class="external-link">base::assign()</a></code> locate an object based on its name
+and mode.
+For example, <code>exists(name) == !is.null(find_object_by_name(name))</code>.</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">envir</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_object.html">find_object</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">name</span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">envir</span><span class="op">)</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Object %s not found"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sQuote.html" class="external-link">sQuote</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">object</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="va">name</span>, envir <span class="op">=</span> <span class="va">envir</span>, inherits <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre><p></p></div>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">find_object</span><span class="op">(</span><span class="st">"pi"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">find_object</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"pi"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "pi"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $envir</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: base&gt;</span>
-<span class="r-in"><span><span class="fu">find_object</span><span class="op">(</span><span class="st">"pi"</span>, mode <span class="op">=</span> <span class="st">"character"</span><span class="op">)</span>   <span class="co">## non-existing</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu">find_object</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"pi"</span>, mode <span class="op">=</span> <span class="st">"character"</span><span class="op">)</span>   <span class="co">## non-existing</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-in"><span><span class="fu">find_object</span><span class="op">(</span><span class="st">"rnorm"</span>, mode <span class="op">=</span> <span class="st">"function"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">find_object</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"rnorm"</span>, mode <span class="op">=</span> <span class="st">"function"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rnorm"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $envir</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: package:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"name")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "package:stats"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"path")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/stats"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">local</a></span><span class="op">(</span><span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="va">a</span> <span class="op">&lt;-</span> <span class="fl">42</span></span></span>
 <span class="r-in"><span>  <span class="va">pi</span> <span class="op">&lt;-</span> <span class="fl">3.14</span></span></span>
 <span class="r-in"><span>  <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="va">pi</span> <span class="op">*</span> <span class="va">a</span></span></span>
 <span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">env</span> <span class="op">&lt;-</span> <span class="fu">find_object</span><span class="op">(</span><span class="st">"a"</span>, from <span class="op">=</span> <span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">env</span> <span class="op">&lt;-</span> <span class="fu">find_object</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"a"</span>, from <span class="op">=</span> <span class="va">f</span><span class="op">)</span><span class="op">$</span><span class="va">envir</span></span></span>
 <span class="r-in"><span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/ls_str.html" class="external-link">ls.str</a></span><span class="op">(</span><span class="va">env</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a :  num 42</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pi :  num 3.14</span>
@@ -127,10 +165,10 @@ For example, <code>exists(name) == !is.null(find_object(name))</code>. Similarly
 <span class="r-in"><span>    <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="va">pi</span> <span class="op">*</span> <span class="va">a</span></span></span>
 <span class="r-in"><span>  <span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">env_a</span> <span class="op">&lt;-</span> <span class="fu">find_object</span><span class="op">(</span><span class="st">"a"</span>, from <span class="op">=</span> <span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">env_a</span> <span class="op">&lt;-</span> <span class="fu">find_object</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"a"</span>, from <span class="op">=</span> <span class="va">f</span><span class="op">)</span><span class="op">$</span><span class="va">envir</span></span></span>
 <span class="r-in"><span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/ls_str.html" class="external-link">ls.str</a></span><span class="op">(</span><span class="va">env_a</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a :  num 42</span>
-<span class="r-in"><span><span class="va">env_pi</span> <span class="op">&lt;-</span> <span class="fu">find_object</span><span class="op">(</span><span class="st">"pi"</span>, from <span class="op">=</span> <span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">env_pi</span> <span class="op">&lt;-</span> <span class="fu">find_object</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"pi"</span>, from <span class="op">=</span> <span class="va">f</span><span class="op">)</span><span class="op">$</span><span class="va">envir</span></span></span>
 <span class="r-in"><span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/ls_str.html" class="external-link">ls.str</a></span><span class="op">(</span><span class="va">env_pi</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pi :  num 3.14</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span></span></span>
@@ -138,6 +176,81 @@ For example, <code>exists(name) == !is.null(find_object(name))</code>. Similarly
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">parent.env</a></span><span class="op">(</span><span class="va">env_pi</span><span class="op">)</span>, <span class="va">env_a</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">find_object</span><span class="op">(</span>value <span class="op">=</span> <span class="va">rnorm</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rnorm"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $envir</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: package:stats&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"name")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "package:stats"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"path")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/stats"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">my_sum</span> <span class="op">&lt;-</span> <span class="va">rnorm</span></span></span>
+<span class="r-in"><span><span class="fu">find_object</span><span class="op">(</span>value <span class="op">=</span> <span class="va">my_sum</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "my_sum"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $envir</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5561e92cd380&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">find_object</span><span class="op">(</span>value <span class="op">=</span> <span class="va">my_sum</span>, from <span class="op">=</span> <span class="fu"><a href="parent_envs.html">parent_env</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rnorm"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $envir</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: package:stats&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"name")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "package:stats"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"path")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/stats"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">my_sum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">local</a></span><span class="op">(</span><span class="va">sum</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">find_object</span><span class="op">(</span>value <span class="op">=</span> <span class="va">my_sum</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "my_sum"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $envir</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5561e92cd380&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">my_find</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">envir</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu">find_object</span><span class="op">(</span>value <span class="op">=</span> <span class="va">object</span>, from <span class="op">=</span> <span class="va">envir</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">my_fcn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">local</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">g</span> <span class="op">&lt;-</span> <span class="va">sum</span>  <span class="co">## this is never found</span></span></span>
+<span class="r-in"><span>  <span class="kw">function</span><span class="op">(</span><span class="va">f</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="va">f</span> <span class="op">&lt;-</span> <span class="va">g</span>  <span class="co">## this is found first</span></span></span>
+<span class="r-in"><span>      <span class="fu">my_find</span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="fu">my_find</span><span class="op">(</span><span class="va">f</span>, envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="co"># skip argument 'f'</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">my_fcn</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "f"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $envir</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5561ea1edcd0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu">my_fcn</span><span class="op">(</span><span class="va">my_sum</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "my_sum"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $envir</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5561e92cd380&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/ns-topenv.html" class="external-link">topenv</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: R_GlobalEnv&gt;</span>
 </code></pre></div>
     </div>
   </div>

@@ -56,12 +56,6 @@
 #'
 #' @export
 find_object <- function(value = NULL, name = NULL, mode = "any", from = parent.frame(), until = emptyenv(), which = c("first", "last", "all")) {
-  if (is.null(name) && is.null(value)) {
-    stop("Either argument 'name' or 'value' must be specified, i.e. non-NULL")
-  } else if (!is.null(name) && !is.null(value)) {
-    stop("Both arguments 'name' and 'value' cannot be specified, i.e. non-NULL")
-  }
-
   if (inherits(from, "environment")) {
     envir <- from
   } else {
@@ -88,12 +82,27 @@ find_object <- function(value = NULL, name = NULL, mode = "any", from = parent.f
 
   res <- list()
   if (!is.null(name)) {
+    if (!is.null(value)) mode <- mode(value)
+    
     while (!in_until(envir)) {
+      res_name <- NULL
       if (exists(name, mode = mode, envir = envir, inherits = FALSE)) {
         res_name <- list(name = name, envir = envir)
+
+        ## Match also value?
+        if (!is.null(value)) {
+          res_value <- get(name, mode = mode, envir = envir, inherits = FALSE)
+          ## No match?
+          if (!identical(res_value, value)) res_name <- NULL
+        }
+      }
+      
+      ## Found a match?
+      if (!is.null(res_name)) {
         if (which == "first") return(res_name)
         res <- c(res, list(res_name))
       }
+      
       envir <- parent.env(envir)
     }
   } else if (!is.null(value)) {
@@ -135,6 +144,8 @@ find_object <- function(value = NULL, name = NULL, mode = "any", from = parent.f
       }
       envir <- parent.env(envir)
     }
+  } else {
+    stop("Either argument 'name' or 'value' must be specified and non-NULL")
   }
 
   if (length(res) == 0L) return(NULL)

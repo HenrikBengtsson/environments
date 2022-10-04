@@ -1,6 +1,6 @@
 #' Locate the original name and location of an object
 #'
-#' @inheritParams find_object
+#' @inheritParams find_object_by_name
 #'
 #' @param object The R object whose location should be identified.
 #'

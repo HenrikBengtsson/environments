@@ -1,4 +1,4 @@
-#' Find the environment where an object exists
+ #' Find the environment where an object exists
 #'
 #' @inheritParams parent_envs
 #'
@@ -20,28 +20,28 @@
 #' reached. In such cases, no matching object could be found and NULL is
 #' returned.
 #'
-#' `find_object()` is how [base::exists()], [base::get()], and
+#' `find_object_by_name()` is how [base::exists()], [base::get()], and
 #' [base::assign()] locate an object based on its name and mode.
-#' For example, `exists(name) == !is.null(find_object(name))`. Similarly,
+#' For example, `exists(name) == !is.null(find_object_by_name(name))`. Similarly,
 #' `object <- get(name)` is the same as:
 #'
 #' ```r
-#' envir <- find_object(name)
+#' envir <- find_object_by_name(name)
 #' if (is.null(envir)) stop(sprintf("Object %s not found", sQuote(name)))
 #' object <- get(name, envir = envir, inherits = FALSE)
 #' ```
 #'
 #' @examples
-#' find_object("pi")
-#' find_object("pi", mode = "character")   ## non-existing
-#' find_object("rnorm", mode = "function")
+#' find_object_by_name("pi")
+#' find_object_by_name("pi", mode = "character")   ## non-existing
+#' find_object_by_name("rnorm", mode = "function")
 #'
 #' f <- local({
 #'   a <- 42
 #'   pi <- 3.14
 #'   function() pi * a
 #' })
-#' env <- find_object("a", from = f)
+#' env <- find_object_by_name("a", from = f)
 #' utils::ls.str(env)
 #' 
 #' f <- local({
@@ -51,9 +51,9 @@
 #'     function() pi * a
 #'   })
 #' })
-#' env_a <- find_object("a", from = f)
+#' env_a <- find_object_by_name("a", from = f)
 #' utils::ls.str(env_a)
-#' env_pi <- find_object("pi", from = f)
+#' env_pi <- find_object_by_name("pi", from = f)
 #' utils::ls.str(env_pi)
 #' stopifnot(
 #'   identical(environment(f), env_pi),
@@ -61,7 +61,7 @@
 #' )
 #' 
 #' @export
-find_object <- function(name, mode = "any", from = parent.frame(), until = emptyenv()) {
+find_object_by_name <- function(name, mode = "any", from = parent.frame(), until = emptyenv()) {
   if (inherits(from, "environment")) {
     envir <- from
   } else {

@@ -193,7 +193,7 @@ e.g before we save to file above. Then it is ready to use when
 unserialized, e.g. read back from file.
 An alternative way to achive this is to use the <code>replace_env()</code> function;</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">new</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.environment.html" class="external-link">as.environment</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="va">a</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/replace_env.html">replace_env</a></span><span class="op">(</span><span class="va">f</span>, search <span class="op">=</span> <span class="fu">find_object_by_value</span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">$</span><span class="va">envir</span>, replace <span class="op">=</span> <span class="va">new</span><span class="op">)</span></span></code></pre><p></p></div>
+<span><span class="fu"><a href="../reference/replace_env.html">replace_env</a></span><span class="op">(</span><span class="va">f</span>, search <span class="op">=</span> <span class="fu"><a href="../reference/find_object.html">find_object</a></span><span class="op">(</span>value <span class="op">=</span> <span class="va">f</span><span class="op">)</span><span class="op">$</span><span class="va">envir</span>, replace <span class="op">=</span> <span class="va">new</span><span class="op">)</span></span></code></pre><p></p></div>
 <p>If we save this to file, restart R, and load it back in, we'll see that
 we have a fully functional version of <code>f</code>, e.g. <code>f()</code> gives 1.57.</p>
 <p>Another, less verbose, alternative is to use <code><a href="prune_fcn.html">prune_fcn()</a></code>;</p>
@@ -212,7 +212,7 @@ we have a fully functional version of <code>f</code>, e.g. <code>f()</code> give
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">f_envs</span> <span class="op">&lt;-</span> <span class="fu"><a href="parent_envs.html">parent_envs</a></span><span class="op">(</span><span class="va">f</span>, until <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="op">)</span>, extra <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">f_envs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x560092481068" "0x560092e310f0" "0x56009206e3b0"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x5608eb8697b8" "0x5608e9c9b790" "0x5608eb3d7480"</span>
 <span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">f</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">y</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 42</span>
@@ -220,11 +220,11 @@ we have a fully functional version of <code>f</code>, e.g. <code>f()</code> give
 <span class="r-in"><span><span class="va">new</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.environment.html" class="external-link">as.environment</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">13</span>, pi <span class="op">=</span> <span class="fl">3.14</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">old</span> <span class="op">&lt;-</span> <span class="fu">replace_env</span><span class="op">(</span><span class="va">f</span>, search <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="op">)</span>, replace <span class="op">=</span> <span class="va">new</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">old</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560092e310f0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5608e9c9b790&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">f2_envs</span> <span class="op">&lt;-</span> <span class="fu"><a href="parent_envs.html">parent_envs</a></span><span class="op">(</span><span class="va">f</span>, until <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="parent_envs.html">parent_env</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">f2_envs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x560092481068" "0x5600910aefd8" "0x56009206e3b0"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x5608eb8697b8" "0x5608e9e8e0b8" "0x5608eb3d7480"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Note that f() will now see a = 13 in the replaced environment</span></span></span>
 <span class="r-in"><span><span class="co">## rather than a = 42 in the calling environment</span></span></span>

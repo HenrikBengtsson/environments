@@ -7,7 +7,7 @@ f <- local({
   pi <- 3.14
   function() pi * a
 })
-env <- find_object(name = "a", from = f)
+env <- find_object(name = "a", from = f)$envir
 utils::ls.str(env)
 
 f <- local({
@@ -17,9 +17,9 @@ f <- local({
     function() pi * a
   })
 })
-env_a <- find_object(name = "a", from = f)
+env_a <- find_object(name = "a", from = f)$envir
 utils::ls.str(env_a)
-env_pi <- find_object(name = "pi", from = f)
+env_pi <- find_object(name = "pi", from = f)$envir
 utils::ls.str(env_pi)
 stopifnot(
   identical(environment(f), env_pi),

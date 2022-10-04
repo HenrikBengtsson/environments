@@ -9,7 +9,7 @@
 do_call <- function(fcn, args = list(), envir = parent.frame(),
                     prune = FALSE) {
   if (prune) {
-    fcn_where <- find_object_by_value(fcn, from = envir, which = "last")
+    fcn_where <- find_object(value = fcn, from = envir, which = "last")
     fcn_globals <- get_globals(fcn)
     new <- as.environment(fcn_globals)
     old <- replace_env(fcn, search = fcn_where$envir, replace = new)

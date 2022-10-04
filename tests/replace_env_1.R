@@ -42,7 +42,7 @@ saveRDS(f, file = tf2)
 
 message("*** Exporting replace_env() modified function in global environment with globals")
 new <- as.environment(list(a = a))
-replace_env(environment(f), search = find_object_by_value(f)$envir, replace = new)
+replace_env(environment(f), search = find_object(value = f)$envir, replace = new)
 stopifnot(
   identical(parent_env(f, n = 0)$pi, 3.14),
   identical(parent_env(f, n = 1)$a, 2),

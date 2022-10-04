@@ -1,26 +1,3 @@
-#' Locate the original name and location of an object
-#'
-#' @inheritParams find_object_by_name
-#'
-#' @param value The R object whose location should be identified.
-#'
-#' @param which If `"first"` or `"last"`, then the first or the last
-#' occurance of `object` among the parent frames is identified and returned.
-#' If `"all"`, then all occurances are returned.
-#'
-#' @return
-#' If `which = "first"` or `which = "last"`, then a named list with
-#' elements `name` and `envir`, where `name` is the name of `object`
-#' as it is named in environment `envir`, i.e.
-#' `identical(envir[[name]], object)`.
-#' If `which = "all"`, then a list of (name, environment) lists are
-#' returned; one for each matching occurence.
-#' If the object could not be located when searching from environment
-#' `from`, then NULL is returned.
-#'
-#' @example incl/find_object_by_value_1.R
-#'
-#' @export
 find_object_by_value <- function(value, from = parent.frame(), until = emptyenv(), which = c("first", "last", "all")) {
   if (inherits(from, "environment")) {
     envir <- from

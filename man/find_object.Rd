@@ -35,11 +35,38 @@ occurance of \code{object} among the parent frames is identified and returned.
 If \code{"all"}, then all occurances are returned.}
 }
 \value{
-An \code{\link[base:environment]{environment}}, or NULL.
+If \code{which = "first"} or \code{which = "last"}, then a named list with
+elements \code{name} and \code{envir}, where \code{name} is the name of \code{object}
+as it is named in environment \code{envir}, i.e.
+\code{identical(envir[[name]], object)}.
+If \code{which = "all"}, then a list of (name, environment) lists are
+returned; one for each matching occurence.
+If the object could not be located when searching from environment
+\code{from}, then NULL is returned.
 }
 \description{
 Find the environment where an object exists
 }
+\section{Find an object by its name and mode}{
+
+The object is looked for in environment \code{from}. If it is found there,
+then \code{from} is returned.  If not found there, the parent environment
+of \code{from} is searched, and so on, until an environment in \code{until}, or
+the "empty" environment (\code{\link[base:emptyenv]{emptyenv()}}) is
+reached. In such cases, no matching object could be found and NULL is
+returned.
+
+\code{find_object()} with arguments \code{name} and \code{mode} is how \code{\link[base:exists]{base::exists()}},
+\code{\link[base:get]{base::get()}}, and \code{\link[base:assign]{base::assign()}} locate an object based on its name
+and mode.
+For example, \code{exists(name) == !is.null(find_object_by_name(name))}.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{envir <- find_object(name = name)
+if (is.null(envir)) stop(sprintf("Object \%s not found", sQuote(name)))
+object <- get(name, envir = envir, inherits = FALSE)
+}\if{html}{\out{</div>}}
+}
+
 \examples{
 find_object(name = "pi")
 find_object(name = "pi", mode = "character")   ## non-existing
@@ -50,7 +77,7 @@ f <- local({
   pi <- 3.14
   function() pi * a
 })
-env <- find_object(name = "a", from = f)
+env <- find_object(name = "a", from = f)$envir
 utils::ls.str(env)
 
 f <- local({
@@ -60,9 +87,9 @@ f <- local({
     function() pi * a
   })
 })
-env_a <- find_object(name = "a", from = f)
+env_a <- find_object(name = "a", from = f)$envir
 utils::ls.str(env_a)
-env_pi <- find_object(name = "pi", from = f)
+env_pi <- find_object(name = "pi", from = f)$envir
 utils::ls.str(env_pi)
 stopifnot(
   identical(environment(f), env_pi),

@@ -62,10 +62,10 @@ find_object <- function(name = NULL, mode = "any", value = NULL, from = parent.f
     stop("Both arguments 'name' and 'value' cannot be specified, i.e. non-NULL")
   }
 
+  which <- match.arg(which)
+
   if (!is.null(name)) {
-    envir <- find_object_by_name(name, mode = mode, from = from, until = until)
-    if (is.null(envir)) return(NULL)
-    list(name = name, envir = envir)
+    find_object_by_name(name, mode = mode, from = from, until = until, which = which)
   } else if (!is.null(value)) {
     find_object_by_value(value, from = from, until = until, which = which)
   }

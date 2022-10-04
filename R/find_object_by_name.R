@@ -1,4 +1,4 @@
-find_object_by_name <- function(name, mode = "any", from = parent.frame(), until = emptyenv()) {
+find_object_by_name <- function(name, mode = "any", from = parent.frame(), until = emptyenv(), which = c("first", "last", "all")) {
   if (inherits(from, "environment")) {
     envir <- from
   } else {
@@ -20,12 +20,20 @@ find_object_by_name <- function(name, mode = "any", from = parent.frame(), until
     }
     FALSE
   }
-  
+
+  which <- match.arg(which)
+
+  res <- list()
   while (!in_until(envir)) {
     if (exists(name, mode = mode, envir = envir, inherits = FALSE)) {
-      return(envir)
+      res_name <- list(name = name, envir = envir)
+      if (which == "first") return(res_name)
+      res <- c(res, list(res_name))
     }
     envir <- parent.env(envir)
   }
-  NULL
+  
+  if (length(res) == 0L) return(NULL)
+  if (which == "last") res <- res[[length(res)]]
+  res
 }

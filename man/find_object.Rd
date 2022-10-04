@@ -35,36 +35,45 @@ occurance of \code{object} among the parent frames is identified and returned.
 If \code{"all"}, then all occurances are returned.}
 }
 \value{
-If \code{which = "first"} or \code{which = "last"}, then a named list with
-elements \code{name} and \code{envir}, where \code{name} is the name of \code{object}
-as it is named in environment \code{envir}, i.e.
-\code{identical(envir[[name]], object)}.
-If \code{which = "all"}, then a list of (name, environment) lists are
-returned; one for each matching occurence.
-If the object could not be located when searching from environment
-\code{from}, then NULL is returned.
+A named list with elements \code{name} and \code{envir}, where \code{name} is the
+name of the located object in environment \code{envir}.
+If no object could be located, then NULL is returned.
+If more than one matching object could be located, then a list of
+all matching (name, environment) lists is returned if \code{which = "all"}.
+If \code{which = "first"}, then the first match is returned,
+and if \code{which = "last"}, then the last match is returned.
 }
 \description{
 Find the environment where an object exists
 }
+\section{Environments searched}{
+
+A matching object is looked for in environment \code{from}. If it is found
+there, then \code{from} is returned.  If not found there, the parent
+environment of \code{from} is searched, and so on, until an environment in
+\code{until}, or the "empty" environment
+(\code{\link[base:emptyenv]{emptyenv()}}) is reached. In such cases,
+no matching object could be found and NULL is returned.
+}
+
 \section{Find an object by its name and mode}{
 
-The object is looked for in environment \code{from}. If it is found there,
-then \code{from} is returned.  If not found there, the parent environment
-of \code{from} is searched, and so on, until an environment in \code{until}, or
-the "empty" environment (\code{\link[base:emptyenv]{emptyenv()}}) is
-reached. In such cases, no matching object could be found and NULL is
-returned.
-
-\code{find_object()} with arguments \code{name} and \code{mode} is how \code{\link[base:exists]{base::exists()}},
-\code{\link[base:get]{base::get()}}, and \code{\link[base:assign]{base::assign()}} locate an object based on its name
-and mode.
-For example, \code{exists(name) == !is.null(find_object_by_name(name))}.
+\code{find_object()} with arguments \code{name} and \code{mode} locates an object
+with name \code{name} and mode \code{mode} in one of the environments searched.
+This is how \code{\link[base:exists]{base::exists()}}, \code{\link[base:get]{base::get()}}, and \code{\link[base:assign]{base::assign()}} locate
+an object based on its name and mode.
+For example, \code{exists(name) == !is.null(find_object(name = name))}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{envir <- find_object(name = name)
 if (is.null(envir)) stop(sprintf("Object \%s not found", sQuote(name)))
 object <- get(name, envir = envir, inherits = FALSE)
 }\if{html}{\out{</div>}}
+}
+
+\section{Find an object by its value}{
+
+\code{find_object()} with arguments \code{value} locates an object of any name
+with value \code{value} in one of the environments searched.
 }
 
 \examples{

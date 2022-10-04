@@ -17,27 +17,28 @@
 #' If `"all"`, then all occurances are returned.
 #'
 #' @return
-#' If `which = "first"` or `which = "last"`, then a named list with
-#' elements `name` and `envir`, where `name` is the name of `object`
-#' as it is named in environment `envir`, i.e.
-#' `identical(envir[[name]], object)`.
-#' If `which = "all"`, then a list of (name, environment) lists are
-#' returned; one for each matching occurence.
-#' If the object could not be located when searching from environment
-#' `from`, then NULL is returned.
+#' A named list with elements `name` and `envir`, where `name` is the
+#' name of the located object in environment `envir`.
+#' If no object could be located, then NULL is returned.
+#' If more than one matching object could be located, then a list of
+#' all matching (name, environment) lists is returned if `which = "all"`.
+#' If `which = "first"`, then the first match is returned,
+#' and if `which = "last"`, then the last match is returned.
+#'
+#' @section Environments searched:
+#' A matching object is looked for in environment `from`. If it is found
+#' there, then `from` is returned.  If not found there, the parent
+#' environment of `from` is searched, and so on, until an environment in
+#' `until`, or the "empty" environment
+#' (\code{\link[base:emptyenv]{emptyenv()}}) is reached. In such cases,
+#' no matching object could be found and NULL is returned.
 #'
 #' @section Find an object by its name and mode:
-#' The object is looked for in environment `from`. If it is found there,
-#' then `from` is returned.  If not found there, the parent environment
-#' of `from` is searched, and so on, until an environment in `until`, or
-#' the "empty" environment (\code{\link[base:emptyenv]{emptyenv()}}) is
-#' reached. In such cases, no matching object could be found and NULL is
-#' returned.
-#'
-#' `find_object()` with arguments `name` and `mode` is how [base::exists()],
-#' [base::get()], and [base::assign()] locate an object based on its name
-#' and mode.
-#' For example, `exists(name) == !is.null(find_object_by_name(name))`.
+#' `find_object()` with arguments `name` and `mode` locates an object
+#' with name `name` and mode `mode` in one of the environments searched.
+#' This is how [base::exists()], [base::get()], and [base::assign()] locate
+#' an object based on its name and mode.
+#' For example, `exists(name) == !is.null(find_object(name = name))`.
 #" Similarly, `object <- get(name)` is the same as:
 #'
 #' ```r
@@ -45,6 +46,10 @@
 #' if (is.null(envir)) stop(sprintf("Object %s not found", sQuote(name)))
 #' object <- get(name, envir = envir, inherits = FALSE)
 #' ```
+#'
+#' @section Find an object by its value:
+#' `find_object()` with arguments `value` locates an object of any name
+#' with value `value` in one of the environments searched.
 #'
 #' @example incl/find_object_1.R
 #' @example incl/find_object_2.R

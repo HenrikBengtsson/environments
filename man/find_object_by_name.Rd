@@ -78,5 +78,4 @@ stopifnot(
   identical(environment(f), env_pi),
   identical(parent.env(env_pi), env_a)
 )
-
 }

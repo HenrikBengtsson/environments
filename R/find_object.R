@@ -62,11 +62,82 @@ find_object <- function(name = NULL, mode = "any", value = NULL, from = parent.f
     stop("Both arguments 'name' and 'value' cannot be specified, i.e. non-NULL")
   }
 
+  if (inherits(from, "environment")) {
+    envir <- from
+  } else {
+    envir <- environment(from)
+    if (!inherits(envir, "environment")) {
+      stop(sprintf("Argument 'from' does not specify an environment or an object with an environment: %s", mode(from)))
+    }
+  }
+
+  if (!is.list(until)) until <- list(until)
+  for (env in until) stopifnot(inherits(env, "environment"))
+
+  ## Make sure there's always an empty environment at the end
+  until <- c(until, list(emptyenv()))
+
+  in_until <- function(envir) {
+    for (env in until) {
+      if (identical(envir, env)) return(TRUE)
+    }
+    FALSE
+  }
+
   which <- match.arg(which)
 
+  res <- list()
   if (!is.null(name)) {
-    find_object_by_name(name, mode = mode, from = from, until = until, which = which)
+    while (!in_until(envir)) {
+      if (exists(name, mode = mode, envir = envir, inherits = FALSE)) {
+        res_name <- list(name = name, envir = envir)
+        if (which == "first") return(res_name)
+        res <- c(res, list(res_name))
+      }
+      envir <- parent.env(envir)
+    }
   } else if (!is.null(value)) {
-    find_object_by_value(value, from = from, until = until, which = which)
+    ## WORKAROUND: R CMD check will add mockup 'F' and 'T' objects
+    ## to catch misuse of 'F' instead of 'FALSE' and 'T' and 'TRUE'
+    ## in examples. Here we detect if example() is running under
+    ## 'R CMD check'.  If it does, we'll skip searching that
+    ## environment.
+    skip <- NULL
+    if ("CheckExEnv" %in% search()) {
+      skip <- as.environment("CheckExEnv")
+    }
+
+    mode <- mode(value) ## scan for objects of this mode
+
+    while (!in_until(envir)) {
+      ## Skip?
+      if (identical(envir, skip)) {
+        envir <- parent.env(envir)
+        next
+      }
+      
+      ## Scan all objects in the current environment ...
+      names <- ls(envir, all.names = TRUE)
+      if (identical(envir, baseenv())) {
+        names <- setdiff(names, ".Last.value")
+      }
+      for (name in names) {
+        ## ... consider only those with the same mode as 'value' ...
+        if (exists(name, mode = mode, envir = envir, inherits = FALSE)) {
+          tmp <- get(name, mode = mode, envir = envir, inherits = FALSE)
+          ## ... are the identical?
+          if (identical(tmp, value, ignore.environment = FALSE, ignore.bytecode = FALSE, ignore.srcref = FALSE)) {
+            res_name <- list(name = name, envir = envir)
+            if (which == "first") return(res_name)
+            res <- c(res, list(res_name))
+          }
+        }
+      }
+      envir <- parent.env(envir)
+    }
   }
+
+  if (length(res) == 0L) return(NULL)
+  if (which == "last") res <- res[[length(res)]]
+  res
 }

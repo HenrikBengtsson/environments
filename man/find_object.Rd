@@ -5,20 +5,20 @@
 \title{Find the environment where an object exists}
 \usage{
 find_object(
+  value = NULL,
   name = NULL,
   mode = "any",
-  value = NULL,
   from = parent.frame(),
   until = emptyenv(),
   which = c("first", "last", "all")
 )
 }
 \arguments{
+\item{value}{The R object whose location should be identified.}
+
 \item{name}{The name of the object to locate.}
 
 \item{mode}{The \code{\link[base:mode]{mode}} of the object to locate.}
-
-\item{value}{The R object whose location should be identified.}
 
 \item{from}{An \code{\link[base:environment]{environment}}, or an object
 with an environment (e.g. a \code{\link[base:function]{function}} and a
@@ -56,6 +56,12 @@ environment of \code{from} is searched, and so on, until an environment in
 no matching object could be found and NULL is returned.
 }
 
+\section{Find an object by its value}{
+
+\code{find_object()} with arguments \code{value} locates an object of any name
+with value \code{value} in one of the environments searched.
+}
+
 \section{Find an object by its name and mode}{
 
 \code{find_object()} with arguments \code{name} and \code{mode} locates an object
@@ -68,12 +74,6 @@ For example, \code{exists(name) == !is.null(find_object(name = name))}.
 if (is.null(envir)) stop(sprintf("Object \%s not found", sQuote(name)))
 object <- get(name, envir = envir, inherits = FALSE)
 }\if{html}{\out{</div>}}
-}
-
-\section{Find an object by its value}{
-
-\code{find_object()} with arguments \code{value} locates an object of any name
-with value \code{value} in one of the environments searched.
 }
 
 \examples{

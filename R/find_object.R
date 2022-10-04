@@ -2,6 +2,8 @@
 #'
 #' @inheritParams parent_envs
 #'
+#' @param value The R object whose location should be identified.
+#'
 #' @param name The name of the object to locate.
 #'
 #' @param mode The \code{\link[base:mode]{mode}} of the object to locate.
@@ -9,8 +11,6 @@
 #' @param from An \code{\link[base:environment]{environment}}, or an object
 #' with an environment (e.g. a \code{\link[base:function]{function}} and a
 #' \code{\link[base:tilde]{formula}}), to start search from.
-#'
-#' @param value The R object whose location should be identified.
 #'
 #' @param which If `"first"` or `"last"`, then the first or the last
 #' occurance of `object` among the parent frames is identified and returned.
@@ -33,6 +33,10 @@
 #' (\code{\link[base:emptyenv]{emptyenv()}}) is reached. In such cases,
 #' no matching object could be found and NULL is returned.
 #'
+#' @section Find an object by its value:
+#' `find_object()` with arguments `value` locates an object of any name
+#' with value `value` in one of the environments searched.
+#'
 #' @section Find an object by its name and mode:
 #' `find_object()` with arguments `name` and `mode` locates an object
 #' with name `name` and mode `mode` in one of the environments searched.
@@ -47,15 +51,11 @@
 #' object <- get(name, envir = envir, inherits = FALSE)
 #' ```
 #'
-#' @section Find an object by its value:
-#' `find_object()` with arguments `value` locates an object of any name
-#' with value `value` in one of the environments searched.
-#'
 #' @example incl/find_object_1.R
 #' @example incl/find_object_2.R
 #'
 #' @export
-find_object <- function(name = NULL, mode = "any", value = NULL, from = parent.frame(), until = emptyenv(), which = c("first", "last", "all")) {
+find_object <- function(value = NULL, name = NULL, mode = "any", from = parent.frame(), until = emptyenv(), which = c("first", "last", "all")) {
   if (is.null(name) && is.null(value)) {
     stop("Either argument 'name' or 'value' must be specified, i.e. non-NULL")
   } else if (!is.null(name) && !is.null(value)) {

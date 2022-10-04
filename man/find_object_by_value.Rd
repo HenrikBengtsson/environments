@@ -5,14 +5,14 @@
 \title{Locate the original name and location of an object}
 \usage{
 find_object_by_value(
-  object,
+  value,
   from = parent.frame(),
   until = emptyenv(),
   which = c("first", "last", "all")
 )
 }
 \arguments{
-\item{object}{The R object whose location should be identified.}
+\item{value}{The R object whose location should be identified.}
 
 \item{from}{An \code{\link[base:environment]{environment}}, or an object
 with an environment (e.g. a \code{\link[base:function]{function}} and a

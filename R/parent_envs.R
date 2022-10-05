@@ -54,8 +54,8 @@
 #' | a = 2           | == top_env(f)
 #' | f               | == globalenv()
 #' +-----------------+
-#'            ^
-#'            |
+#'         ^
+#'         |
 #' +-----------------+
 #' | environment(f): | == parent_envs(f)[[1]]
 #' | pi = 3.14       | == parent_env(f, n = 0L)

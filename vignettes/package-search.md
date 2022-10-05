@@ -159,7 +159,7 @@ package namespace, not in the "imports" environments, not in the
 say above is that, if a function cannot be found even in the global
 environment, it continues to search the parent environments of the
 global environment too.  The parent environments of the global
-environments are all the environments that `search()` reports;
+environment are all the environments that `search()` reports;
 
 ```r
 > search()

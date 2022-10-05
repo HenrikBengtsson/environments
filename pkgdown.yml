@@ -1,6 +1,7 @@
 pandoc: '2.18'
 pkgdown: 2.0.6
 pkgdown_sha: ~
-articles: {}
-last_built: 2022-10-05T15:04Z
+articles:
+  package-search: package-search.html
+last_built: 2022-10-05T19:03Z
 

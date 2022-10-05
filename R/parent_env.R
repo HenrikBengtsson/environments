@@ -1,6 +1,6 @@
 #' @param n The generation of parent environment to get.
 #' If `n = 0`, then `envir` is returned.
-#' If `n = 1`, then `parent.env(envir)` is returned.
+#' If `n = 1` (default), then `parent.env(envir)` is returned.
 #' If `n = 2`, then `parent.env(parent.env(envir))` is returned,
 #' and so on, until `emptyenv()` is returned.
 #'
@@ -11,8 +11,9 @@
 #' parent_env()
 #'
 #' ns <- getNamespace("stats")
-#' parent_env(ns, n = 0)
-#' parent_env(ns, n = 1)
+#' print(ns)
+#' parent_env(ns, n = 0)    ## same as 'ns'
+#' parent_env(ns, n = 1)    ## default
 #' parent_env(ns, n = 2)
 #' parent_env(ns, n = 3)
 #' parent_env(ns, n = Inf)  ## always emptyenv()
@@ -24,6 +25,8 @@
 #'     function() pi * a
 #'   })
 #' })
+#' environment(f)
+#' parent_env(f, n = 0)     ## same as environment(f)
 #' parent_env(f, n = 1)
 #' parent_env(f, n = 2)
 #' parent_env(f, n = 3)

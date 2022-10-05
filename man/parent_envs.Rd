@@ -18,7 +18,7 @@ or an object with an environment, e.g. a function or a formula.}
 
 \item{n}{The generation of parent environment to get.
 If \code{n = 0}, then \code{envir} is returned.
-If \code{n = 1}, then \code{parent.env(envir)} is returned.
+If \code{n = 1} (default), then \code{parent.env(envir)} is returned.
 If \code{n = 2}, then \code{parent.env(parent.env(envir))} is returned,
 and so on, until \code{emptyenv()} is returned.}
 
@@ -74,26 +74,27 @@ If we sourced the script in the global environment, then
 We can retrieve these two "ancestral" environments of \code{f()} using
 \code{parent_envs(f)}, which can be represented visually as:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{+----------------------+
-| parent_env(f):       | == parent_envs(f)[[2]]
-| cargo = \{ 1e6 \}      | == parent_env(f, n = 1L)
-| a = 2                | == top_env(f)
-| f                    | == globalenv()
-+----------------------+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{+-----------------+
+| parent_env(f):  | == parent_envs(f)[[2]]
+| cargo = \{ 1e6 \} | == parent_env(f, n = 1L)
+| a = 2           | == top_env(f)
+| f               | == globalenv()
++-----------------+
            ^
            |
-+----------------------+
-| environment(f):      | == parent_envs(f)[[1]]
-| pi = 3.14            | == parent_env(f, n = 0L)
-+----------------------+
++-----------------+
+| environment(f): | == parent_envs(f)[[1]]
+| pi = 3.14       | == parent_env(f, n = 0L)
++-----------------+
 }\if{html}{\out{</div>}}
 }
 \examples{
 parent_env()
 
 ns <- getNamespace("stats")
-parent_env(ns, n = 0)
-parent_env(ns, n = 1)
+print(ns)
+parent_env(ns, n = 0)    ## same as 'ns'
+parent_env(ns, n = 1)    ## default
 parent_env(ns, n = 2)
 parent_env(ns, n = 3)
 parent_env(ns, n = Inf)  ## always emptyenv()
@@ -105,6 +106,8 @@ f <- local({
     function() pi * a
   })
 })
+environment(f)
+parent_env(f, n = 0)     ## same as environment(f)
 parent_env(f, n = 1)
 parent_env(f, n = 2)
 parent_env(f, n = 3)

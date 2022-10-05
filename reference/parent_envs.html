@@ -64,7 +64,7 @@ or an object with an environment, e.g. a function or a formula.</p></dd>
 <dt>n</dt>
 <dd><p>The generation of parent environment to get.
 If <code>n = 0</code>, then <code>envir</code> is returned.
-If <code>n = 1</code>, then <code>parent.env(envir)</code> is returned.
+If <code>n = 1</code> (default), then <code>parent.env(envir)</code> is returned.
 If <code>n = 2</code>, then <code>parent.env(parent.env(envir))</code> is returned,
 and so on, until <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">emptyenv()</a></code> is returned.</p></dd>
 
@@ -123,30 +123,32 @@ If we sourced the script in the global environment, then
 <code>parent_env(f)</code> is the global environment.</p>
 <p>We can retrieve these two "ancestral" environments of <code>f()</code> using
 <code>parent_envs(f)</code>, which can be represented visually as:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sc">+----------------------+</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="er">|</span> <span class="fu">parent_env</span>(f)<span class="sc">:</span>       <span class="er">|</span> <span class="er">==</span> <span class="fu">parent_envs</span>(f)[[<span class="dv">2</span>]]</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="sc">|</span> cargo <span class="ot">=</span> { <span class="fl">1e6</span> }      <span class="sc">|</span> <span class="er">==</span> <span class="fu">parent_env</span>(f, <span class="at">n =</span> 1L)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="sc">|</span> a <span class="ot">=</span> <span class="dv">2</span>                <span class="sc">|</span> <span class="er">==</span> <span class="fu">top_env</span>(f)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="sc">|</span> f                    <span class="sc">|</span> <span class="er">==</span> <span class="fu">globalenv</span>()</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="sc">+----------------------+</span></span>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sc">+-----------------+</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="er">|</span> <span class="fu">parent_env</span>(f)<span class="sc">:</span>  <span class="er">|</span> <span class="er">==</span> <span class="fu">parent_envs</span>(f)[[<span class="dv">2</span>]]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="sc">|</span> cargo <span class="ot">=</span> { <span class="fl">1e6</span> } <span class="sc">|</span> <span class="er">==</span> <span class="fu">parent_env</span>(f, <span class="at">n =</span> 1L)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="sc">|</span> a <span class="ot">=</span> <span class="dv">2</span>           <span class="sc">|</span> <span class="er">==</span> <span class="fu">top_env</span>(f)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="sc">|</span> f               <span class="sc">|</span> <span class="er">==</span> <span class="fu">globalenv</span>()</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="sc">+-----------------+</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>           <span class="er">^</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>           <span class="er">|</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="sc">+----------------------+</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="er">|</span> <span class="fu">environment</span>(f)<span class="sc">:</span>      <span class="er">|</span> <span class="er">==</span> <span class="fu">parent_envs</span>(f)[[<span class="dv">1</span>]]</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="sc">|</span> pi <span class="ot">=</span> <span class="fl">3.14</span>            <span class="sc">|</span> <span class="er">==</span> <span class="fu">parent_env</span>(f, <span class="at">n =</span> 0L)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="sc">+----------------------+</span></span></code></pre><p></p></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="sc">+-----------------+</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="er">|</span> <span class="fu">environment</span>(f)<span class="sc">:</span> <span class="er">|</span> <span class="er">==</span> <span class="fu">parent_envs</span>(f)[[<span class="dv">1</span>]]</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="sc">|</span> pi <span class="ot">=</span> <span class="fl">3.14</span>       <span class="sc">|</span> <span class="er">==</span> <span class="fu">parent_env</span>(f, <span class="at">n =</span> 0L)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="sc">+-----------------+</span></span></code></pre><p></p></div>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">parent_env</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x56479fb04fa0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x559790b60900&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-reflect.html" class="external-link">getNamespace</a></span><span class="op">(</span><span class="st">"stats"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">parent_env</span><span class="op">(</span><span class="va">ns</span>, n <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ns</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
-<span class="r-in"><span><span class="fu">parent_env</span><span class="op">(</span><span class="va">ns</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x564796277d10&gt;</span>
+<span class="r-in"><span><span class="fu">parent_env</span><span class="op">(</span><span class="va">ns</span>, n <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>    <span class="co">## same as 'ns'</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
+<span class="r-in"><span><span class="fu">parent_env</span><span class="op">(</span><span class="va">ns</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>    <span class="co">## default</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5597872d4d10&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"name")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "imports:stats"</span>
 <span class="r-in"><span><span class="fu">parent_env</span><span class="op">(</span><span class="va">ns</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
@@ -164,11 +166,11 @@ If we sourced the script in the global environment, then
 <span class="r-in"><span>  <span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">parent_env</span><span class="op">(</span><span class="va">f</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5647a061a1f8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x559791210778&gt;</span>
 <span class="r-in"><span><span class="fu">parent_env</span><span class="op">(</span><span class="va">f</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5647a0368690&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5597913f1810&gt;</span>
 <span class="r-in"><span><span class="fu">parent_env</span><span class="op">(</span><span class="va">f</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x56479fb04fa0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x559790b60900&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">parent_envs</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">emptyenv</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $R_EmptyEnv</span>
@@ -186,8 +188,8 @@ If we sourced the script in the global environment, then
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: R_GlobalEnv&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">parent_envs</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">new.env</a></span><span class="op">(</span>parent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">baseenv</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`0x5647a07b5918`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5647a07b5918&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`0x55979188bbc8`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55979188bbc8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $base</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: base&gt;</span>
@@ -205,11 +207,11 @@ If we sourced the script in the global environment, then
 <span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">f_envs</span> <span class="op">&lt;-</span> <span class="fu">parent_envs</span><span class="op">(</span><span class="va">f</span>, until <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">f_envs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x5647a081cb60" "0x5647a0819eb0" "0x5647a0368690"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x5597918f4d68" "0x5597918f20b8" "0x5597913f1810"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">f_envs</span> <span class="op">&lt;-</span> <span class="fu">parent_envs</span><span class="op">(</span><span class="va">f</span>, until <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="op">)</span>, extra <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">f_envs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x5647a081cb60" "0x5647a0819eb0" "0x5647a0368690" "0x56479fb04fa0"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0x5597918f4d68" "0x5597918f20b8" "0x5597913f1810" "0x559790b60900"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fl">42</span></span></span>
 <span class="r-in"><span><span class="va">pi</span> <span class="op">&lt;-</span> <span class="fl">3.14</span></span></span>

@@ -194,8 +194,8 @@ has been loaded.</p>
 <div class="section level3">
 <h3 id="forgetting-to-import-a-function">Forgetting to import a function<a class="anchor" aria-label="anchor" href="#forgetting-to-import-a-function"></a>
 </h3>
-<p>Now, what would happen if forget to import <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">stats::var()</a></code>?
-Let’s retry by dropping:</p>
+<p>Now, what would happen if we forget to import
+<code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">stats::var()</a></code>? Let’s retry by dropping:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @importFrom stats var</span></span></code></pre></div>
 <p>First of all, <code>R CMD check</code> would detect this and produce
@@ -289,8 +289,7 @@ it to the global environment, e.g.</p>
 <span><span class="co">#&gt;      mean  variance </span></span>
 <span><span class="co">#&gt; 50.500000  3.141593</span></span></code></pre></div>
 <p>Whoops! That’s really worrying; the result of the function depends on
-what happens to be in the global environment of the current R
-session.<br>
+what happens to be in the global environment of the current R session.
 Futhermore, the <strong>stats</strong> package may not even be attached,
 so we could end up with an error also a fresh R session, e.g.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span> R_DEFAULT_PACKAGES<span class="ot">=</span>base R <span class="sc">--</span>quiet <span class="sc">--</span>vanilla</span>

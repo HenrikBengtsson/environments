@@ -276,7 +276,7 @@ problem of picking up unwanted objects in the global environment, and
 avoid being dependent on what packages happens to be attached at the
 time we call our package functions.  
 The answer has to do with historical reasons.  The design of having
-the **base** environment being followed by the global environment
+the **base** namespace being followed by the global environment
 stems from the old days when R did not have namespaces.  At that time,
 the R engine searched all attached packages to identify any variable
 or function used to evaluate a function.  That design had of course

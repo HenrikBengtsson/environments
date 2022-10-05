@@ -1,0 +1,298 @@
+<!--
+%\VignetteIndexEntry{How objects are found by package functions}
+%\VignetteAuthor{Henrik Bengtsson}
+%\VignetteKeyword{R}
+%\VignetteKeyword{package}
+%\VignetteKeyword{vignette}
+%\VignetteKeyword{search}
+%\VignetteKeyword{namespace}
+%\VignetteKeyword{imports}
+%\VignetteEngine{environments::selfonly}
+-->
+
+## Introduction
+
+Consider a package **teeny** that exports function `mean_and_variance()` for calculating the sample mean and the sample variance in a single call:
+
+```r
+#' Calculate the Mean and Variance
+#'
+#' @param x A numeric vector.
+#'
+#' @return
+#' A named numeric vector of length two
+#' with elements `mean` and `variance`.
+#'
+#' @importFrom stats var
+#' @export
+mean_and_variance <- function(x) {
+  mu <- mean(x)
+  sigma2 <- var(x)
+  c(mean = mu, variance = sigma2)
+}
+```
+
+When called we get something like:
+
+```r
+teeny::mean_and_variance(1:100)
+#>     mean variance 
+#>  50.5000 841.6667
+```
+
+There are a few things to notice about the implements.
+The first is that we declare that `variance()` should be imported from the **stats** package. Here we use a **[roxygen2]** `@importFrom stats var` statement to declare this import, which is short for manually adding an `importFrom(stats, var)` entry in the package `NAMESPACE` file.
+
+The second is that, because all objects exported by the **base** package are always available, we do not have to explicitly import them.  It is actually not possible to import **base** functions.  If would add an `@importFrom base mean` statement, the package would fail to _install_ (see Appendix).
+
+When R evaluates this function call, it has to locate functions `mean()` and `var()`.  It turns out that these are effectively found as:
+
+```r
+pkg_ns <- getNamespace("teeny")
+mean <- parent.env(parent.env(pkg_ns))[["mean"]]
+var  <- parent.env(           pkg_ns )[["var"]]
+```
+
+Note the extra layer of `parent.env()` for `mean()`.  So, why are they not found in the same environment?  This is because we explicitly imported `stats::var()`, but not `base::mean()`.
+
+Let's dig in deeper to see how this works, but before doing that, let's revisit the above using the **environments** package.  The two functions are found as:
+
+```r
+library(environments)
+pkg_ns <- getNamespace("teeny")
+mean <- parent_env(pkg_ns, n = 2)[["mean"]]
+var  <- parent_env(pkg_ns       )[["var"]]
+```
+
+We can list the parent environments of the **teeny** namespace as:
+
+```r
+pkg_ns <- getNamespace("teeny")
+nss <- parent_envs(pkg_ns)
+nss
+#> $teeny
+#> <environment: namespace:teeny>
+#> 
+#> $`imports:teeny`
+#> <environment: 0x55cb372dd980>
+#> attr(,"name")
+#> [1] "imports:teeny"
+#> 
+#> $base
+#> <environment: namespace:base>
+#> 
+#> $R_GlobalEnv
+#> <environment: R_GlobalEnv>
+```
+
+This reveals the search path used by the functions in the **teeny** package.
+When `mean_and_variance()` is called, R searches for `mean()` and `var()` in these environments until found.  
+So, in the case of `mean()`, it first looks `nss[[1]]` using something like `exists("mean", mode = "function", envir = nss[[1]], inherits = FALSE)`, and if not found, it continues to environment `nss[[2]]`, and so on until found.  In this case, it locates `mean()` in `nss[[3]]`, i.e. in the **base** namespace;
+
+```r
+exists("mean", mode = "function", envir = nss[[3]], inherits = FALSE)
+#> [1] TRUE
+```
+
+It searches for `var()` in a similar manner.  Since `var()` was explicitly imported, and all package imports are stored in the `imports::teeny` environment, it finds `var()` in `nss[[2]]`;
+
+```r
+exists("var", mode = "function", envir = nss[[2]], inherits = FALSE)
+#> [1] TRUE
+```
+
+This begs the question, isn't that imported `var()` function a copy of the `var()` in the **stats** package?  Yes, it is!  Technically, we could, with some hacks, replace the "imported" `var()` with another function after the package has been loaded.
+
+
+
+## Forgetting to import a function
+
+Now, what would happen if forget to import `stats::var()`?  Let's retry by dropping:
+
+```r
+#' @importFrom stats var
+```
+
+First of all, `R CMD check` would detect this and produce the following NOTE:
+
+```
+* checking R code for possible problems ... NOTE
+mean_and_variance: no visible global function definition for ‘var’
+Undefined global functions or variables:
+  var
+Consider adding
+  importFrom("stats", "var")
+to your NAMESPACE file.
+```
+
+That's conforting to know. Note also how it suggests how we might be able to resolve it. That is a useful service.
+
+Next, let's see what happens if we try to use the function;
+
+```r
+teeny::mean_and_variance(1:100)
+#>     mean variance 
+#>  50.5000 841.6667
+```
+
+Hmm, how is that possible?  The `var()` function does not exist in the package namespace, not in the "imports" environments, not in the **base** namespace, and not in the global environment.  What we didn't say above is that, if a function cannot be found even in the global environment, it continues to search the parent environments of the global environment too.  The parent environments of the global environments are all the environments that `search()` reports;
+
+```r
+> search()
+[1] ".GlobalEnv"        "package:stats"     "package:graphics"
+[4] "package:grDevices" "package:utils"     "package:datasets"
+[7] "package:methods"   "Autoloads"         "package:base"
+```
+
+If the object search for is not found in one of these environments, then it ends up at the very top parent environment, which is always the empty environment, and stops there (with an error).  
+
+To see _all_ the environment searched, we can use:
+
+```r
+pkg_ns <- getNamespace("teeny")
+nss <- environments::parent_envs(pkg_ns, until = emptyenv())
+str(nss)
+#> List of 13
+#>  $ teeny            :<environment: namespace:teeny> 
+#>  $ imports:teeny    :<environment: 0x555840d33fc8> 
+#>   ..- attr(*, "name")= chr "imports:teeny"
+#>  $ base             :<environment: namespace:base> 
+#>  $ R_GlobalEnv      :<environment: R_GlobalEnv> 
+#>  $ package:stats    :<environment: package:stats> 
+#>   ..- attr(*, "name")= chr "package:stats"
+#>   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/stats"
+#>  $ package:graphics :<environment: package:graphics> 
+#>   ..- attr(*, "name")= chr "package:graphics"
+#>   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/graphics"
+#>  $ package:grDevices:<environment: package:grDevices> 
+#>   ..- attr(*, "name")= chr "package:grDevices"
+#>   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/grDevices"
+#>  $ package:utils    :<environment: package:utils> 
+#>   ..- attr(*, "name")= chr "package:utils"
+#>   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/utils"
+#>  $ package:datasets :<environment: package:datasets> 
+#>   ..- attr(*, "name")= chr "package:datasets"
+#>   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/datasets"
+#>  $ package:methods  :<environment: package:methods> 
+#>   ..- attr(*, "name")= chr "package:methods"
+#>   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/methods"
+#>  $ Autoloads        :<environment: 0x55583eee63c0> 
+#>   ..- attr(*, "name")= chr "Autoloads"
+#>  $ base             :<environment: base> 
+#>  $ R_EmptyEnv       :<environment: R_EmptyEnv>
+```
+
+Thus, the reason why `teeny::mean_and_variance(1:100)` works, is that
+R eventually locates `var()` in the **stats** package, i.e. in the
+`package:stats` environment.  Using the **environments** package, we
+can see where it finds `var()` by calling:
+
+```r
+environments::find_object(name = "var", from = teeny::mean_and_variance)
+# > $name
+# > [1] "var"
+# > 
+# > $envir
+# > <environment: package:stats>
+# > attr(,"name")
+# > [1] "package:stats"
+# > attr(,"path")
+#> [1] "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/stats"
+```
+
+So, why do we even bother to import `var()` from the **stats** package then?  Recall how also the global environment is part of the search path.  This means that we can inject another, possible false, implementation of `var()` by adding it to the global environment, e.g.
+
+```r
+var <- function(x) pi
+teeny::mean_and_variance(1:100)
+#>      mean  variance 
+#> 50.500000  3.141593
+```
+
+Whoops!  That's really worrying; the result of the function depends on what happens to be in the global environment of the current R session.  
+Futhermore, the **stats** package may not even be attached, so we could end up with an error also a fresh R session, e.g.
+
+```r
+$ R_DEFAULT_PACKAGES=base R --quiet --vanilla
+> search()
+[1] ".GlobalEnv"   "Autoloads"    "package:base"
+> teeny::mean_and_variance(1:100)
+Error in var(x) : could not find function "var"
+```
+
+This illustrates why it is important to declare _all_ imports, even those from base-R packages. So, do _not_ ignore those NOTEs on "no visible global function definition for ..." that `R CMD check` reports on.
+
+
+## Why R searches also the global environment and attached packages
+
+The parent environment of the **base** namespace is the global environment;
+
+```r
+base_ns <- getNamespace("base")
+parent_envs(base_ns)
+#> $base
+#> <environment: namespace:base>
+#> 
+#> $R_GlobalEnv
+#> <environment: R_GlobalEnv>
+```
+
+So, why isn't it just the empty environment?  Then we would avoid the
+problem of picking up unwanted objects in the global environment, and
+avoid being dependent on what packages happens to be attached at the
+time we call our package functions.  
+The answer has to do with historical reasons.  The design of having
+the **base** environment being followed by the global environment
+stems from the old days when R did not have namespaces.  At that time,
+the R engine searched all attached packages to identify any variable
+or function used to evaluate a function.  That design had of course
+similar problems to the ones illustrated above, e.g. functions could
+be overridden by assign new ones in the global environment, or by a
+third-party package attached on the `search()` path.  This is why the
+concept of _namespaces_ was introduced in R; as a package developer
+you had full control of exactly which implementation of a function was
+called.
+
+However, due to how S3 method dispatching worked, and how some
+packages attaches packages conditionally of being available, e.g. `if
+require(otherpkg)) somefcn()`, it was necessary to keep searching also
+the global environment and attached packages as a fallback.  These are
+the main reasons why the **base** namespace is still followed by the
+global environment.  It is not unreasonable to expect that this will
+change in some future R version.  For instance, in the R-devel thread
+'Time to drop globalenv() from searches in package code?' (2022-09-15;
+<https://stat.ethz.ch/pipermail/r-devel/2022-September/081980.html>),
+one of the R Core developers explains the history and proposes a way
+forward to make the empty environment the parent of the **base**
+namespace.
+
+
+# Appendix
+
+## It is not possible to import from the 'base' package
+
+If we would add:
+
+```
+importFrom(base, mean)
+```
+
+to the `NAMESPACE` file for **teeny**, the package would build, but it would not _install_.  We would get an installation error:
+
+```
+$ R CMD INSTALL teeny_0_1.0.tar.gz 
+* installing to library ‘/home/hb/R/x86_64-pc-linux-gnu-library/4.2-CBI-gcc9’
+* installing *source* package ‘teeny’ ...
+** using staged installation
+** R
+** byte-compile and prepare package for lazy loading
+Error in asNamespace(ns, base.OK = FALSE) : 
+  operation not allowed on base namespace
+Calls: <Anonymous> ... namespaceImportFrom -> importIntoEnv -> getNamespaceInfo -> asNamespace
+ERROR: lazy loading failed for package ‘teeny’
+* removing ‘/home/hb/R/x86_64-pc-linux-gnu-library/4.2-CBI-gcc9/teeny’
+* restoring previous ‘/home/hb/R/x86_64-pc-linux-gnu-library/4.2-CBI-gcc9/teeny’
+```
+
+
+[roxygen2]: https://cran.r-project.org/package=roxygen2

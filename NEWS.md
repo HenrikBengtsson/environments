@@ -5,7 +5,11 @@
  * Argument `until` for `parent_envs()` now defaults to `globalenv()`
    rather than `emptyenv()`.
 
- * Merged `locate_object()` into a new `find_object()` function.
+ * Merge `locate_object()` into a new `find_object()` function.
+
+## Documentation
+
+ * Add a package vignette.
 
 
 # Version 0.3.0 (2022-09-27)

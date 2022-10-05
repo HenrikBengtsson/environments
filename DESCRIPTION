@@ -1,15 +1,20 @@
 Package: environments
-Version: 0.3.0-9007
+Version: 0.3.0-9009
 Title: Working with Environments and Closures in R
 Description: A set of tools to work with environments and closures in R for the purpose of demonstrating how they work.
 Imports:
     globals,
     utils
 Suggests:
-    cli
+    cli,
+    commonmark,
+    tools
+VignetteBuilder:
+    environments
 Authors@R: c(
     person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),
            email = "henrikb@braju.com"))
 License: MIT + file LICENSE
+Encoding: UTF-8
 RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)

@@ -321,16 +321,16 @@ problem of picking up unwanted objects in the global environment, and
 avoid being dependent on what packages happens to be attached at the
 time we call our package functions.<br>
 The answer has to do with historical reasons. The design of having the
-<strong>base</strong> environment being followed by the global
-environment stems from the old days when R did not have namespaces. At
-that time, the R engine searched all attached packages to identify any
-variable or function used to evaluate a function. That design had of
-course similar problems to the ones illustrated above, e.g. functions
-could be overridden by assign new ones in the global environment, or by
-a third-party package attached on the <code><a href="https://rdrr.io/r/base/search.html" class="external-link">search()</a></code> path. This
-is why the concept of <em>namespaces</em> was introduced in R; as a
-package developer you had full control of exactly which implementation
-of a function was called.</p>
+<strong>base</strong> namespace being followed by the global environment
+stems from the old days when R did not have namespaces. At that time,
+the R engine searched all attached packages to identify any variable or
+function used to evaluate a function. That design had of course similar
+problems to the ones illustrated above, e.g. functions could be
+overridden by assign new ones in the global environment, or by a
+third-party package attached on the <code><a href="https://rdrr.io/r/base/search.html" class="external-link">search()</a></code> path. This is
+why the concept of <em>namespaces</em> was introduced in R; as a package
+developer you had full control of exactly which implementation of a
+function was called.</p>
 <p>However, due to how S3 method dispatching worked, and how some
 packages attaches packages conditionally of being available,
 e.g. <code>if require(otherpkg)) somefcn()</code>, it was necessary to

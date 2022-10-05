@@ -116,11 +116,6 @@ sample variance in a single call:</p>
 <span>  <span class="va">sigma2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="va">mu</span>, variance <span class="op">=</span> <span class="va">sigma2</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>When called we get something like:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">teeny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teeny/man/mean_and_variance.html" class="external-link">mean_and_variance</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span></span>
-<span><span class="co">#&gt;     mean variance </span></span>
-<span><span class="co">#&gt;  50.5000 841.6667</span></span></code></pre></div>
 <p>There are a few things to notice about the implements. The first is
 that we declare that <code>variance()</code> should be imported from the
 <strong>stats</strong> package. Here we use a <strong><a href="https://cran.r-project.org/package=roxygen2" class="external-link">roxygen2</a></strong>
@@ -131,12 +126,17 @@ which is short for manually adding an
 <p>The second is that, because all objects exported by the
 <strong>base</strong> package are always available, we do not have to
 explicitly import them. It is actually not possible to import
-<strong>base</strong> functions. If would add an
-<code>@importFrom base mean</code> statement, the package would fail to
+<strong>base</strong> functions; if we would add an
+<code>@importFrom base mean</code> statement, the package fails to
 <em>install</em> (see Appendix).</p>
-<p>When R evaluates this function call, it has to locate functions
-<code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code> and <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code>. It turns out that these are
-effectively found as:</p>
+<p>Continuing, when R evaluates</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">teeny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teeny/man/mean_and_variance.html" class="external-link">mean_and_variance</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     mean variance </span></span>
+<span><span class="co">#&gt;  50.5000 841.6667</span></span></code></pre></div>
+<p>it will eventually have to locate functions <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code> and
+<code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code>. It turns out that these are effectively found
+as:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pkg_ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-reflect.html" class="external-link">getNamespace</a></span><span class="op">(</span><span class="st">"teeny"</span><span class="op">)</span></span>
 <span><span class="va">mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">parent.env</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">parent.env</a></span><span class="op">(</span><span class="va">pkg_ns</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="st">"mean"</span><span class="op">]</span><span class="op">]</span></span>
@@ -146,18 +146,12 @@ effectively found as:</p>
 This is because we explicitly imported <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">stats::var()</a></code>, but
 not <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">base::mean()</a></code>.</p>
 <p>Let’s dig in deeper to see how this works, but before doing that,
-let’s revisit the above using the <strong>environments</strong> package.
-The two functions are found as:</p>
+let’s look at what the parent environments of the <strong>teeny</strong>
+namespace are. We can du this using the <strong>environments</strong>
+package as:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">environments</span><span class="op">)</span></span>
-<span><span class="va">pkg_ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-reflect.html" class="external-link">getNamespace</a></span><span class="op">(</span><span class="st">"teeny"</span><span class="op">)</span></span>
-<span><span class="va">mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parent_envs.html">parent_env</a></span><span class="op">(</span><span class="va">pkg_ns</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">[[</span><span class="st">"mean"</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">var</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parent_envs.html">parent_env</a></span><span class="op">(</span><span class="va">pkg_ns</span>       <span class="op">)</span><span class="op">[[</span><span class="st">"var"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p>We can list the parent environments of the <strong>teeny</strong>
-namespace as:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pkg_ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-reflect.html" class="external-link">getNamespace</a></span><span class="op">(</span><span class="st">"teeny"</span><span class="op">)</span></span>
-<span><span class="va">nss</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parent_envs.html">parent_envs</a></span><span class="op">(</span><span class="va">pkg_ns</span><span class="op">)</span></span>
+<span><span class="va">nss</span> <span class="op">&lt;-</span> <span class="fu">environments</span><span class="fu">::</span><span class="fu"><a href="../reference/parent_envs.html">parent_envs</a></span><span class="op">(</span><span class="va">pkg_ns</span><span class="op">)</span></span>
 <span><span class="va">nss</span></span>
 <span><span class="co">#&gt; $teeny</span></span>
 <span><span class="co">#&gt; &lt;environment: namespace:teeny&gt;</span></span>
@@ -172,24 +166,23 @@ namespace as:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $R_GlobalEnv</span></span>
 <span><span class="co">#&gt; &lt;environment: R_GlobalEnv&gt;</span></span></code></pre></div>
-<p>This reveals the search path used by the functions in the
+<p>This reveals (part of) the search path used by the functions in the
 <strong>teeny</strong> package. When <code>mean_and_variance()</code> is
 called, R searches for <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code> and <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code> in
-these environments until found.<br>
-So, in the case of <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code>, it first looks
-<code>nss[[1]]</code> using something like
+these environments until found. So, in the case of <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code>,
+it first looks <code>nss[[1]]</code> using something like
 <code>exists("mean", mode = "function", envir = nss[[1]], inherits = FALSE)</code>,
 and if not found, it continues to environment <code>nss[[2]]</code>, and
 so on until found. In this case, it locates <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code> in
 <code>nss[[3]]</code>, i.e. in the <strong>base</strong> namespace;</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists</a></span><span class="op">(</span><span class="st">"mean"</span>, mode <span class="op">=</span> <span class="st">"function"</span>, envir <span class="op">=</span> <span class="va">nss</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>, inherits <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 <p>It searches for <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code> in a similar manner. Since
 <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code> was explicitly imported, and all package imports are
 stored in the <code>imports::teeny</code> environment, it finds
 <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code> in <code>nss[[2]]</code>;</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists</a></span><span class="op">(</span><span class="st">"var"</span>, mode <span class="op">=</span> <span class="st">"function"</span>, envir <span class="op">=</span> <span class="va">nss</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, inherits <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 <p>This begs the question, isn’t that imported <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code>
@@ -203,7 +196,7 @@ has been loaded.</p>
 </h3>
 <p>Now, what would happen if forget to import <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">stats::var()</a></code>?
 Let’s retry by dropping:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @importFrom stats var</span></span></code></pre></div>
 <p>First of all, <code>R CMD check</code> would detect this and produce
 the following NOTE:</p>
@@ -217,7 +210,7 @@ to your NAMESPACE file.</code></pre>
 <p>That’s conforting to know. Note also how it suggests how we might be
 able to resolve it. That is a useful service.</p>
 <p>Next, let’s see what happens if we try to use the function;</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">teeny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teeny/man/mean_and_variance.html" class="external-link">mean_and_variance</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     mean variance </span></span>
 <span><span class="co">#&gt;  50.5000 841.6667</span></span></code></pre></div>
@@ -229,15 +222,15 @@ found even in the global environment, it continues to search the parent
 environments of the global environment too. The parent environments of
 the global environments are all the environments that
 <code><a href="https://rdrr.io/r/base/search.html" class="external-link">search()</a></code> reports;</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">search</span>()</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">".GlobalEnv"</span>        <span class="st">"package:stats"</span>     <span class="st">"package:graphics"</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">4</span>] <span class="st">"package:grDevices"</span> <span class="st">"package:utils"</span>     <span class="st">"package:datasets"</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>[<span class="dv">7</span>] <span class="st">"package:methods"</span>   <span class="st">"Autoloads"</span>         <span class="st">"package:base"</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">search</span>()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">".GlobalEnv"</span>        <span class="st">"package:stats"</span>     <span class="st">"package:graphics"</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">4</span>] <span class="st">"package:grDevices"</span> <span class="st">"package:utils"</span>     <span class="st">"package:datasets"</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>[<span class="dv">7</span>] <span class="st">"package:methods"</span>   <span class="st">"Autoloads"</span>         <span class="st">"package:base"</span></span></code></pre></div>
 <p>If the object search for is not found in one of these environments,
 then it ends up at the very top parent environment, which is always the
 empty environment, and stops there (with an error).</p>
 <p>To see <em>all</em> the environment searched, we can use:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pkg_ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-reflect.html" class="external-link">getNamespace</a></span><span class="op">(</span><span class="st">"teeny"</span><span class="op">)</span></span>
 <span><span class="va">nss</span> <span class="op">&lt;-</span> <span class="fu">environments</span><span class="fu">::</span><span class="fu"><a href="../reference/parent_envs.html">parent_envs</a></span><span class="op">(</span><span class="va">pkg_ns</span>, until <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">emptyenv</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">nss</span><span class="op">)</span></span>
@@ -274,7 +267,7 @@ works, is that R eventually locates <code><a href="https://rdrr.io/r/stats/cor.h
 <strong>stats</strong> package, i.e. in the <code>package:stats</code>
 environment. Using the <strong>environments</strong> package, we can see
 where it finds <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code> by calling:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">environments</span><span class="fu">::</span><span class="fu"><a href="../reference/find_object.html">find_object</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"var"</span>, from <span class="op">=</span> <span class="fu">teeny</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/teeny/man/mean_and_variance.html" class="external-link">mean_and_variance</a></span><span class="op">)</span></span>
 <span><span class="co"># &gt; $name</span></span>
 <span><span class="co"># &gt; [1] "var"</span></span>
@@ -290,7 +283,7 @@ where it finds <code><a href="https://rdrr.io/r/stats/cor.html" class="external-
 environment is part of the search path. This means that we can inject
 another, possible false, implementation of <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code> by adding
 it to the global environment, e.g.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">var</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">pi</span></span>
 <span><span class="fu">teeny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/teeny/man/mean_and_variance.html" class="external-link">mean_and_variance</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      mean  variance </span></span>
@@ -300,11 +293,11 @@ what happens to be in the global environment of the current R
 session.<br>
 Futhermore, the <strong>stats</strong> package may not even be attached,
 so we could end up with an error also a fresh R session, e.g.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span> R_DEFAULT_PACKAGES<span class="ot">=</span>base R <span class="sc">--</span>quiet <span class="sc">--</span>vanilla</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">search</span>()</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">".GlobalEnv"</span>   <span class="st">"Autoloads"</span>    <span class="st">"package:base"</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> teeny<span class="sc">::</span><span class="fu">mean_and_variance</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>Error <span class="cf">in</span> <span class="fu">var</span>(x) <span class="sc">:</span> could not find <span class="cf">function</span> <span class="st">"var"</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span> R_DEFAULT_PACKAGES<span class="ot">=</span>base R <span class="sc">--</span>quiet <span class="sc">--</span>vanilla</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">search</span>()</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">".GlobalEnv"</span>   <span class="st">"Autoloads"</span>    <span class="st">"package:base"</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> teeny<span class="sc">::</span><span class="fu">mean_and_variance</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>Error <span class="cf">in</span> <span class="fu">var</span>(x) <span class="sc">:</span> could not find <span class="cf">function</span> <span class="st">"var"</span></span></code></pre></div>
 <p>This illustrates why it is important to declare <em>all</em> imports,
 even those from base-R packages. So, do <em>not</em> ignore those NOTEs
 on “no visible global function definition for …” that
@@ -316,7 +309,7 @@ packages<a class="anchor" aria-label="anchor" href="#why-r-searches-also-the-glo
 </h3>
 <p>The parent environment of the <strong>base</strong> namespace is the
 global environment;</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">base_ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-reflect.html" class="external-link">getNamespace</a></span><span class="op">(</span><span class="st">"base"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/parent_envs.html">parent_envs</a></span><span class="op">(</span><span class="va">base_ns</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $base</span></span>

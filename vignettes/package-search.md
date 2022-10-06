@@ -69,12 +69,12 @@ not found in the same environment?  This is because we explicitly
 imported `stats::var()`, but not `base::mean()`.
 
 Let's dig in deeper to see how this works, but before doing that,
-let's look at what the parent environments of the **teeny** namespace
-are. We can du this using the **environments** package as:
+let's look at what the first few parent environments of the **teeny**
+namespace are. We can du this using the **environments** package as:
 
 ```r
 pkg_ns <- getNamespace("teeny")
-nss <- environments::parent_envs(pkg_ns)
+nss <- environments::parent_envs(pkg_ns, until = globalenv())
 nss
 #> $teeny
 #> <environment: namespace:teeny>

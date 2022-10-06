@@ -31,8 +31,8 @@ last one.  It is also possible to specify a list of alternative
 environments.}
 
 \item{which}{If \code{"first"} or \code{"last"}, then the first or the last
-occurance of \code{object} among the parent frames is identified and returned.
-If \code{"all"}, then all occurances are returned.}
+occurrence of \code{object} among the parent frames is identified and returned.
+If \code{"all"}, then all occurrences are returned.}
 }
 \value{
 A named list with elements \code{name} and \code{envir}, where \code{name} is the

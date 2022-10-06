@@ -142,7 +142,7 @@ Consider adding
 to your NAMESPACE file.
 ```
 
-That's conforting to know. Note also how it suggests how we might be
+That's comforting to know. Note also how it suggests how we might be
 able to resolve it. That is a useful service.
 
 Next, let's see what happens if we try to use the function;
@@ -240,7 +240,7 @@ teeny::mean_and_variance(1:100)
 
 Whoops!  That's really worrying; the result of the function depends on
 what happens to be in the global environment of the current R session.
-Futhermore, the **stats** package may not even be attached, so we
+Furthermore, the **stats** package may not even be attached, so we
 could end up with an error also a fresh R session, e.g.
 
 ```r

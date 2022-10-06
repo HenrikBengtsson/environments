@@ -64,7 +64,7 @@
 #' we cannot query `n` from `f`, but we can query both `pi` and `a` as
 #' `environment(f)$pi` and `parent_env(f)$a`.
 #' Similarly, we can also do `parent_env(f)$cargo`, but it is a variable
-#' useless for evalating `f()`.
+#' useless for evaluating `f()`.
 #'
 #' When we serialize `f` (e.g. export it to a parallel worker), the body
 #' and the formals of the function is included, as well as all
@@ -155,7 +155,7 @@
 #' We can of course build up the above version of `f()` _before_ serializing,
 #' e.g before we save to file above. Then it is ready to use when
 #' unserialized, e.g. read back from file.
-#' An alternative way to achive this is to use the `replace_env()` function;
+#' An alternative way to achieve this is to use the `replace_env()` function;
 #'
 #' ```r
 #' new <- as.environment(list(a = a))

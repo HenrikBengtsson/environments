@@ -75,7 +75,7 @@ frame, like \code{n} is.  To clarify further what the difference is:
 we cannot query \code{n} from \code{f}, but we can query both \code{pi} and \code{a} as
 \code{environment(f)$pi} and \code{parent_env(f)$a}.
 Similarly, we can also do \code{parent_env(f)$cargo}, but it is a variable
-useless for evalating \code{f()}.
+useless for evaluating \code{f()}.
 
 When we serialize \code{f} (e.g. export it to a parallel worker), the body
 and the formals of the function is included, as well as all
@@ -160,7 +160,7 @@ and we can evaluate \code{f()} again;
 We can of course build up the above version of \code{f()} \emph{before} serializing,
 e.g before we save to file above. Then it is ready to use when
 unserialized, e.g. read back from file.
-An alternative way to achive this is to use the \code{replace_env()} function;
+An alternative way to achieve this is to use the \code{replace_env()} function;
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{new <- as.environment(list(a = a))
 replace_env(f, search = find_object(value = f)$envir, replace = new)

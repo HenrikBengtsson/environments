@@ -34,7 +34,7 @@
 
 * Now `locate_object()` ignores `base::.Last.value`.
 
-* Now `prune_fcn()` ingnores primitive functions.
+* Now `prune_fcn()` ignores primitive functions.
 
 * Moved **cli** to `Suggests:`.
 

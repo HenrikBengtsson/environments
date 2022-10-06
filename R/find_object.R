@@ -13,8 +13,8 @@
 #' \code{\link[base:tilde]{formula}}), to start search from.
 #'
 #' @param which If `"first"` or `"last"`, then the first or the last
-#' occurance of `object` among the parent frames is identified and returned.
-#' If `"all"`, then all occurances are returned.
+#' occurrence of `object` among the parent frames is identified and returned.
+#' If `"all"`, then all occurrences are returned.
 #'
 #' @return
 #' A named list with elements `name` and `envir`, where `name` is the

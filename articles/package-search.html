@@ -207,7 +207,7 @@ Undefined global functions or variables:
 Consider adding
   importFrom("stats", "var")
 to your NAMESPACE file.</code></pre>
-<p>That’s conforting to know. Note also how it suggests how we might be
+<p>That’s comforting to know. Note also how it suggests how we might be
 able to resolve it. That is a useful service.</p>
 <p>Next, let’s see what happens if we try to use the function;</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -290,8 +290,9 @@ it to the global environment, e.g.</p>
 <span><span class="co">#&gt; 50.500000  3.141593</span></span></code></pre></div>
 <p>Whoops! That’s really worrying; the result of the function depends on
 what happens to be in the global environment of the current R session.
-Futhermore, the <strong>stats</strong> package may not even be attached,
-so we could end up with an error also a fresh R session, e.g.</p>
+Furthermore, the <strong>stats</strong> package may not even be
+attached, so we could end up with an error also a fresh R session,
+e.g.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span> R_DEFAULT_PACKAGES<span class="ot">=</span>base R <span class="sc">--</span>quiet <span class="sc">--</span>vanilla</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">search</span>()</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">".GlobalEnv"</span>   <span class="st">"Autoloads"</span>    <span class="st">"package:base"</span></span>

@@ -1,14 +1,11 @@
-<!--
-%\VignetteIndexEntry{How objects are found by package functions}
-%\VignetteAuthor{Henrik Bengtsson}
-%\VignetteKeyword{R}
-%\VignetteKeyword{package}
-%\VignetteKeyword{vignette}
-%\VignetteKeyword{search}
-%\VignetteKeyword{namespace}
-%\VignetteKeyword{imports}
-%\VignetteEngine{environments::selfonly}
--->
+---
+title: "How objects are found by package functions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How objects are found by package functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
 ## Introduction
 
@@ -16,7 +13,7 @@ Consider a package **teeny** that exports function
 `mean_and_variance()` for calculating the sample mean and the sample
 variance in a single call:
 
-```r
+```{r}
 #' Calculate the Mean and Variance
 #'
 #' @param x A numeric vector.
@@ -51,8 +48,11 @@ Continuing, when R evaluates
 
 ```r
 teeny::mean_and_variance(1:100)
-#>     mean variance 
-#>  50.5000 841.6667
+```
+
+```
+##     mean variance 
+##  50.5000 841.6667
 ```
 
 it will eventually have to locate functions `mean()` and `var()`.  It
@@ -76,19 +76,22 @@ namespace are. We can du this using the **environments** package as:
 pkg_ns <- getNamespace("teeny")
 nss <- environments::parent_envs(pkg_ns, until = globalenv())
 nss
-#> $teeny
-#> <environment: namespace:teeny>
-#> 
-#> $`imports:teeny`
-#> <environment: 0x55cb372dd980>
-#> attr(,"name")
-#> [1] "imports:teeny"
-#> 
-#> $base
-#> <environment: namespace:base>
-#> 
-#> $R_GlobalEnv
-#> <environment: R_GlobalEnv>
+```
+
+```
+## $teeny
+## <environment: namespace:teeny>
+## 
+## $`imports:teeny`
+## <environment: 0x55cb372dd980>
+## attr(,"name")
+## [1] "imports:teeny"
+## 
+## $base
+## <environment: namespace:base>
+## 
+## $R_GlobalEnv
+## <environment: R_GlobalEnv>
 ```
 
 This reveals (part of) the search path used by the functions in the
@@ -102,7 +105,10 @@ i.e. in the **base** namespace;
 
 ```r
 exists("mean", mode = "function", envir = nss[[3]], inherits = FALSE)
-#> [1] TRUE
+```
+
+```
+## [1] TRUE
 ```
 
 It searches for `var()` in a similar manner.  Since `var()` was
@@ -111,7 +117,10 @@ explicitly imported, and all package imports are stored in the
 
 ```r
 exists("var", mode = "function", envir = nss[[2]], inherits = FALSE)
-#> [1] TRUE
+```
+
+```
+## [1] TRUE
 ```
 
 This begs the question, isn't that imported `var()` function a copy of
@@ -149,8 +158,11 @@ Next, let's see what happens if we try to use the function;
 
 ```r
 teeny::mean_and_variance(1:100)
-#>     mean variance 
-#>  50.5000 841.6667
+```
+
+```
+##     mean variance 
+##  50.5000 841.6667
 ```
 
 Hmm, how is that possible?  The `var()` function does not exist in the
@@ -161,11 +173,8 @@ environment, it continues to search the parent environments of the
 global environment too.  The parent environments of the global
 environment are all the environments that `search()` reports;
 
-```r
-> search()
-[1] ".GlobalEnv"        "package:stats"     "package:graphics"
-[4] "package:grDevices" "package:utils"     "package:datasets"
-[7] "package:methods"   "Autoloads"         "package:base"
+```{r}
+search()
 ```
 
 If the object search for is not found in one of these environments,
@@ -178,34 +187,37 @@ To see _all_ the environment searched, we can use:
 pkg_ns <- getNamespace("teeny")
 nss <- environments::parent_envs(pkg_ns, until = emptyenv())
 str(nss)
-#> List of 13
-#>  $ teeny            :<environment: namespace:teeny> 
-#>  $ imports:teeny    :<environment: 0x555840d33fc8> 
-#>   ..- attr(*, "name")= chr "imports:teeny"
-#>  $ base             :<environment: namespace:base> 
-#>  $ R_GlobalEnv      :<environment: R_GlobalEnv> 
-#>  $ package:stats    :<environment: package:stats> 
-#>   ..- attr(*, "name")= chr "package:stats"
-#>   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/stats"
-#>  $ package:graphics :<environment: package:graphics> 
-#>   ..- attr(*, "name")= chr "package:graphics"
-#>   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/graphics"
-#>  $ package:grDevices:<environment: package:grDevices> 
-#>   ..- attr(*, "name")= chr "package:grDevices"
-#>   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/grDevices"
-#>  $ package:utils    :<environment: package:utils> 
-#>   ..- attr(*, "name")= chr "package:utils"
-#>   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/utils"
-#>  $ package:datasets :<environment: package:datasets> 
-#>   ..- attr(*, "name")= chr "package:datasets"
-#>   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/datasets"
-#>  $ package:methods  :<environment: package:methods> 
-#>   ..- attr(*, "name")= chr "package:methods"
-#>   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/methods"
-#>  $ Autoloads        :<environment: 0x55583eee63c0> 
-#>   ..- attr(*, "name")= chr "Autoloads"
-#>  $ package:base     :<environment: base> 
-#>  $ R_EmptyEnv       :<environment: R_EmptyEnv>
+```
+
+```
+## List of 13
+##  $ teeny            :<environment: namespace:teeny> 
+##  $ imports:teeny    :<environment: 0x555840d33fc8> 
+##   ..- attr(*, "name")= chr "imports:teeny"
+##  $ base             :<environment: namespace:base> 
+##  $ R_GlobalEnv      :<environment: R_GlobalEnv> 
+##  $ package:stats    :<environment: package:stats> 
+##   ..- attr(*, "name")= chr "package:stats"
+##   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/stats"
+##  $ package:graphics :<environment: package:graphics> 
+##   ..- attr(*, "name")= chr "package:graphics"
+##   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/graphics"
+##  $ package:grDevices:<environment: package:grDevices> 
+##   ..- attr(*, "name")= chr "package:grDevices"
+##   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/grDevices"
+##  $ package:utils    :<environment: package:utils> 
+##   ..- attr(*, "name")= chr "package:utils"
+##   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/utils"
+##  $ package:datasets :<environment: package:datasets> 
+##   ..- attr(*, "name")= chr "package:datasets"
+##   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/datasets"
+##  $ package:methods  :<environment: package:methods> 
+##   ..- attr(*, "name")= chr "package:methods"
+##   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/methods"
+##  $ Autoloads        :<environment: 0x55583eee63c0> 
+##   ..- attr(*, "name")= chr "Autoloads"
+##  $ package:base     :<environment: base> 
+##  $ R_EmptyEnv       :<environment: R_EmptyEnv>
 ```
 
 Thus, the reason why `teeny::mean_and_variance(1:100)` works, is that
@@ -215,15 +227,18 @@ can see where it finds `var()` by calling:
 
 ```r
 environments::find_object(name = "var", from = teeny::mean_and_variance)
-# > $name
-# > [1] "var"
-# > 
-# > $envir
-# > <environment: package:stats>
-# > attr(,"name")
-# > [1] "package:stats"
-# > attr(,"path")
-#> [1] "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/stats"
+```
+
+```
+## $name
+## [1] "var"
+## 
+## $envir
+## <environment: package:stats>
+## attr(,"name")
+## [1] "package:stats"
+## attr(,"path")
+## [1] "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/stats"
 ```
 
 So, why do we even bother to import `var()` from the **stats** package
@@ -234,8 +249,11 @@ implementation of `var()` by adding it to the global environment, e.g.
 ```r
 var <- function(x) pi
 teeny::mean_and_variance(1:100)
-#>      mean  variance 
-#> 50.500000  3.141593
+```
+
+```
+##      mean  variance 
+## 50.500000  3.141593
 ```
 
 Whoops!  That's really worrying; the result of the function depends on
@@ -264,14 +282,9 @@ on.
 
 The parent environment of the **base** namespace is the global environment;
 
-```r
+```{r}
 base_ns <- getNamespace("base")
-parent_envs(base_ns)
-#> $base
-#> <environment: namespace:base>
-#> 
-#> $R_GlobalEnv
-#> <environment: R_GlobalEnv>
+environments::parent_envs(base_ns)
 ```
 
 So, why isn't it just the empty environment?  Then we would avoid the
@@ -308,47 +321,40 @@ namespace.
 
 If we look at the output from, for instance, `parent_envs(stats::median)`, we see that there are two "base" environments.  One early on following the "imports" environment and one at the very end just before the empty environment.  These two environments are:
 
-```r
+```{r}
 getNamespace("base")
-#> <environment: namespace:base>
 ```
 
 and
 
-```r
+```{r}
 baseenv()
-#> <environment: base>
 ```
 
 respectively.  They are very similar, except that their parent environments differ; `getNamespace("base")` is followed by the _global_ environment, and `baseenv()` is followed by the _empty_ environment;
 
-```r
-parent_env(getNamespace("base"))
-#> <environment: R_GlobalEnv>
+```{r}
+environments::parent_env(getNamespace("base"))
 
-parent_env(baseenv())
-#> <environment: R_EmptyEnv>
+environments::parent_env(baseenv())
 ```
 
 Everything else is the same, e.g.
 
-```r
+```{r}
 all.equal(getNamespace("base"), baseenv())
-#> [1] TRUE
 ```
 
 and
 
-```r
-> identical(getNamespace("base")[["mean"]], baseenv()[["mean"]])
-[1] TRUE
+```{r}
+identical(getNamespace("base")[["mean"]], baseenv()[["mean"]])
 ```
 
 By the way, `.BaseNamespaceEnv` is the same as `getNamespace("base")`;
 
-```r
-> identical(.BaseNamespaceEnv, getNamespace("base"))
-#> [1] TRUE
+```{r}
+identical(.BaseNamespaceEnv, getNamespace("base"))
 ```
 
 As far as I understand it, the reason why there are two "base" environment is that `getNamespace("base")` is used in R as a workaround in order to be able search for objects as explained in Appendix 'Why R searches also the global environment and attached packages' above.  The design is that a package namespace should have all exported **base** objects on the search path _immediately_ following the package's imported objects.  However, because of the historical reasons of having to search also the global environment and the attached packages, we cannot use `baseenv()` for this purpose.  If we did, then the search path would end there, and like breaks a few things as it stands right now.  Because of this, `getNamespace("base")` was introduced as an copy of `baseenv()`, but with the parent environment being the global environment in order to _not_ break the full search path.  If, or rather when, R Core can sort out the last hurdles for having the package search path end immediately after the "import" and the **base** environment, then I imagine there is no longer a need for the special `getNamespace("base")` environment.
@@ -366,8 +372,8 @@ to the `NAMESPACE` file for **teeny**, the package would build, but it
 would not _install_.  We would get an installation error:
 
 ```
-$ R CMD INSTALL teeny_0_1.0.tar.gz 
-* installing to library ‘/home/hb/R/x86_64-pc-linux-gnu-library/4.2-CBI-gcc9’
+$ R CMD INSTALL teeny_1.0.tar.gz 
+* installing to library ‘/path/to/R/x86_64-pc-linux-gnu-library/4.2’
 * installing *source* package ‘teeny’ ...
 ** using staged installation
 ** R

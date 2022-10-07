@@ -7,8 +7,10 @@
 
  * Merge `locate_object()` into a new `find_object()` function.
 
- * Now `environment_name()` returns `"baseenv"` for `baseenv()` to
-   distinguish it from `"base"` returned for `getNamespace("base")`.
+ * Now `environment_name()` returns `"package:base"` for `baseenv()`
+   to distinguish it from `"base"` returned for
+   `getNamespace("base")`.  `baseenv()` is the same as
+   `pos.to.env(grep("package:base", search()))`.
    
 ## Documentation
 

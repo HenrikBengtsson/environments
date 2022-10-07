@@ -17,14 +17,25 @@ Get the name of an environment
 }
 \details{
 This function returns what
-\code{\link[base:environmentName]{environmentName(envir)}}, except when
-it is empty, e.g. when \code{envir <- new.env()}.  In such cases, it returns
-the hexadecimal string that is outputted by \code{print(envir)}.
+\code{\link[base:environmentName]{environmentName(envir)}} with a few
+exceptions.  One exception is that it, instead of \code{"base"}, returns
+\code{"package:base"} for \code{baseenv()}, which is the same environment as
+\code{pos.to.env(grep("package:base", search()))}.  This distinguishes
+from \code{"base"} returned for \code{getNamespace("base")}, which is \emph{not}
+the same environment.  Another exception is when \code{environmentName()}
+returns an empty string, e.g. when \code{envir <- new.env()}.  In such cases,
+it returns the hexadecimal string that is outputted by \code{print(envir)}.
 }
 \examples{
 environment_name(emptyenv())             ## "R_EmptyEnv"
 
 environment_name(globalenv())            ## "R_GlobalEnv"
+
+environment_name(baseenv())              ## "package:base"
+
+environment_name(.BaseNamespaceEnv)      ## "base"
+
+environment_name(getNamespace("base"))   ## "base"
 
 environment_name(getNamespace("utils"))  ## "utils"
 

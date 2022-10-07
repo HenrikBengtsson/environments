@@ -6,14 +6,25 @@
 #'
 #' @details
 #' This function returns what
-#' \code{\link[base:environmentName]{environmentName(envir)}}, except when
-#' it is empty, e.g. when `envir <- new.env()`.  In such cases, it returns
-#' the hexadecimal string that is outputted by `print(envir)`.
+#' \code{\link[base:environmentName]{environmentName(envir)}} with a few
+#' exceptions.  One exception is that it, instead of `"base"`, returns
+#' `"package:base"` for `baseenv()`, which is the same environment as
+#' `pos.to.env(grep("package:base", search()))`.  This distinguishes
+#' from `"base"` returned for `getNamespace("base")`, which is _not_
+#' the same environment.  Another exception is when `environmentName()`
+#' returns an empty string, e.g. when `envir <- new.env()`.  In such cases,
+#' it returns the hexadecimal string that is outputted by `print(envir)`.
 #'
 #' @examples
 #' environment_name(emptyenv())             ## "R_EmptyEnv"
 #'
 #' environment_name(globalenv())            ## "R_GlobalEnv"
+#'
+#' environment_name(baseenv())              ## "package:base"
+#'
+#' environment_name(.BaseNamespaceEnv)      ## "base"
+#'
+#' environment_name(getNamespace("base"))   ## "base"
 #'
 #' environment_name(getNamespace("utils"))  ## "utils"
 #'
@@ -31,7 +42,7 @@ environment_name <- function(envir) {
   ## not the same environment.
   if (name == "base") {
     if (identical(envir, baseenv())) {
-      name <- "baseenv"
+      name <- "package:base"
     }
   }
   

@@ -74,9 +74,9 @@
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>Returns an <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">environmentName(envir)</a></code>,
-if <code>envir</code> is an <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></code>,
-a function, or a formula.  In all other cases, NULL is returned.</p>
+    <p>Returns an <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></code>, if <code>envir</code> is
+an environment, a function, or a formula.  In all other cases, NULL is
+returned.</p>
     </div>
 
     <div id="ref-examples">
@@ -99,7 +99,7 @@ a function, or a formula.  In all other cases, NULL is returned.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## A formula</span></span></span>
 <span class="r-in"><span><span class="fu">environment_of</span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span><span class="op">)</span>          <span class="co">## &lt;environment: R_GlobalEnv&gt;</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55ba9cf68418&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5596db7eb328&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## A non-function object</span></span></span>
 <span class="r-in"><span><span class="fu">environment_of</span><span class="op">(</span><span class="va">pi</span><span class="op">)</span>             <span class="co">## NULL</span></span></span>

@@ -257,6 +257,9 @@ visible global function definition for ..." that `R CMD check` reports
 on.
 
 
+
+# Appendix
+
 ## Why R searches also the global environment and attached packages
 
 The parent environment of the **base** namespace is the global environment;
@@ -301,35 +304,6 @@ forward to make the empty environment the parent of the **base**
 namespace.
 
 
-# Appendix
-
-## It is not possible to import from the 'base' package
-
-If we would add:
-
-```
-importFrom(base, mean)
-```
-
-to the `NAMESPACE` file for **teeny**, the package would build, but it
-would not _install_.  We would get an installation error:
-
-```
-$ R CMD INSTALL teeny_0_1.0.tar.gz 
-* installing to library ‘/home/hb/R/x86_64-pc-linux-gnu-library/4.2-CBI-gcc9’
-* installing *source* package ‘teeny’ ...
-** using staged installation
-** R
-** byte-compile and prepare package for lazy loading
-Error in asNamespace(ns, base.OK = FALSE) : 
-  operation not allowed on base namespace
-Calls: <Anonymous> ... namespaceImportFrom -> importIntoEnv -> getNamespaceInfo -> asNamespace
-ERROR: lazy loading failed for package ‘teeny’
-* removing ‘/home/hb/R/x86_64-pc-linux-gnu-library/4.2-CBI-gcc9/teeny’
-* restoring previous ‘/home/hb/R/x86_64-pc-linux-gnu-library/4.2-CBI-gcc9/teeny’
-```
-
-
 ## The difference between getNamespace("base") and baseenv()
 
 If we look at the output from, for instance, `parent_envs(stats::median)`, we see that there are two "base" environments.  One early on following the "imports" environment and one at the very end just before the empty environment.  These two environments are:
@@ -368,6 +342,42 @@ and
 ```r
 > identical(getNamespace("base")[["mean"]], baseenv()[["mean"]])
 [1] TRUE
+```
+
+By the way, `.BaseNamespaceEnv` is the same as `getNamespace("base")`;
+
+```r
+> identical(.BaseNamespaceEnv, getNamespace("base"))
+#> [1] TRUE
+```
+
+As far as I understand it, the reason why there are two "base" environment is that `getNamespace("base")` is used in R as a workaround in order to be able search for objects as explained in Appendix 'Why R searches also the global environment and attached packages' above.  The design is that a package namespace should have all exported **base** objects on the search path _immediately_ following the package's imported objects.  However, because of the historical reasons of having to search also the global environment and the attached packages, we cannot use `baseenv()` for this purpose.  If we did, then the search path would end there, and like breaks a few things as it stands right now.  Because of this, `getNamespace("base")` was introduced as an copy of `baseenv()`, but with the parent environment being the global environment in order to _not_ break the full search path.  If, or rather when, R Core can sort out the last hurdles for having the package search path end immediately after the "import" and the **base** environment, then I imagine there is no longer a need for the special `getNamespace("base")` environment.
+
+
+## It is not possible to import from the 'base' package
+
+If we would add:
+
+```
+importFrom(base, mean)
+```
+
+to the `NAMESPACE` file for **teeny**, the package would build, but it
+would not _install_.  We would get an installation error:
+
+```
+$ R CMD INSTALL teeny_0_1.0.tar.gz 
+* installing to library ‘/home/hb/R/x86_64-pc-linux-gnu-library/4.2-CBI-gcc9’
+* installing *source* package ‘teeny’ ...
+** using staged installation
+** R
+** byte-compile and prepare package for lazy loading
+Error in asNamespace(ns, base.OK = FALSE) : 
+  operation not allowed on base namespace
+Calls: <Anonymous> ... namespaceImportFrom -> importIntoEnv -> getNamespaceInfo -> asNamespace
+ERROR: lazy loading failed for package ‘teeny’
+* removing ‘/home/hb/R/x86_64-pc-linux-gnu-library/4.2-CBI-gcc9/teeny’
+* restoring previous ‘/home/hb/R/x86_64-pc-linux-gnu-library/4.2-CBI-gcc9/teeny’
 ```
 
 

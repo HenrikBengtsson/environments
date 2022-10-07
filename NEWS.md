@@ -2,9 +2,6 @@
 
 ## Significant Changes
 
- * Argument `until` for `parent_envs()` now defaults to `globalenv()`
-   rather than `emptyenv()`.
-
  * Merge `locate_object()` into a new `find_object()` function.
 
  * Now `environment_name()` returns `"package:base"` for `baseenv()`

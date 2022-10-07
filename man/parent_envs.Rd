@@ -8,7 +8,7 @@
 \usage{
 parent_env(envir = parent.frame(), n = 1L)
 
-parent_envs(envir = parent.frame(), until = globalenv(), extra = 0L)
+parent_envs(envir = parent.frame(), until = emptyenv(), extra = 0L)
 
 top_env(envir, until = globalenv())
 }

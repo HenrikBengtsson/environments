@@ -189,12 +189,9 @@
 #'
 #' @export
 replace_env <- function(envir, search, replace, update_parent = TRUE) {
+  envir <- environment_of(envir0 <- envir)
   if (!inherits(envir, "environment")) {
-     e <- environment(envir)
-     if (is.null(e)) {
-       stop(sprintf("Argument 'envir' must be an environment or an object with an environment: %s", mode(envir)))
-     }
-     envir <- e
+    stop(sprintf("Argument 'envir' must be an environment or an object with an environment: %s", mode(envir0)))
   }
   if (!is.list(search)) {
     search <- list(search)

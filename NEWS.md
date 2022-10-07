@@ -8,10 +8,18 @@
    to distinguish it from `"base"` returned for
    `getNamespace("base")`.  `baseenv()` is the same as
    `pos.to.env(grep("package:base", search()))`.
-   
+
+## New Features
+
+ * Add `environment_of()`.
+ 
+ * `parent_env()` and likes now return the "base" environment for
+   primitive functions.
+
 ## Documentation
 
- * Add a package vignette.
+ * Add a package vignette explaining how objects are located when R
+   evaluates a call to a function part of a package namespace.
 
 
 # Version 0.3.0 (2022-09-27)

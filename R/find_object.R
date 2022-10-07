@@ -56,13 +56,9 @@
 #'
 #' @export
 find_object <- function(value = NULL, name = NULL, mode = "any", from = parent.frame(), until = emptyenv(), which = c("first", "last", "all")) {
-  if (inherits(from, "environment")) {
-    envir <- from
-  } else {
-    envir <- environment(from)
-    if (!inherits(envir, "environment")) {
-      stop(sprintf("Argument 'from' does not specify an environment or an object with an environment: %s", mode(from)))
-    }
+  envir <- environment_of(from)
+  if (!inherits(envir, "environment")) {
+    stop(sprintf("Argument 'from' must be an environment or an object with an environment: %s", mode(from)))
   }
 
   if (!is.list(until)) until <- list(until)

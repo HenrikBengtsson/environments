@@ -21,14 +21,22 @@ if \code{envir} is an \code{\link[base:environment]{environment}},
 a function, or a formula.  In all other cases, NULL is returned.
 }
 \examples{
-environment_of(globalenv())    ## R_GlobalEnv
+## An environment
+environment_of(globalenv())    ## <environment: R_GlobalEnv>
 
-environment_of(mean)           ## package:base
+## A primitive function (always in the 'base' package)
+environment_of(abs)            ## <environment: base>
 
-environment_of(abs)            ## package:base (primitive function)
+## A package function
+environment_of(mean)           ## <environment: base>
 
+## Another package function
 environment_of(stats::median)  ## namespace:stats
 
+## A formula
+environment_of(y ~ x)          ## <environment: R_GlobalEnv>
+
+## A non-function object
 environment_of(pi)             ## NULL
 
 }

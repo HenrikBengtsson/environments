@@ -34,12 +34,9 @@
 #' @rdname parent_envs
 #' @export
 parent_env <- function(envir = parent.frame(), n = 1L) {
+  envir <- environment_of(envir0 <- envir)
   if (!inherits(envir, "environment")) {
-     e <- environment(envir)
-     if (is.null(e)) {
-       stop(sprintf("Argument 'envir' must be an environment or an object with an environment: %s", mode(envir)))
-     }
-     envir <- e
+    stop(sprintf("Argument 'envir' must be an environment or an object with an environment: %s", mode(envir0)))
   }
   stopifnot(is.numeric(n), length(n) == 1L, !is.na(n), n >= 0L)
 

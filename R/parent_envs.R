@@ -83,12 +83,9 @@
 #'
 #' @export
 parent_envs <- function(envir = parent.frame(), until = emptyenv(), extra = 0L) {
+  envir <- environment_of(envir0 <- envir)
   if (!inherits(envir, "environment")) {
-     e <- environment(envir)
-     if (is.null(e)) {
-       stop(sprintf("Argument 'envir' must be an environment or an object with an environment: %s", mode(envir)))
-     }
-     envir <- e
+    stop(sprintf("Argument 'envir' must be an environment or an object with an environment: %s", mode(envir0)))
   }
   if (!is.list(until)) until <- list(until)
   for (env in until) stopifnot(inherits(env, "environment"))

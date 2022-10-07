@@ -35,12 +35,9 @@
 #' @rdname parent_envs
 #' @export
 top_env <- function(envir, until = globalenv()) {
+  envir <- environment_of(envir0 <- envir)
   if (!inherits(envir, "environment")) {
-     e <- environment(envir)
-     if (is.null(e)) {
-       stop(sprintf("Argument 'envir' must be an environment or an object with an environment: %s", mode(envir)))
-     }
-     envir <- e
+    stop(sprintf("Argument 'envir' must be an environment or an object with an environment: %s", mode(envir0)))
   }
   stopifnot(inherits(until, "environment"))
 

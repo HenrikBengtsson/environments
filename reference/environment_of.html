@@ -85,21 +85,21 @@ a function, or a formula.  In all other cases, NULL is returned.</p>
 <span class="r-in"><span><span class="fu">environment_of</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">globalenv</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>    <span class="co">## &lt;environment: R_GlobalEnv&gt;</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: R_GlobalEnv&gt;</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## A primitive function (always in the 'base' package)</span></span></span>
-<span class="r-in"><span><span class="fu">environment_of</span><span class="op">(</span><span class="va">abs</span><span class="op">)</span>            <span class="co">## &lt;environment: base&gt;</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: base&gt;</span>
+<span class="r-in"><span><span class="co">## A primitive function (always in the 'base' namespace)</span></span></span>
+<span class="r-in"><span><span class="fu">environment_of</span><span class="op">(</span><span class="va">abs</span><span class="op">)</span>            <span class="co">## &lt;environment: namespace:base&gt;</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## A package function</span></span></span>
-<span class="r-in"><span><span class="fu">environment_of</span><span class="op">(</span><span class="va">mean</span><span class="op">)</span>           <span class="co">## &lt;environment: base&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">environment_of</span><span class="op">(</span><span class="va">mean</span><span class="op">)</span>           <span class="co">## &lt;environment: namespace:base&gt;</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Another package function</span></span></span>
-<span class="r-in"><span><span class="fu">environment_of</span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">)</span>  <span class="co">## namespace:stats</span></span></span>
+<span class="r-in"><span><span class="fu">environment_of</span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">)</span>  <span class="co">## &lt;environment: namespace:stats&gt;</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## A formula</span></span></span>
 <span class="r-in"><span><span class="fu">environment_of</span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span><span class="op">)</span>          <span class="co">## &lt;environment: R_GlobalEnv&gt;</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5594882dcf48&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55ba9cf68418&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## A non-function object</span></span></span>
 <span class="r-in"><span><span class="fu">environment_of</span><span class="op">(</span><span class="va">pi</span><span class="op">)</span>             <span class="co">## NULL</span></span></span>

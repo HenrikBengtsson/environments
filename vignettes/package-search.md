@@ -204,7 +204,7 @@ str(nss)
 #>   ..- attr(*, "path")= chr "/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/methods"
 #>  $ Autoloads        :<environment: 0x55583eee63c0> 
 #>   ..- attr(*, "name")= chr "Autoloads"
-#>  $ `package:base`   :<environment: base> 
+#>  $ package:base     :<environment: base> 
 #>  $ R_EmptyEnv       :<environment: R_EmptyEnv>
 ```
 

@@ -330,4 +330,45 @@ ERROR: lazy loading failed for package ‘teeny’
 ```
 
 
+## The difference between getNamespace("base") and baseenv()
+
+If we look at the output from, for instance, `parent_envs(stats::median)`, we see that there are two "base" environments.  One early on following the "imports" environment and one at the very end just before the empty environment.  These two environments are:
+
+```r
+getNamespace("base")
+#> <environment: namespace:base>
+```
+
+and
+
+```r
+baseenv()
+#> <environment: base>
+```
+
+respectively.  They are very similar, except that their parent environments differ; `getNamespace("base")` is followed by the _global_ environment, and `baseenv()` is followed by the _empty_ environment;
+
+```r
+parent_env(getNamespace("base"))
+#> <environment: R_GlobalEnv>
+
+parent_env(baseenv())
+#> <environment: R_EmptyEnv>
+```
+
+Everything else is the same, e.g.
+
+```r
+all.equal(getNamespace("base"), baseenv())
+#> [1] TRUE
+```
+
+and
+
+```r
+> identical(getNamespace("base")[["mean"]], baseenv()[["mean"]])
+[1] TRUE
+```
+
+
 [roxygen2]: https://cran.r-project.org/package=roxygen2

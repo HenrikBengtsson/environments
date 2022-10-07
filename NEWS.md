@@ -13,7 +13,7 @@
 
  * Add `environment_of()`.
  
- * `parent_env()` and likes now return the "base" environment for
+ * `parent_env()` and likes now return the **base** namespace for
    primitive functions.
 
 ## Documentation

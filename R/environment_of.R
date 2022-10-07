@@ -13,14 +13,14 @@
 #' ## An environment
 #' environment_of(globalenv())    ## <environment: R_GlobalEnv>
 #'
-#' ## A primitive function (always in the 'base' package)
-#' environment_of(abs)            ## <environment: base>
+#' ## A primitive function (always in the 'base' namespace)
+#' environment_of(abs)            ## <environment: namespace:base>
 #'
 #' ## A package function
-#' environment_of(mean)           ## <environment: base>
+#' environment_of(mean)           ## <environment: namespace:base>
 #'
 #' ## Another package function
-#' environment_of(stats::median)  ## namespace:stats
+#' environment_of(stats::median)  ## <environment: namespace:stats>
 #'
 #' ## A formula
 #' environment_of(y ~ x)          ## <environment: R_GlobalEnv>
@@ -35,8 +35,8 @@ environment_of <- function(envir) {
   e <- environment(envir)
   if (!is.null(e)) return(e)
      
-  ## Special case: primitive functions are all in the 'base' package
-  if (is.primitive(envir)) return(baseenv())
+  ## Special case: primitive functions are all in the 'base' namespace
+  if (is.primitive(envir)) return(.BaseNamespaceEnv)
 
   NULL
 }

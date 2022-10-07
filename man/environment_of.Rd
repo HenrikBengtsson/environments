@@ -24,14 +24,14 @@ a function, or a formula.  In all other cases, NULL is returned.
 ## An environment
 environment_of(globalenv())    ## <environment: R_GlobalEnv>
 
-## A primitive function (always in the 'base' package)
-environment_of(abs)            ## <environment: base>
+## A primitive function (always in the 'base' namespace)
+environment_of(abs)            ## <environment: namespace:base>
 
 ## A package function
-environment_of(mean)           ## <environment: base>
+environment_of(mean)           ## <environment: namespace:base>
 
 ## Another package function
-environment_of(stats::median)  ## namespace:stats
+environment_of(stats::median)  ## <environment: namespace:stats>
 
 ## A formula
 environment_of(y ~ x)          ## <environment: R_GlobalEnv>

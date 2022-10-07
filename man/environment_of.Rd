@@ -16,9 +16,9 @@ A non-empty character string.
 Get the environment of an object
 }
 \details{
-Returns an \code{\link[base:environmentName]{environmentName(envir)}},
-if \code{envir} is an \code{\link[base:environment]{environment}},
-a function, or a formula.  In all other cases, NULL is returned.
+Returns an \code{\link[base:environment]{environment}}, if \code{envir} is
+an environment, a function, or a formula.  In all other cases, NULL is
+returned.
 }
 \examples{
 ## An environment

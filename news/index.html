@@ -59,8 +59,13 @@
 <li><p>Now <code><a href="../reference/environment_name.html">environment_name()</a></code> returns <code>"package:base"</code> for <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">baseenv()</a></code> to distinguish it from <code>"base"</code> returned for <code>getNamespace("base")</code>. <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">baseenv()</a></code> is the same as <code>pos.to.env(grep("package:base", search()))</code>.</p></li>
 </ul></div>
 <div class="section level3">
+<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li><p>Add <code><a href="../reference/environment_of.html">environment_of()</a></code>.</p></li>
+<li><p><code><a href="../reference/parent_envs.html">parent_env()</a></code> and likes now return the “base” environment for primitive functions.</p></li>
+</ul></div>
+<div class="section level3">
 <h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
-<ul><li>Add a package vignette.</li>
+<ul><li>Add a package vignette explaining how objects are located when R evaluates a call to a function part of a package namespace.</li>
 </ul></div>
 </div>
     <div class="section level2">

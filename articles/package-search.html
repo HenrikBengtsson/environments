@@ -303,6 +303,9 @@ even those from base-R packages. So, do <em>not</em> ignore those NOTEs
 on “no visible global function definition for …” that
 <code>R CMD check</code> reports on.</p>
 </div>
+<div class="section level2">
+<h2 id="appendix">Appendix<a class="anchor" aria-label="anchor" href="#appendix"></a>
+</h2>
 <div class="section level3">
 <h3 id="why-r-searches-also-the-global-environment-and-attached-packages">Why R searches also the global environment and attached
 packages<a class="anchor" aria-label="anchor" href="#why-r-searches-also-the-global-environment-and-attached-packages"></a>
@@ -345,9 +348,62 @@ one of the R Core developers explains the history and proposes a way
 forward to make the empty environment the parent of the
 <strong>base</strong> namespace.</p>
 </div>
-<div class="section level2">
-<h2 id="appendix">Appendix<a class="anchor" aria-label="anchor" href="#appendix"></a>
-</h2>
+<div class="section level3">
+<h3 id="the-difference-between-getnamespacebase-and-baseenv">The difference between getNamespace(“base”) and baseenv()<a class="anchor" aria-label="anchor" href="#the-difference-between-getnamespacebase-and-baseenv"></a>
+</h3>
+<p>If we look at the output from, for instance,
+<code>parent_envs(stats::median)</code>, we see that there are two
+“base” environments. One early on following the “imports” environment
+and one at the very end just before the empty environment. These two
+environments are:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/ns-reflect.html" class="external-link">getNamespace</a></span><span class="op">(</span><span class="st">"base"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;environment: namespace:base&gt;</span></span></code></pre></div>
+<p>and</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">baseenv</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;environment: base&gt;</span></span></code></pre></div>
+<p>respectively. They are very similar, except that their parent
+environments differ; <code>getNamespace("base")</code> is followed by
+the <em>global</em> environment, and <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">baseenv()</a></code> is followed
+by the <em>empty</em> environment;</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/parent_envs.html">parent_env</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-reflect.html" class="external-link">getNamespace</a></span><span class="op">(</span><span class="st">"base"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;environment: R_GlobalEnv&gt;</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/parent_envs.html">parent_env</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">baseenv</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;environment: R_EmptyEnv&gt;</span></span></code></pre></div>
+<p>Everything else is the same, e.g.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-reflect.html" class="external-link">getNamespace</a></span><span class="op">(</span><span class="st">"base"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">baseenv</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>and</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">identical</span>(<span class="fu">getNamespace</span>(<span class="st">"base"</span>)[[<span class="st">"mean"</span>]], <span class="fu">baseenv</span>()[[<span class="st">"mean"</span>]])</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="cn">TRUE</span></span></code></pre></div>
+<p>By the way, <code>.BaseNamespaceEnv</code> is the same as
+<code>getNamespace("base")</code>;</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">identical</span>(.BaseNamespaceEnv, <span class="fu">getNamespace</span>(<span class="st">"base"</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>As far as I understand it, the reason why there are two “base”
+environment is that <code>getNamespace("base")</code> is used in R as a
+workaround in order to be able search for objects as explained in
+Appendix ‘Why R searches also the global environment and attached
+packages’ above. The design is that a package namespace should have all
+exported <strong>base</strong> objects on the search path
+<em>immediately</em> following the package’s imported objects. However,
+because of the historical reasons of having to search also the global
+environment and the attached packages, we cannot use
+<code><a href="https://rdrr.io/r/base/environment.html" class="external-link">baseenv()</a></code> for this purpose. If we did, then the search path
+would end there, and like breaks a few things as it stands right now.
+Because of this, <code>getNamespace("base")</code> was introduced as an
+copy of <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">baseenv()</a></code>, but with the parent environment being
+the global environment in order to <em>not</em> break the full search
+path. If, or rather when, R Core can sort out the last hurdles for
+having the package search path end immediately after the “import” and
+the <strong>base</strong> environment, then I imagine there is no longer
+a need for the special <code>getNamespace("base")</code>
+environment.</p>
+</div>
 <div class="section level3">
 <h3 id="it-is-not-possible-to-import-from-the-base-package">It is not possible to import from the ‘base’ package<a class="anchor" aria-label="anchor" href="#it-is-not-possible-to-import-from-the-base-package"></a>
 </h3>

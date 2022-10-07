@@ -25,6 +25,16 @@
 environment_name <- function(envir) {
   stopifnot(inherits(envir, "environment"))
   name <- environmentName(envir)
+  
+  ## Special case: environmentName() returns "base" for both
+  ## baseenv() and getNamespace("base"), although the two are
+  ## not the same environment.
+  if (name == "base") {
+    if (identical(envir, baseenv())) {
+      name <- "baseenv"
+    }
+  }
+  
   if (!nzchar(name)) {
     ## Here we call print.default(), instead of generic print(), to
     ## avoid the risk of someone defining a print.environment().

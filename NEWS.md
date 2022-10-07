@@ -7,6 +7,9 @@
 
  * Merge `locate_object()` into a new `find_object()` function.
 
+ * Now `environment_name()` returns `"baseenv"` for `baseenv()` to
+   distinguish it from `"base"` returned for `getNamespace("base")`.
+   
 ## Documentation
 
  * Add a package vignette.

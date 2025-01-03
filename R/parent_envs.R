@@ -87,12 +87,14 @@ parent_envs <- function(envir = parent.frame(), until = emptyenv(), extra = 0L) 
   if (!inherits(envir, "environment")) {
     stop(sprintf("Argument 'envir' must be an environment or an object with an environment: %s", mode(envir0)))
   }
+  if (is.character(until)) until <- as.list(until)
   if (!is.list(until)) until <- list(until)
   for (kk in seq_along(until)) {
     env <- until[[kk]]
-    if (is.character(env)) env <- as.environment(env)
-    stopifnot(inherits(env, "environment"))
-    until[[kk]] <- env
+    stopifnot(
+      length(env) == 1L,
+      inherits(env, "environment") || is.character(env)
+    )
   }
   stopifnot(is.numeric(extra), length(extra) == 1L, !is.na(extra), extra >= 0L)
 
@@ -101,7 +103,11 @@ parent_envs <- function(envir = parent.frame(), until = emptyenv(), extra = 0L) 
 
   in_until <- function(envir) {
     for (env in until) {
-      if (identical(envir, env)) return(TRUE)
+      if (is.character(env)) {
+        if (identical(environment_name(envir), env)) return(TRUE)
+      } else {
+        if (identical(envir, env)) return(TRUE)
+      }
     }
     FALSE
   }
@@ -109,6 +115,7 @@ parent_envs <- function(envir = parent.frame(), until = emptyenv(), extra = 0L) 
   envirs <- list(envir)
   names <- environment_name(envir)
   while (!in_until(envir)) {
+    str(list(envir = envir, until = until))
     envir <- parent.env(envir)
     envirs <- c(envirs, envir)
     names <- c(names, environment_name(envir))

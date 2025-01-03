@@ -115,7 +115,6 @@ parent_envs <- function(envir = parent.frame(), until = emptyenv(), extra = 0L) 
   envirs <- list(envir)
   names <- environment_name(envir)
   while (!in_until(envir)) {
-    str(list(envir = envir, until = until))
     envir <- parent.env(envir)
     envirs <- c(envirs, envir)
     names <- c(names, environment_name(envir))

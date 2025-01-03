@@ -91,9 +91,8 @@ parent_envs <- function(envir = parent.frame(), until = emptyenv(), extra = 0L) 
   if (!is.list(until)) until <- list(until)
   for (kk in seq_along(until)) {
     env <- until[[kk]]
-    stopifnot(
-      length(env) == 1L,
-      inherits(env, "environment") || is.character(env)
+    stopifnot(     
+      inherits(env, "environment") || (is.character(env) && length(env) == 1L)
     )
   }
   stopifnot(is.numeric(extra), length(extra) == 1L, !is.na(extra), extra >= 0L)

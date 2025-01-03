@@ -15,6 +15,9 @@
  
  * `parent_env()` and likes now return the **base** namespace for
    primitive functions.
+   
+ * `parent_envs()` supports `until` to specify `search()` environment
+   names as character string.
 
 ## Documentation
 

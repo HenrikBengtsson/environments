@@ -88,7 +88,12 @@ parent_envs <- function(envir = parent.frame(), until = emptyenv(), extra = 0L) 
     stop(sprintf("Argument 'envir' must be an environment or an object with an environment: %s", mode(envir0)))
   }
   if (!is.list(until)) until <- list(until)
-  for (env in until) stopifnot(inherits(env, "environment"))
+  for (kk in seq_along(until)) {
+    env <- until[[kk]]
+    if (is.character(env)) env <- as.environment(env)
+    stopifnot(inherits(env, "environment"))
+    until[[kk]] <- env
+  }
   stopifnot(is.numeric(extra), length(extra) == 1L, !is.na(extra), extra >= 0L)
 
   ## Make sure there's always an empty environment at the end

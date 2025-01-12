@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">environments</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0-9014</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0-9000</span>
       </span>
     </div>
 
@@ -53,19 +53,23 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="version-development-version">Version (development version)<a class="anchor" aria-label="anchor" href="#version-development-version"></a></h2>
+<ul><li>…</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.4.0" id="version-040">Version 0.4.0<a class="anchor" aria-label="anchor" href="#version-040"></a></h2>
 <div class="section level3">
-<h3 id="significant-changes-development-version">Significant Changes<a class="anchor" aria-label="anchor" href="#significant-changes-development-version"></a></h3>
+<h3 id="significant-changes-0-4-0">Significant Changes<a class="anchor" aria-label="anchor" href="#significant-changes-0-4-0"></a></h3>
 <ul><li><p>Merge <code>locate_object()</code> into a new <code><a href="../reference/find_object.html">find_object()</a></code> function.</p></li>
 <li><p>Now <code><a href="../reference/environment_name.html">environment_name()</a></code> returns <code>"package:base"</code> for <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">baseenv()</a></code> to distinguish it from <code>"base"</code> returned for <code>getNamespace("base")</code>. <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">baseenv()</a></code> is the same as <code>pos.to.env(grep("package:base", search()))</code>.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-0-4-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-4-0"></a></h3>
 <ul><li><p>Add <code><a href="../reference/environment_of.html">environment_of()</a></code>.</p></li>
 <li><p><code><a href="../reference/parent_envs.html">parent_env()</a></code> and likes now return the <strong>base</strong> namespace for primitive functions.</p></li>
 <li><p><code><a href="../reference/parent_envs.html">parent_envs()</a></code> supports <code>until</code> to specify <code><a href="https://rdrr.io/r/base/search.html" class="external-link">search()</a></code> environment names as character string.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
+<h3 id="documentation-0-4-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-4-0"></a></h3>
 <ul><li>Add a package vignette explaining how objects are located when R evaluates a call to a function part of a package namespace.</li>
 </ul></div>
 </div>

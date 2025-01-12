@@ -1,5 +1,5 @@
 Package: environments
-Version: 0.3.0-9013
+Version: 0.3.0-9014
 Title: Working with Environments and Closures in R
 Description: A set of tools to work with environments and closures in R for the purpose of demonstrating how they work.
 Imports:
@@ -7,7 +7,8 @@ Imports:
     utils
 Suggests:
     cli,
-    knitr
+    knitr,
+    rmarkdown
 VignetteBuilder:
     knitr
 Authors@R: c(

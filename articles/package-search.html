@@ -29,27 +29,27 @@ document.addEventListener('DOMContentLoaded', function(e) {
 </script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,58 +60,57 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -347,21 +346,21 @@ functions</h1>
 <p>Consider a package <strong>teeny</strong> that exports function
 <code>mean_and_variance()</code> for calculating the sample mean and the
 sample variance in a single call:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Calculate the Mean and Variance</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param x A numeric vector.</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @return</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; A named numeric vector of length two</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; with elements `mean` and `variance`.</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @importFrom stats var</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>mean_and_variance <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  mu <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  sigma2 <span class="ot">&lt;-</span> <span class="fu">var</span>(x)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">mean =</span> mu, <span class="at">variance =</span> sigma2)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co">#&#39; Calculate the Mean and Variance</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&#39; @param x A numeric vector.</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&#39; @return</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&#39; A named numeric vector of length two</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&#39; with elements `mean` and `variance`.</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="co">#&#39; @importFrom stats var</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>mean_and_variance <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>  mu <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  sigma2 <span class="ot">&lt;-</span> <span class="fu">var</span>(x)</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">mean =</span> mu, <span class="at">variance =</span> sigma2)</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>}</span></code></pre></div>
 <p>There are a few things to notice about the implements. The first is
 that we declare that <code>variance()</code> should be imported from the
 <strong>stats</strong> package. Here we use a <strong><a href="https://cran.r-project.org/package=roxygen2">roxygen2</a></strong>
@@ -376,15 +375,15 @@ explicitly import them. It is actually not possible to import
 <code>@importFrom base mean</code> statement, the package fails to
 <em>install</em> (see Appendix).</p>
 <p>Continuing, when R evaluates</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>teeny<span class="sc">::</span><span class="fu">mean_and_variance</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>teeny<span class="sc">::</span><span class="fu">mean_and_variance</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)</span></code></pre></div>
 <pre><code>##     mean variance 
 ##  50.5000 841.6667</code></pre>
 <p>it will eventually have to locate functions <code>mean()</code> and
 <code>var()</code>. It turns out that these are effectively found
 as:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pkg_ns <span class="ot">&lt;-</span> <span class="fu">getNamespace</span>(<span class="st">&quot;teeny&quot;</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>mean <span class="ot">&lt;-</span> <span class="fu">parent.env</span>(<span class="fu">parent.env</span>(pkg_ns))[[<span class="st">&quot;mean&quot;</span>]]</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>var  <span class="ot">&lt;-</span> <span class="fu">parent.env</span>(           pkg_ns )[[<span class="st">&quot;var&quot;</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>pkg_ns <span class="ot">&lt;-</span> <span class="fu">getNamespace</span>(<span class="st">&quot;teeny&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>mean <span class="ot">&lt;-</span> <span class="fu">parent.env</span>(<span class="fu">parent.env</span>(pkg_ns))[[<span class="st">&quot;mean&quot;</span>]]</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>var  <span class="ot">&lt;-</span> <span class="fu">parent.env</span>(           pkg_ns )[[<span class="st">&quot;var&quot;</span>]]</span></code></pre></div>
 <p>Note the extra layer of <code>parent.env()</code> for
 <code>mean()</code>. So, why are they not found in the same environment?
 This is because we explicitly imported <code>stats::var()</code>, but
@@ -393,9 +392,9 @@ not <code>base::mean()</code>.</p>
 let’s look at what the first few parent environments of the
 <strong>teeny</strong> namespace are. We can du this using the
 <strong>environments</strong> package as:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pkg_ns <span class="ot">&lt;-</span> <span class="fu">getNamespace</span>(<span class="st">&quot;teeny&quot;</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>nss <span class="ot">&lt;-</span> environments<span class="sc">::</span><span class="fu">parent_envs</span>(pkg_ns, <span class="at">until =</span> <span class="fu">globalenv</span>())</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>nss</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>pkg_ns <span class="ot">&lt;-</span> <span class="fu">getNamespace</span>(<span class="st">&quot;teeny&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>nss <span class="ot">&lt;-</span> environments<span class="sc">::</span><span class="fu">parent_envs</span>(pkg_ns, <span class="at">until =</span> <span class="fu">globalenv</span>())</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>nss</span></code></pre></div>
 <pre><code>## $teeny
 ## &lt;environment: namespace:teeny&gt;
 ## 
@@ -418,13 +417,13 @@ it first looks <code>nss[[1]]</code> using something like
 and if not found, it continues to environment <code>nss[[2]]</code>, and
 so on until found. In this case, it locates <code>mean()</code> in
 <code>nss[[3]]</code>, i.e. in the <strong>base</strong> namespace;</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exists</span>(<span class="st">&quot;mean&quot;</span>, <span class="at">mode =</span> <span class="st">&quot;function&quot;</span>, <span class="at">envir =</span> nss[[<span class="dv">3</span>]], <span class="at">inherits =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">exists</span>(<span class="st">&quot;mean&quot;</span>, <span class="at">mode =</span> <span class="st">&quot;function&quot;</span>, <span class="at">envir =</span> nss[[<span class="dv">3</span>]], <span class="at">inherits =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>It searches for <code>var()</code> in a similar manner. Since
 <code>var()</code> was explicitly imported, and all package imports are
 stored in the <code>imports::teeny</code> environment, it finds
 <code>var()</code> in <code>nss[[2]]</code>;</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exists</span>(<span class="st">&quot;var&quot;</span>, <span class="at">mode =</span> <span class="st">&quot;function&quot;</span>, <span class="at">envir =</span> nss[[<span class="dv">2</span>]], <span class="at">inherits =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">exists</span>(<span class="st">&quot;var&quot;</span>, <span class="at">mode =</span> <span class="st">&quot;function&quot;</span>, <span class="at">envir =</span> nss[[<span class="dv">2</span>]], <span class="at">inherits =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>This begs the question, isn’t that imported <code>var()</code>
 function a copy of the <code>var()</code> in the <strong>stats</strong>
@@ -436,7 +435,7 @@ has been loaded.</p>
 <h2>Forgetting to import a function</h2>
 <p>Now, what would happen if we forget to import
 <code>stats::var()</code>? Let’s retry by dropping:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @importFrom stats var</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co">#&#39; @importFrom stats var</span></span></code></pre></div>
 <p>First of all, <code>R CMD check</code> would detect this and produce
 the following NOTE:</p>
 <pre><code>* checking R code for possible problems ... NOTE
@@ -449,7 +448,7 @@ to your NAMESPACE file.</code></pre>
 <p>That’s comforting to know. Note also how it suggests how we might be
 able to resolve it. That is a useful service.</p>
 <p>Next, let’s see what happens if we try to use the function;</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>teeny<span class="sc">::</span><span class="fu">mean_and_variance</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>teeny<span class="sc">::</span><span class="fu">mean_and_variance</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)</span></code></pre></div>
 <pre><code>##     mean variance 
 ##  50.5000 841.6667</code></pre>
 <p>Hmm, how is that possible? The <code>var()</code> function does not
@@ -460,18 +459,17 @@ found even in the global environment, it continues to search the parent
 environments of the global environment too. The parent environments of
 the global environment are all the environments that
 <code>search()</code> reports;</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">search</span>()</span></code></pre></div>
-<pre><code>##  [1] &quot;.GlobalEnv&quot;        &quot;package:stats&quot;     &quot;package:graphics&quot; 
-##  [4] &quot;package:grDevices&quot; &quot;package:utils&quot;     &quot;package:datasets&quot; 
-##  [7] &quot;toolbox:default&quot;   &quot;package:methods&quot;   &quot;Autoloads&quot;        
-## [10] &quot;package:base&quot;</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">search</span>()</span></code></pre></div>
+<pre><code>## [1] &quot;.GlobalEnv&quot;        &quot;package:stats&quot;     &quot;package:graphics&quot; 
+## [4] &quot;package:grDevices&quot; &quot;package:utils&quot;     &quot;package:datasets&quot; 
+## [7] &quot;package:methods&quot;   &quot;Autoloads&quot;         &quot;package:base&quot;</code></pre>
 <p>If the object search for is not found in one of these environments,
 then it ends up at the very top parent environment, which is always the
 empty environment, and stops there (with an error).</p>
 <p>To see <em>all</em> the environment searched, we can use:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pkg_ns <span class="ot">&lt;-</span> <span class="fu">getNamespace</span>(<span class="st">&quot;teeny&quot;</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>nss <span class="ot">&lt;-</span> environments<span class="sc">::</span><span class="fu">parent_envs</span>(pkg_ns, <span class="at">until =</span> <span class="fu">emptyenv</span>())</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(nss)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>pkg_ns <span class="ot">&lt;-</span> <span class="fu">getNamespace</span>(<span class="st">&quot;teeny&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>nss <span class="ot">&lt;-</span> environments<span class="sc">::</span><span class="fu">parent_envs</span>(pkg_ns, <span class="at">until =</span> <span class="fu">emptyenv</span>())</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">str</span>(nss)</span></code></pre></div>
 <pre><code>## List of 13
 ##  $ teeny            :&lt;environment: namespace:teeny&gt; 
 ##  $ imports:teeny    :&lt;environment: 0x555840d33fc8&gt; 
@@ -505,7 +503,7 @@ works, is that R eventually locates <code>var()</code> in the
 <strong>stats</strong> package, i.e. in the <code>package:stats</code>
 environment. Using the <strong>environments</strong> package, we can see
 where it finds <code>var()</code> by calling:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>environments<span class="sc">::</span><span class="fu">find_object</span>(<span class="at">name =</span> <span class="st">&quot;var&quot;</span>, <span class="at">from =</span> teeny<span class="sc">::</span>mean_and_variance)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>environments<span class="sc">::</span><span class="fu">find_object</span>(<span class="at">name =</span> <span class="st">&quot;var&quot;</span>, <span class="at">from =</span> teeny<span class="sc">::</span>mean_and_variance)</span></code></pre></div>
 <pre><code>## $name
 ## [1] &quot;var&quot;
 ## 
@@ -520,8 +518,8 @@ where it finds <code>var()</code> by calling:</p>
 environment is part of the search path. This means that we can inject
 another, possible false, implementation of <code>var()</code> by adding
 it to the global environment, e.g.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>var <span class="ot">&lt;-</span> <span class="cf">function</span>(x) pi</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>teeny<span class="sc">::</span><span class="fu">mean_and_variance</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>var <span class="ot">&lt;-</span> <span class="cf">function</span>(x) pi</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>teeny<span class="sc">::</span><span class="fu">mean_and_variance</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)</span></code></pre></div>
 <pre><code>##      mean  variance 
 ## 50.500000  3.141593</code></pre>
 <p>Whoops! That’s really worrying; the result of the function depends on
@@ -529,11 +527,11 @@ what happens to be in the global environment of the current R session.
 Furthermore, the <strong>stats</strong> package may not even be
 attached, so we could end up with an error also a fresh R session,
 e.g.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span> R_DEFAULT_PACKAGES<span class="ot">=</span>base R <span class="sc">--</span>quiet <span class="sc">--</span>vanilla</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">search</span>()</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">&quot;.GlobalEnv&quot;</span>   <span class="st">&quot;Autoloads&quot;</span>    <span class="st">&quot;package:base&quot;</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> teeny<span class="sc">::</span><span class="fu">mean_and_variance</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>Error <span class="cf">in</span> <span class="fu">var</span>(x) <span class="sc">:</span> could not find <span class="cf">function</span> <span class="st">&quot;var&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="sc">$</span> R_DEFAULT_PACKAGES<span class="ot">=</span>base R <span class="sc">--</span>quiet <span class="sc">--</span>vanilla</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">search</span>()</span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">&quot;.GlobalEnv&quot;</span>   <span class="st">&quot;Autoloads&quot;</span>    <span class="st">&quot;package:base&quot;</span></span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="sc">&gt;</span> teeny<span class="sc">::</span><span class="fu">mean_and_variance</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>Error <span class="cf">in</span> <span class="fu">var</span>(x) <span class="sc">:</span> could not find <span class="cf">function</span> <span class="st">&quot;var&quot;</span></span></code></pre></div>
 <p>This illustrates why it is important to declare <em>all</em> imports,
 even those from base-R packages. So, do <em>not</em> ignore those NOTEs
 on “no visible global function definition for …” that
@@ -546,8 +544,8 @@ on “no visible global function definition for …” that
 packages</h2>
 <p>The parent environment of the <strong>base</strong> namespace is the
 global environment;</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>base_ns <span class="ot">&lt;-</span> <span class="fu">getNamespace</span>(<span class="st">&quot;base&quot;</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>environments<span class="sc">::</span><span class="fu">parent_envs</span>(base_ns)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>base_ns <span class="ot">&lt;-</span> <span class="fu">getNamespace</span>(<span class="st">&quot;base&quot;</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>environments<span class="sc">::</span><span class="fu">parent_envs</span>(base_ns)</span></code></pre></div>
 <pre><code>## $base
 ## &lt;environment: namespace:base&gt;
 ## 
@@ -559,50 +557,45 @@ global environment;</p>
 ## attr(,&quot;name&quot;)
 ## [1] &quot;package:stats&quot;
 ## attr(,&quot;path&quot;)
-## [1] &quot;/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/stats&quot;
+## [1] &quot;/home/henrik/shared/software/CBI/_ubuntu22_04/R-4.4.2-gcc11/lib/R/library/stats&quot;
 ## 
 ## $`package:graphics`
 ## &lt;environment: package:graphics&gt;
 ## attr(,&quot;name&quot;)
 ## [1] &quot;package:graphics&quot;
 ## attr(,&quot;path&quot;)
-## [1] &quot;/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/graphics&quot;
+## [1] &quot;/home/henrik/shared/software/CBI/_ubuntu22_04/R-4.4.2-gcc11/lib/R/library/graphics&quot;
 ## 
 ## $`package:grDevices`
 ## &lt;environment: package:grDevices&gt;
 ## attr(,&quot;name&quot;)
 ## [1] &quot;package:grDevices&quot;
 ## attr(,&quot;path&quot;)
-## [1] &quot;/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/grDevices&quot;
+## [1] &quot;/home/henrik/shared/software/CBI/_ubuntu22_04/R-4.4.2-gcc11/lib/R/library/grDevices&quot;
 ## 
 ## $`package:utils`
 ## &lt;environment: package:utils&gt;
 ## attr(,&quot;name&quot;)
 ## [1] &quot;package:utils&quot;
 ## attr(,&quot;path&quot;)
-## [1] &quot;/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/utils&quot;
+## [1] &quot;/home/henrik/shared/software/CBI/_ubuntu22_04/R-4.4.2-gcc11/lib/R/library/utils&quot;
 ## 
 ## $`package:datasets`
 ## &lt;environment: package:datasets&gt;
 ## attr(,&quot;name&quot;)
 ## [1] &quot;package:datasets&quot;
 ## attr(,&quot;path&quot;)
-## [1] &quot;/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/datasets&quot;
-## 
-## $`toolbox:default`
-## &lt;environment: 0x555bee0d3868&gt;
-## attr(,&quot;name&quot;)
-## [1] &quot;toolbox:default&quot;
+## [1] &quot;/home/henrik/shared/software/CBI/_ubuntu22_04/R-4.4.2-gcc11/lib/R/library/datasets&quot;
 ## 
 ## $`package:methods`
 ## &lt;environment: package:methods&gt;
 ## attr(,&quot;name&quot;)
 ## [1] &quot;package:methods&quot;
 ## attr(,&quot;path&quot;)
-## [1] &quot;/home/hb/shared/software/CBI/R-4.2.1-gcc9/lib/R/library/methods&quot;
+## [1] &quot;/home/henrik/shared/software/CBI/_ubuntu22_04/R-4.4.2-gcc11/lib/R/library/methods&quot;
 ## 
 ## $Autoloads
-## &lt;environment: 0x555beb56b770&gt;
+## &lt;environment: 0x638d33505ca0&gt;
 ## attr(,&quot;name&quot;)
 ## [1] &quot;Autoloads&quot;
 ## 
@@ -646,28 +639,28 @@ forward to make the empty environment the parent of the
 “base” environments. One early on following the “imports” environment
 and one at the very end just before the empty environment. These two
 environments are:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getNamespace</span>(<span class="st">&quot;base&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">getNamespace</span>(<span class="st">&quot;base&quot;</span>)</span></code></pre></div>
 <pre><code>## &lt;environment: namespace:base&gt;</code></pre>
 <p>and</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">baseenv</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">baseenv</span>()</span></code></pre></div>
 <pre><code>## &lt;environment: base&gt;</code></pre>
 <p>respectively. They are very similar, except that their parent
 environments differ; <code>getNamespace(&quot;base&quot;)</code> is followed by
 the <em>global</em> environment, and <code>baseenv()</code> is followed
 by the <em>empty</em> environment;</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>environments<span class="sc">::</span><span class="fu">parent_env</span>(<span class="fu">getNamespace</span>(<span class="st">&quot;base&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>environments<span class="sc">::</span><span class="fu">parent_env</span>(<span class="fu">getNamespace</span>(<span class="st">&quot;base&quot;</span>))</span></code></pre></div>
 <pre><code>## &lt;environment: R_GlobalEnv&gt;</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>environments<span class="sc">::</span><span class="fu">parent_env</span>(<span class="fu">baseenv</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a>environments<span class="sc">::</span><span class="fu">parent_env</span>(<span class="fu">baseenv</span>())</span></code></pre></div>
 <pre><code>## &lt;environment: R_EmptyEnv&gt;</code></pre>
 <p>Everything else is the same, e.g.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all.equal</span>(<span class="fu">getNamespace</span>(<span class="st">&quot;base&quot;</span>), <span class="fu">baseenv</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="fu">all.equal</span>(<span class="fu">getNamespace</span>(<span class="st">&quot;base&quot;</span>), <span class="fu">baseenv</span>())</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>and</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(<span class="fu">getNamespace</span>(<span class="st">&quot;base&quot;</span>)[[<span class="st">&quot;mean&quot;</span>]], <span class="fu">baseenv</span>()[[<span class="st">&quot;mean&quot;</span>]])</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">identical</span>(<span class="fu">getNamespace</span>(<span class="st">&quot;base&quot;</span>)[[<span class="st">&quot;mean&quot;</span>]], <span class="fu">baseenv</span>()[[<span class="st">&quot;mean&quot;</span>]])</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>By the way, <code>.BaseNamespaceEnv</code> is the same as
 <code>getNamespace(&quot;base&quot;)</code>;</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(.BaseNamespaceEnv, <span class="fu">getNamespace</span>(<span class="st">&quot;base&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="fu">identical</span>(.BaseNamespaceEnv, <span class="fu">getNamespace</span>(<span class="st">&quot;base&quot;</span>))</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>As far as I understand it, the reason why there are two “base”
 environment is that <code>getNamespace(&quot;base&quot;)</code> is used in R as a
